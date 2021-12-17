@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <sign-in></sign-in>
     <v-main>
       <router-view/>
     </v-main>
@@ -7,10 +8,10 @@
 </template>
 
 <script>
-
+import Signin from './components/signin/signin.vue'
 export default {
   name: 'App',
-
+  components: {"sign-in":Signin,},
   data: () => ({
     //
   }),
