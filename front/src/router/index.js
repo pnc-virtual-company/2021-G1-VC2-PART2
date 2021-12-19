@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Navigation from '../components/nav/Navigation.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  
+  {path:'/', component:Navigation}
 ]
 
 const router = new VueRouter({
