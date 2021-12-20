@@ -59,7 +59,10 @@ class UserController extends Controller
 
     public function UpdateUser(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+       
+        return response()->json(['message' => "updated successfully!" , "event" => $user],200);
     }
 
     public function DeleteUser($id)
@@ -71,5 +74,10 @@ class UserController extends Controller
         }else{
             return response()->json(['message' => 'ID NOT FOUND'], 404);
         }
+    }
+
+    public function search($username)
+    {
+        return User::where('username','like','%'.$username.'%')->get();
     }
 }
