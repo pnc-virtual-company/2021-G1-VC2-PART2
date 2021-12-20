@@ -3,7 +3,7 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\StudentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,3 +29,12 @@ Route::post('/signin', [UserController::class, 'Signin']);
 
 // ==================== Route Search User======================================
 Route::get('/username/search/{username}', [UserController::class, 'search']);
+
+//===================== Route Student ==============================
+Route::get('/students',[StudentController::class,'getStudent']);
+Route::post('/students',[StudentController::class,'store']);
+Route::put('/students/{id}',[StudentController::class,'updateStudent']);
+Route::delete('/students/{id}',[StudentController::class,'delete']);
+
+//Route search student =============================== 
+Route::get('/students/search/{firstName}', [StudentController::class, 'search']);
