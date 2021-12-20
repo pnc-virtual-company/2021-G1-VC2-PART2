@@ -27,11 +27,5 @@ Route::delete('username/{id}', [UserController::class, 'DeleteUser']);
 Route::post('/signup', [UserController::class, 'Signup']);
 Route::post('/signin', [UserController::class, 'Signin']);
 
-// ==============================Private route===============================
-// Route::group(['middleware' => ['auth:sanctum']], function() {
-//     Route::post('/students', [StudentController::class, 'store']);
-//     Route::put('/students/{id}', [StudentController::class, 'update']);
-//     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
-
-//     Route::post('/signout', [UserController::class, 'signout']);
-// });
+// ==================== Route Search User======================================
+Route::get('/username/search/{username}', [UserController::class, 'search']);
