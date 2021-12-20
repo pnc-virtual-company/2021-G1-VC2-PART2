@@ -11,9 +11,6 @@
               </div>
             </v-col>
             <v-col cols="10" lg="4" class="content">
-                <v-snackbar top class="message" color="green" v-model="snackbar">
-                Login success
-                </v-snackbar>
                 <!-- =============logo/header======== -->
                 <div class="text-center">
                     <v-avatar size="130">
@@ -50,7 +47,7 @@
                     
                     <v-card-actions class="justify-center">
                     <!-- =============button submit signin======== -->
-                    <v-btn :loading="loading" type="submit" color="blue">
+                    <v-btn :loading="loading" type="submit" color="blue" class="button">
                         <span class="white--text px-8">Login</span>
                     </v-btn>
                     </v-card-actions>
@@ -59,6 +56,7 @@
             </v-col>
         </div>
         <!-- =============Message when we signin success======== -->
+        <v-snackbar top class="message" color="green" v-model="snackbar">Login success</v-snackbar>
         
   </v-app>
 </template>
@@ -66,6 +64,7 @@
 <script>
 import axios from '../../axios-http';
 export default {
+  emits: ['sign-in'],
   data: () => ({
     loading:false,
     snackbar:false,
@@ -80,6 +79,8 @@ export default {
       v => !!v || 'Password is required',
       v => (v && v.length >= 8) || 'Password must be 8  characters or more!',
     ],
+    message: '',
+    Issignin: true,
   }),
 
   methods:{
@@ -89,16 +90,19 @@ export default {
           email: this.email,
           password: this.password,
         }
-        this.loading = true
+
+        this.loading = true;
         setTimeout(()=> {
           this.loading = false
           this.snackbar = true
         },3000)
-
         axios.post('/signin', signin).then(res => {
+          localStorage.setItem("userid", res.data.user.id);
           console.log(res.data);
+          this.$emit('sign-in', this.Issignin);
           this.$router.push('/navigation');
         })
+        
       }
     }
   }
@@ -131,7 +135,7 @@ export default {
     align-items: center;
   }
   .message{
-    margin-left: 27%;
+    margin-left: 25%;
   }
   .head{
     margin-top: 7%;
@@ -142,6 +146,9 @@ export default {
   }
   p{
     color:rgb(30, 236, 236);
+  }
+  .button:hover{
+    background: rgb(60, 60, 240);
   }
  
 </style>
