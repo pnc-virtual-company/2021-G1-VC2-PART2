@@ -1,36 +1,71 @@
 <template>
-    <div>
-        
         <nav>
-            <div>
-                <div class="circle"></div>
-            </div>
             <div class="navbar">
+               
                 <ul>
-                    <li><a href="#">User</a></li>
-                    <li><a href="#">Student</a></li>
-                    <li><a href="#">Permission</a></li>
-                    <li><a href="#">Disciple</a></li>
+                    <div class="circle">
+                        <img src="../../assets/pn-logo.png" alt="">
+                    </div>
+                    <!-- <p>Username</p> -->
+
+                    <v-list-item :to="{ path: '/user' }">
+                        <v-list-item-icon>
+                            <v-icon>mdi-account-circle-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>Users</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item :to="{ path: '/student' }">
+                        <v-list-item-icon>
+                            <v-icon>mdi-account-group-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>Students</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item :to="{ path: '/permission' }">
+                        <v-list-item-icon>
+                            <v-icon>mdi-comment-account-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>Permission</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item :to="{ path: '/disciple' }">
+                        <v-list-item-icon>
+                            <v-icon>mdi-account-multiple-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title class="white-text">Disciple</v-list-item-title>
+                    </v-list-item>
+
                 </ul>
                 <div class="navbar-right">
                     <div class="blog">
+                        <span>Admin</span>
                         <v-btn icon class="btn-Signout">
-                            <v-icon style="font-size:35px;color: white;">mdi-import</v-icon>
+                            <v-icon @click="Signout" style="font-size:35px;color: white;">mdi-import</v-icon>
                         </v-btn>
                     </div>
                     
                 </div>
             </div>
         </nav>
-    </div>
-
-
     
 </template>
 
 <script>
     export default {
-        
+        emits: ['sign-out'],
+        data(){
+            return{
+                isSignout: false,
+            }
+        },
+        methods: {
+            Signout(){
+                this.$emit('sign-out', this.isSignout);
+                this.$router.push('/');
+                localStorage.clear();
+            }
+        },
     }
 </script>
 
@@ -40,49 +75,42 @@
         padding: 0;
         font-family: sans-serif;
     }
-    nav {
-        background-color: #2196f3;
-        
+    img{
+        width: 100%;
+        height: 100%;
     }
+   
     .navbar {
         display: flex;
         justify-content: space-between;
+        background-color: white;
+    }
+    nav{
+        position: sticky;
+        top: 0;
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     }
     ul {
         display: flex;
     }
-    ul li {
-        list-style: none;
-        margin: 20px;
-    }
-    li a {
-        /* margin-left: 10px; */
-        color: #fff;
-        text-decoration: none;
-        padding: 1rem;
-        text-transform: uppercase;
-    }
     .navbar-right {
-        /* margin-right: -50px; */
-        /* background-color: purple; */
         padding: 0px;
         width: 400px;
     }
     .navbar-right:before {
         content: '';
         position: absolute;
-        /* bottom: 0; */
-        height: 64px;
-        z-index: 1;
+        height: 100%;
+        margin: 0;
+        /* z-index: 1; */
         right: -50px;
         width: 30%;
         transform: skew(-40deg);
-        background-color: #1562a1fd;
+        background-color: #4397dbfd;
     }
     .navbar-right:after {
         content: '';
         position: absolute;
-        /* bottom: 0; */
         height: 10%;
         z-index: -1;
         right: 10%;
@@ -98,23 +126,28 @@
     .btn-Signout {
         color: rgb(252, 248, 248);
         font-size: 30px;
-        /* font-weight: 700; */
         text-transform: uppercase; 
         text-decoration: none;
-        /* margin:  20px; */
         cursor: pointer;
-        margin-top: 12px;
+        margin-top: 10px;
         margin-right: 20px;
     }
     .circle {
         float: left;
-        background: rgb(218, 198, 198);
-        width: 50px;
+        width: 260px;
         height: 50px;
         border-radius: 50%;
-        margin: 10px;
-        margin-right: 30px;
-      
+        margin: 3px;
+        margin-right: 10px;
+    }
+    /* p{
+        margin-top: 16px;
+        margin-right: 10px;
+    } */
+    span{
+        margin-right: 200px;
+        margin-top: 5%;
+        color: #fff;
     }
     
 </style>
