@@ -102,7 +102,6 @@
         position: absolute;
         height: 100%;
         margin: 0;
-        /* z-index: 1; */
         right: -50px;
         width: 30%;
         transform: skew(-40deg);
@@ -140,14 +139,9 @@
         margin: 3px;
         margin-right: 10px;
     }
-    /* p{
-        margin-top: 16px;
-        margin-right: 10px;
-    } */
     span{
         margin-right: 200px;
         margin-top: 5%;
         color: #fff;
     }
-    
 </style>
