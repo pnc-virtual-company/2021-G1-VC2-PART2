@@ -89,7 +89,13 @@ class StudentController extends Controller
      */
     public function delete($id)
     {
-        return Student::destroy($id);
+        $isDeleted = Student::destroy($id);
+
+        if($isDeleted == 1) {
+            return response()->json(['message' => 'Deleted successfully'], 200);
+        }else{
+            return response()->json(['message' => 'ID NOT FOUND'], 404);
+        }
     }
     public function search($firstName)
     {
