@@ -1,183 +1,189 @@
 <template>
+  <div class="main">
+    <formstudent
+        @add-user="getstudent"
+    />
 
- 
-  <div class="table">
-    <formstudent></formstudent>
-    <div class="userLists">
-      <v-data-table
-        :headers="headers"
-        :items="desserts"
-        item-key="name"
-        class="elevation-1"
-        :search="search"
-        :custom-filter="filterOnlyCapsText"
-      >
-        <template v-slot:top body.append>
-          <v-text-field
-            v-model="search"
+  <div class="userLists">
+   
+      <v-simple-table>
+        <template v-slot:top>
+          <v-text-field class="mx-4 search"
+            v-on:keyup="search"
+            v-model="studentName"
             label="Search user"
-            class="mx-4"
           ></v-text-field>
         </template>
       
-                
-        <template>
-          
-          <tr>
-            <td></td>
-            <td>
-              <v-text-field
-                v-model="calories"
-                type="number"
-                label="Less than"
-              ></v-text-field>
-            </td>
-            <td colspan="4"></td>
-          </tr>
-        </template>
-      </v-data-table>
-    </div>
+          <template v-slot:default>
+          <thead>
+              <tr>
+                  <th class="text-left">First name</th>
+                  <th class="text-left">Last name</th>
+                  <th class="text-left">Class</th>
+                  <th class="text-left">Phone</th>
+                  <th class="text-left">Gender</th>
+                  <th class="text-left">Ngo</th>
+                  <th class="text-left">Action</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="student in studentdata" :key="student.username">
+                  <td>{{ student.firstName }}</td>
+                  <td>{{ student.lastName }}</td>
+                  <td>{{ student.class }}</td>
+                  <td>{{ student.phone }}</td>
+                  <td>{{ student.gender }}</td>
+                  <td>{{ student.ngo }}</td>
+                  
+                  <td><v-list-item-icon>
+                      <v-icon @click="addShow(student)">mdi-pencil-box-multiple-outline</v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-icon>
+                      <v-icon @click="DeleteStudent(student.id)">mdi-delete</v-icon>
+                  </v-list-item-icon></td>
+
+                  <EditStudent v-if="showDialog"
+                    :studentData = "studentInfo"
+                    @Cancel = "Cancel" 
+                    @Update = "UpdateStudent" 
+                  />
+
+              </tr>
+          </tbody>
+
+
+          </template>
+      </v-simple-table>
+  </div>
   </div>
 </template>
 
 <script>
   import FormStudent from '../ui/FormStudent.vue';
-
+  import EditStudent from './EditStudent.vue';
+  import axios from '../../axios-http.js';
+ 
   export default {
-    components: {'formstudent': FormStudent},
+    components: {'formstudent': FormStudent, EditStudent},
     data () {
       return {
-        search: '',
-        calories: '',
         dialog: false,
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-            iron: '1%',
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-            iron: '1%',
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-            iron: '7%',
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-            iron: '8%',
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-            iron: '16%',
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-            iron: '0%',
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-            iron: '2%',
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-            iron: '45%',
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-            iron: '22%',
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-            iron: '6%',
-          },
-        ],
+        showDialog: false,
+        studentdata:[],
+        studentInfo: '',
+        studentName: '',
       }
     },
-    computed: {
-      headers () {
-        return [
-          {
-            text: 'Dessert (100g serving)',
-            align: 'start',
-            sortable: false,
-            value: 'name',
-          },
-          {
-            text: 'Calories',
-            value: 'calories',
-            filter: value => {
-              if (!this.calories) return true
-
-              return value < parseInt(this.calories)
-            },
-          },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-          { text: 'Protein (g)', value: 'protein' },
-          { text: 'Iron (%)', value: 'iron' },
-        ]
-      },
-    },
+   
     methods: {
-      filterOnlyCapsText (value, search) {
-        return value != null &&
-          search != null &&
-          typeof value === 'string' &&
-          value.toString().toLocaleUpperCase().indexOf(search) !== -1
+      getstudent(student){
+        console.log(student);
+        axios.get('/students').then(res => {
+          this.studentdata = res.data;
+          console.log(this.studentdata);
+        })
       },
+      DeleteStudent(id){
+        axios.delete('/students/' + id).then(res => {
+          console.log(res.data);
+          this.getstudent();
+        })
+      },
+      UpdateStudent(id,student,hidden){
+          axios.put('/students/' + id , student).then(res => {
+            console.log(res.data);
+            this.showDialog = hidden;
+            this.getstudent();
+          })
+      },
+      addShow(student){
+        this.studentInfo = student;
+        this.showDialog = true;
+      },
+      Cancel(hidden){
+        this.showDialog = hidden;
+      },
+      search(){
+        if(this.studentName !== ""){
+          axios.get('/students/search/' + this.studentName).then(res => {
+            this.studentdata = res.data;
+          })
+        }else{
+          this.getstudent();
+        }
+      }
+
     },
+    mounted() {
+      this.getstudent()
+    }
   }
 </script>
 
 <style scoped>
+  .btn-student {
+      float: right;
+      margin-top: 20px;
+      margin-right: -149px;
+  }
+  h2{
+      text-align: center;
+      padding: 10px;
+      color: #fff;
+      background: rgb(108, 185, 226);
+  }
+  
+  input[type=text] {
+      width: 50%;
+      margin-top: 3%;
+      padding: 3px;
+      padding-left: 10px;
+      outline: none;
+      border: 1px solid rgb(194, 193, 193);
+      border-radius: 5px;
+  }
+  input[type=number]
+  {
+      width: 100%;
+      margin-top: 3%;
+      padding: 3px;
+      padding-left: 10px;
+      outline: none;
+        border: 1px solid rgb(194, 193, 193);
+      border-radius: 5px;
+  }
+  select{
+      width: 100%;
+      margin-top: 2%;
+      padding: 3px;
+      padding-left: 10px;
+      outline: none;
+      border: 1px solid rgb(194, 193, 193);
+      border-radius: 5px;
+  }
+  input[type=radio]{
+      margin-left: 10px;
+      margin-top: 3%;
+  }
+  input[type=file]{
+      width: 100%;
+      margin-top: 3%;
+      padding: 5px 0;
+      outline: none;
+  }
   .userLists{
     width: 80%;
     margin-left: 10%;
-    margin-top: 5%;
+    margin-top: 2%;
   }
   .table{
     overflow-y: scroll;
     height: 90vh;
+  }
+  .search{
+    width: 30%;
+    margin-left: 1%;
   }
 </style>
