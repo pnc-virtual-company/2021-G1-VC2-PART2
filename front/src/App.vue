@@ -1,8 +1,7 @@
 <template>
   <v-app>
-   
     <app-nav  app v-if="isSignin" @sign-out="Signout"></app-nav>
-
+  
     <v-main>
       <router-view @sign-in="Signin"/>
     </v-main>
@@ -31,6 +30,7 @@
       let userid = localStorage.getItem('userid');
       if(userid !== null){
         this.isSignin = true;
+        // this.$router.push('/user');
       }
     },
   };

@@ -5,6 +5,7 @@ import StudentView from '../components/views/StudentView.vue';
 import Users from '../components/views/Users.vue';
 import Permission from '../components/views/Permission.vue';
 import Disciple from '../components/views/Disciple.vue';
+
 Vue.use(VueRouter)
 
 const routes = [
