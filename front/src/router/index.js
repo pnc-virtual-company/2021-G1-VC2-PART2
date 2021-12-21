@@ -5,10 +5,12 @@ import StudentView from '../components/views/StudentView.vue';
 import Users from '../components/views/Users.vue';
 import Permission from '../components/views/Permission.vue';
 import Disciple from '../components/views/Disciple.vue';
+// import studentform from '../components/ui/FormStudent.vue';
 Vue.use(VueRouter)
 
 const routes = [
     {path: '/' , component: signform},
+    // {path: '/' , component: studentform},
     {path: '/signin' , component: signform},
     {path: '/user' , component: Users},
     {path: '/student' , component: StudentView},

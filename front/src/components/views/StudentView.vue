@@ -1,45 +1,55 @@
 <template>
+
+ 
   <div class="table">
-  <div class="userLists">
-    <v-data-table
-      :headers="headers"
-      :items="desserts"
-      item-key="name"
-      class="elevation-1"
-      :search="search"
-      :custom-filter="filterOnlyCapsText"
-    >
-      <template v-slot:top body.append>
-        <v-text-field
-          v-model="search"
-          label="Search user"
-          class="mx-4"
-        ></v-text-field>
-      </template>
-      <template>
-        <tr>
-          <td></td>
-          <td>
-            <v-text-field
-              v-model="calories"
-              type="number"
-              label="Less than"
-            ></v-text-field>
-          </td>
-          <td colspan="4"></td>
-        </tr>
-      </template>
-    </v-data-table>
-  </div>
+    <formstudent></formstudent>
+    <div class="userLists">
+      <v-data-table
+        :headers="headers"
+        :items="desserts"
+        item-key="name"
+        class="elevation-1"
+        :search="search"
+        :custom-filter="filterOnlyCapsText"
+      >
+        <template v-slot:top body.append>
+          <v-text-field
+            v-model="search"
+            label="Search user"
+            class="mx-4"
+          ></v-text-field>
+        </template>
+      
+                
+        <template>
+          
+          <tr>
+            <td></td>
+            <td>
+              <v-text-field
+                v-model="calories"
+                type="number"
+                label="Less than"
+              ></v-text-field>
+            </td>
+            <td colspan="4"></td>
+          </tr>
+        </template>
+      </v-data-table>
+    </div>
   </div>
 </template>
 
 <script>
+  import FormStudent from '../ui/FormStudent.vue';
+
   export default {
+    components: {'formstudent': FormStudent},
     data () {
       return {
         search: '',
         calories: '',
+        dialog: false,
         desserts: [
           {
             name: 'Frozen Yogurt',
