@@ -100,7 +100,7 @@ export default {
           localStorage.setItem("userid", res.data.user.id);
           console.log(res.data);
           this.$emit('sign-in', this.Issignin);
-          this.$router.push('/navigation');
+          this.$router.push('/user');
         })
         
       }

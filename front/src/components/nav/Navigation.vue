@@ -4,9 +4,9 @@
                
                 <ul>
                     <div class="circle">
-                        <img src="../../assets/pn-logo.png" alt="">
+                        <img :src="url + userInfo.profile" alt="">
                     </div>
-                    <!-- <p>Username</p> -->
+                    <p>{{userInfo.username}}</p>
 
                     <v-list-item :to="{ path: '/user' }">
                         <v-list-item-icon>
@@ -39,7 +39,7 @@
                 </ul>
                 <div class="navbar-right">
                     <div class="blog">
-                        <span>Admin</span>
+                        <span>{{userInfo.role}}</span>
                         <v-btn icon class="btn-Signout">
                             <v-icon @click="Signout" style="font-size:35px;color: white;">mdi-import</v-icon>
                         </v-btn>
@@ -52,11 +52,15 @@
 </template>
 
 <script>
+    import axios from '../../axios-http.js';
     export default {
         emits: ['sign-out'],
         data(){
             return{
                 isSignout: false,
+                userID: '',
+                userInfo: '',
+                url: "http://127.0.0.1:8000/storage/imageUser/",
             }
         },
         methods: {
@@ -66,6 +70,17 @@
                 localStorage.clear();
             }
         },
+        mounted() {
+            this.userID = localStorage.getItem('userid');
+            axios.get('/users').then(res => {
+                for(let user of res.data){
+                    if(user.id == this.userID){
+                        this.userInfo = user;
+                    }
+                }
+            })
+        },
+    
     }
 </script>
 
@@ -78,6 +93,7 @@
     img{
         width: 100%;
         height: 100%;
+        border-radius: 360px;
     }
    
     .navbar {
@@ -140,10 +156,10 @@
         margin: 3px;
         margin-right: 10px;
     }
-    /* p{
+    p{
         margin-top: 16px;
         margin-right: 10px;
-    } */
+    }
     span{
         margin-right: 200px;
         margin-top: 5%;
