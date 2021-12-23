@@ -12,7 +12,7 @@
           v-bind="attrs"
           v-on="on"
         >
-          Create new Permission
+          Create
         </v-btn>
       </template>
       <v-card>
@@ -30,21 +30,10 @@
                 <v-text-field
                   label="first name"
                   hint="input your firstname"
-                 
+                  v-model="firstname"
                   required
                 ></v-text-field>
               </v-col>
-              <!-- <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <v-text-field
-                  label="Legal middle name"
-                  hint="example of helper text only on focus"
-                   persistent-hint
-                ></v-text-field>
-              </v-col> -->
               <v-col
                 cols="12"
                 sm="6"
@@ -53,55 +42,56 @@
                 <v-text-field
                   label="last name"
                   hint="input your lastname"
+                  v-model="lastName"
                   required
                 ></v-text-field>
               </v-col>
               <v-col
                 cols="12"
-                sm="12"
+                sm="6"
               >
-                <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
-                  label="Choose students"
-                  required
-                ></v-select>
+                <v-autocomplete
+                  v-model="student"
+                  :items="studentlist"
+                  dense
+                  filled
+                  label="Choose Students"
+                ></v-autocomplete>
               </v-col>
               <v-col
                 cols="12"
-                sm="12"
+                sm="6"
               >
-              
-              
-                <v-autocomplete
-                  v-model="value"
-                  :items="items"
-                  dense
-                  filled
-                  label="Filled"
-                ></v-autocomplete>
-              
-
+                  <v-autocomplete
+                    v-model="teacher"
+                    :items="teacherlist"
+                    dense
+                    filled
+                    label="Choose Teacher"
+                  ></v-autocomplete>
               </v-col>
-              
+          
             <!-- Date picker -->
               <v-col
                 cols="12"
                 sm="12"
+                class="dates"
+                
               >
                 <v-row>
                   <v-col
                     cols="12"
-                    sm="6"
-
+                    sm="7"
                   >
                     <v-date-picker
                       v-model="dates"
                       range
+                      class="color"
                     ></v-date-picker>
                   </v-col>
                   <v-col
                     cols="12"
-                    sm="6"
+                    sm="5"
                   >
                     <v-text-field
                       v-model="dateRangeText"
@@ -117,23 +107,14 @@
 
               <v-col
                 cols="12"
-                sm="6"
+                sm="12"
               >
                 <v-select
+                  v-model="leavetype"
                   :items="['sick', 'have a task to do', 'sick too', 'sick three']"
                   label="Choose leave type"
                   required
                 ></v-select>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <v-autocomplete
-                  :items="['Sokhom', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                  label="Teachers"
-                  multiple
-                ></v-autocomplete>
               </v-col>
             </v-row>
           </v-container>
@@ -151,7 +132,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="createPermission"
           >
             Save
           </v-btn>
@@ -165,11 +146,33 @@
   export default {
     data: () => ({
       dialog: false,
-      dates: ['2019-09-10', '2019-09-20'],
+      dates: [],
       items: ['foo', 'bar', 'fizz', 'buzz'],
+      studentlist:['chanthy', 'chanthea', 'sreytouch', 'srey vun'],
+      teacherlist:['Sim', 'Vandy', 'Davy', 'Thaina', 'Phuty', 'Somkhan'],
       values: ['foo', 'bar'],
       value: null,
+
+      
+      firstname: '',
+      lastName: '',
+      student:'',
+      teacher:'',
+      leavetype:''
+
     }),
+    methods: {
+      createPermission (){
+        this.dialog = false;
+        console.log(this.firstname);
+        console.log(this.lastName);
+        console.log(this.student);
+        console.log(this.teacher);
+        console.log(this.leavetype);
+        console.log(this.dates);
+      
+      }
+    },
     computed: {
       dateRangeText () {
         return this.dates.join(' ~ ')
@@ -177,3 +180,9 @@
     },
   }
 </script>
+<style scoped>
+  .dates {
+  background:#E1F5FE;
+  border-radius: 10px;
+  }
+</style>
