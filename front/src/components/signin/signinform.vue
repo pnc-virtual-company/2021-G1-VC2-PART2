@@ -91,14 +91,15 @@ export default {
           password: this.password,
         }
 
-        this.loading = true;
-        setTimeout(()=> {
-          this.loading = false
-          this.snackbar = true
-        },3000)
+        // this.loading = true;
+        // setTimeout(()=> {
+        //   this.loading = false
+        //   this.snackbar = true
+        // },3000)
         axios.post('/signin', signin).then(res => {
           localStorage.setItem("userid", res.data.user.id);
           console.log(res.data);
+          // this.loading = false;
           this.$emit('sign-in', this.Issignin);
           this.$router.push('/user');
         })

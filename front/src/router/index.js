@@ -16,6 +16,7 @@ const routes = [
     {path: '/disciple' , component: Disciple},
  
 ]
+// let userID = localStorage.getItem('userid');
 
 const router = new VueRouter({
   mode: 'history',
