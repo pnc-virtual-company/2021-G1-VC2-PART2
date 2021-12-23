@@ -147,7 +147,7 @@
     data: () => ({
       dialog: false,
       dates: [],
-      items: ['foo', 'bar', 'fizz', 'buzz'],
+      items: ['foo', 'bar', 'fizz'],
       studentlist:['chanthy', 'chanthea', 'sreytouch', 'srey vun'],
       teacherlist:['Sim', 'Vandy', 'Davy', 'Thaina', 'Phuty', 'Somkhan'],
       values: ['foo', 'bar'],
