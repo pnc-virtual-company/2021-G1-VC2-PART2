@@ -1,10 +1,14 @@
 <template>
   <v-expansion-panels class="main">
-    <v-text-field
-          v-model="search"
-          label="Search"
-          class="mx-4"
-        ></v-text-field>
+   <v-card-title>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
     <v-expansion-panel
       v-for="(item,i) in 2"
       :key="i">
