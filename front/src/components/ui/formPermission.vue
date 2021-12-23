@@ -70,49 +70,57 @@
                 cols="12"
                 sm="12"
               >
+              
+              
                 <v-autocomplete
-                filled
-                >
-                </v-autocomplete>
+                  v-model="value"
+                  :items="items"
+                  dense
+                  filled
+                  label="Filled"
+                ></v-autocomplete>
+              
+
               </v-col>
               
-             <v-col
+            <!-- Date picker -->
+              <v-col
                 cols="12"
                 sm="12"
-             >
-                <v-row >
-                    <v-col
+              >
+                <v-row>
+                  <v-col
                     cols="12"
                     sm="6"
-                    >
-                        <v-date-picker
-                            v-model="dates"
-                            range
-                        ></v-date-picker>
-                    </v-col>
-                    <v-col
-                    cols="12"
-                    sm="6"
-                    >
-                        <v-text-field
-                            v-model="dateRangeText"
-                            label="Date range"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                        ></v-text-field>
-                        model: {{ dates }}
-                    </v-col>
-                </v-row>
-             </v-col>
-                
 
+                  >
+                    <v-date-picker
+                      v-model="dates"
+                      range
+                    ></v-date-picker>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                  >
+                    <v-text-field
+                      v-model="dateRangeText"
+                      label="Date range"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                    ></v-text-field>
+                    model: {{ dates }}
+                  </v-col>
+                </v-row>
+              </v-col>
+              
 
               <v-col
                 cols="12"
                 sm="6"
               >
                 <v-select
-                  :items="['sick', 'have a task to do', '30-54', '54+']"
+                  :items="['sick', 'have a task to do', 'sick too', 'sick three']"
                   label="Choose leave type"
                   required
                 ></v-select>
@@ -157,6 +165,15 @@
   export default {
     data: () => ({
       dialog: false,
+      dates: ['2019-09-10', '2019-09-20'],
+      items: ['foo', 'bar', 'fizz', 'buzz'],
+      values: ['foo', 'bar'],
+      value: null,
     }),
+    computed: {
+      dateRangeText () {
+        return this.dates.join(' ~ ')
+      },
+    },
   }
 </script>
