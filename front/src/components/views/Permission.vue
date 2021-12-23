@@ -7,6 +7,7 @@
         label="Search"
         single-line
         hide-details
+        class="search"
       ></v-text-field>
     <!-- ================================== -->
     <!-- ==========card======================== -->
@@ -15,7 +16,6 @@
       v-for="(item,i) in 2"
       :key="i">
       <v-expansion-panel-header class="header">
-        <!-- <h2>Username</h2> -->
         <v-img
           lazy-src="https://picsum.photos/id/11/10/6"
           max-height="150"
@@ -32,27 +32,20 @@
           src="https://i.pinimg.com/originals/3a/74/5d/3a745d3dcba72feb73e44e399ec97bea.jpg"
         ></v-img>
         <div>
-        
         <h3>PHAKACHAN PHON</h3>
         <br>
         <p>2021WEB</p>
         </div>
-    
          <v-row class="btn" align="center" justify="space-around">
         <v-btn tile color="#81D4FA">
           <v-icon>mdi-pencil</v-icon>
-         
         </v-btn>
         <v-btn tile color="#EF9A9A">
           <v-icon>mdi-delete </v-icon>
-         
         </v-btn>
       </v-row>
-
       </v-expansion-panel-header>
       <!-- ======space================== -->
-      <!-- <br> -->
-      <!-- ===== -->
       <v-expansion-panel-content>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
       </v-expansion-panel-content>
@@ -80,7 +73,6 @@
     margin-top: 2%;
   }
    .card{
-      /* / background-color:aquamarine; / */
       margin-top: 2%;
       width: 80%;
       margin-left: 10%;
@@ -88,5 +80,8 @@
     h3 ,p{
       text-align: center;
     }
-   
+   .search{
+     width: 40%;
+     margin-left: 5%;
+   }
 </style>
