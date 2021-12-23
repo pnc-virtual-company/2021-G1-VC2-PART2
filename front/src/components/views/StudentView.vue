@@ -104,7 +104,7 @@
       },
       Cancel(hidden){
         this.showDialog = hidden;
-      },
+      }, 
       search(){
         if(this.studentName !== ""){
           axios.get('/students/search/' + this.studentName).then(res => {
