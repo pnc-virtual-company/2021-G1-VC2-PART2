@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\DiscipleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,3 +53,7 @@ Route::delete('/permissions/{id}',[PermissionController::class,'delete']);
 //Route search Permission =============================== 
 Route::get('/permissions/search/{firstName}', [PermissionController::class, 'search']);
 
+Route::get('/disciples',[DiscipleController::class,'index']);
+Route::post('disciples',[DiscipleController::class,'store']);
+Route::put('/disciples/{id}',[DiscipleController::class,'Update']);
+Route::delete('/disciples/{id}',[DiscipleController::class,'delete']);
