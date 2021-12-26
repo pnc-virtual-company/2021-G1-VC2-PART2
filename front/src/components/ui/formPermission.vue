@@ -1,114 +1,48 @@
 <template>
-  <v-row justify="center" class="mt-4 mr-10 float-right">
+  <div class="text-center">
     <v-dialog
       v-model="dialog"
-      persistent
-      max-width="600px"
+      width="600"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="primary"
+          color="blue lighten-2"
           dark
           v-bind="attrs"
           v-on="on"
         >
-          Create
+        New permission
         </v-btn>
       </template>
+
       <v-card>
-        <v-card-title>
-          <span class="text-h5">Permission</span>
+        
+        <v-card-title class="text-h5 grey lighten-2">
+          Add Permission
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
-                <v-text-field
-                  label="first name"
-                  hint="input your firstname"
-                  v-model="firstname"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
-                <v-text-field
-                  label="last name"
-                  hint="input your lastname"
-                  v-model="lastName"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
+              
+              <v-col cols="12" sm="6">
                 <v-autocomplete
-                  v-model="student"
+                  v-model="studentId"
                   :items="studentlist"
                   dense
-                  filled
                   label="Choose Students"
                 ></v-autocomplete>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                  <v-autocomplete
-                    v-model="teacher"
-                    :items="teacherlist"
-                    dense
-                    filled
-                    label="Choose Teacher"
-                  ></v-autocomplete>
-              </v-col>
-          
-            <!-- Date picker -->
-              <v-col
-                cols="12"
-                sm="12"
-                class="dates"
-                
-              >
-                <v-row>
-                  <v-col
-                    cols="12"
-                    sm="7"
-                  >
-                    <v-date-picker
-                      v-model="dates"
-                      range
-                      class="color"
-                    ></v-date-picker>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="5"
-                  >
-                    <v-text-field
-                      v-model="dateRangeText"
-                      label="Date range"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                    ></v-text-field>
-                    model: {{ dates }}
-                  </v-col>
-                </v-row>
-              </v-col>
-              
 
-              <v-col
-                cols="12"
-                sm="12"
-              >
+              <v-col cols="12" sm="6">
+                <v-autocomplete
+                  v-model="teacher"
+                  :items="teacherlist"
+                  dense
+                  label="Choose Teacher"
+                ></v-autocomplete>
+              </v-col>
+
+              <v-col cols="12" sm="12">
                 <v-select
                   v-model="leavetype"
                   :items="['sick', 'have a task to do', 'sick too', 'sick three']"
@@ -116,9 +50,24 @@
                   required
                 ></v-select>
               </v-col>
+        
+              <v-col cols="6" sm="12">
+                <label for="startDate">Start date: </label>
+                <input type="date" name="date" v-model="startDate">
+                <label for="endDate" style="margin-left:15%">End date: </label>
+                <input type="date" name="date" v-model="endDate">
+              </v-col>
+
+              <v-col cols="12" sm="12">
+                <v-text-field
+                  label="Description"
+                  hint="input your description"
+                  v-model="description"
+                  required
+                ></v-text-field>
+              </v-col>
             </v-row>
           </v-container>
-          <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -137,52 +86,58 @@
             Save
           </v-btn>
         </v-card-actions>
+
       </v-card>
     </v-dialog>
-  </v-row>
+  </div>
 </template>
 
 <script>
   export default {
+    emits: ['add-per'],
     data: () => ({
       dialog: false,
-      dates: [],
-      items: ['foo', 'bar', 'fizz'],
       studentlist:['chanthy', 'chanthea', 'sreytouch', 'srey vun'],
       teacherlist:['Sim', 'Vandy', 'Davy', 'Thaina', 'Phuty', 'Somkhan'],
-      values: ['foo', 'bar'],
       value: null,
-
       
-      firstname: '',
-      lastName: '',
-      student:'',
+      studentId:'',
       teacher:'',
-      leavetype:''
+      leavetype:'',
+      startDate: '',
+      endDate: '',
+      description: '',
 
     }),
     methods: {
       createPermission (){
         this.dialog = false;
-        console.log(this.firstname);
-        console.log(this.lastName);
-        console.log(this.student);
-        console.log(this.teacher);
-        console.log(this.leavetype);
-        console.log(this.dates);
+        let addpermission = {
+          student_id: this.studentId,
+          teacher: this.teacher,
+          leavetype: this.leavetype,
+          startDate: this.startDate,
+          endDate: this.endDate,
+          description: this.description,
+        }
+        this.$emit('add-per', addpermission);
+        console.log(addpermission);
       
       }
     },
-    computed: {
-      dateRangeText () {
-        return this.dates.join(' ~ ')
-      },
-    },
+    
   }
 </script>
 <style scoped>
+  .text-center{
+    margin-left: 76%;
+    margin-bottom: -50px;
+  }
   .dates {
   background:#E1F5FE;
   border-radius: 10px;
+  }
+  input[type=date]{
+    outline: none;
   }
 </style>

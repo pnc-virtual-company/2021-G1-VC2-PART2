@@ -9,9 +9,7 @@ class permission extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'firstName',
-        'lastName',
-        'class',
+        'student_id',
         'description',
         'permissionType'
     ];

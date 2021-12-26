@@ -14,7 +14,7 @@ class PermissionController extends Controller
     public function getPermission()
     {
         //
-        return Permission::latest()->get();
+        return Permission::with('student')->latest()->get();
     
     }
 
@@ -28,20 +28,14 @@ class PermissionController extends Controller
     {
         //
          $request->validate([
-            'firstName' => 'required',
-            'lastName' => 'required',
-            'class' => 'required',
+            'student_id'=> 'required',
             'description'=>'required',
             'permissionType'=>'required',
             
         ]);
 
-       
-
         $permission = new Permission();
-        $permission->firstName = $request->firstName;
-        $permission->lastName = $request->lastName;
-        $permission->class = $request->class;
+        $permission->student_id = $request->student_id;
         $permission->description = $request->description;
         $permission->permissionType = $request->permissionType;
 
