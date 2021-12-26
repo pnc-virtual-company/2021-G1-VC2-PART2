@@ -22,6 +22,7 @@ class CreateStudentsTable extends Migration
             $table->string('gender');
             $table->string('ngo');
             $table->string('picture');
+            $table->foreignId('user_id')->constrained()->onDelete('CASCADE');
             $table->timestamps();
         });
     }

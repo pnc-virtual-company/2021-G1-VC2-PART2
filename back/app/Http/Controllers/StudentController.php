@@ -47,6 +47,7 @@ class StudentController extends Controller
         $student->gender = $request->gender;
         $student->ngo = $request->ngo;
         $student->picture = $request->file('picture')->hashName();
+        $student->user_id = $request->user_id;
 
         $student->save();
 

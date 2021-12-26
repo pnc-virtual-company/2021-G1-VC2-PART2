@@ -4,11 +4,11 @@
                
                 <ul>
                     <div class="circle">
-                        <img src="../../assets/pn-logo.png" alt="">
+                        <img :src="url + userInfo.profile" alt="">
                     </div>
-                    <!-- <p>Username</p> -->
+                    <p>{{userInfo.username}}</p>
 
-                    <v-list-item :to="{ path: '/user' }">
+                    <v-list-item v-if="isRole" :to="{ path: '/user' }">
                         <v-list-item-icon>
                             <v-icon>mdi-account-circle-outline</v-icon>
                         </v-list-item-icon>
@@ -39,7 +39,7 @@
                 </ul>
                 <div class="navbar-right">
                     <div class="blog">
-                        <span>Admin</span>
+                        <span>{{userInfo.role}}</span>
                         <v-btn icon class="btn-Signout">
                             <v-icon @click="Signout" style="font-size:35px;color: white;">mdi-import</v-icon>
                         </v-btn>
@@ -52,11 +52,18 @@
 </template>
 
 <script>
+    import axios from '../../axios-http.js';
     export default {
         emits: ['sign-out'],
         data(){
             return{
                 isSignout: false,
+                isRole: false,
+                userID: '',
+                userInfo: null,
+                profile: '',
+                token: null,
+                url: "http://127.0.0.1:8000/storage/imageUser/",
             }
         },
         methods: {
@@ -66,6 +73,23 @@
                 localStorage.clear();
             }
         },
+        mounted() {
+            this.token = localStorage.getItem('token');
+            this.username = localStorage.getItem('username');
+            this.profile = localStorage.getItem('profile');
+            axios.get('/users').then(res => {
+                for(let user of res.data){
+                    if(user.username == this.username && user.profile == this.profile && this.token !== null){
+                        this.userInfo = {username: user.username, role: user.role, profile: user.profile}
+                        
+                        if(user.role == "Admin"){
+                            this.isRole = true;
+                        }
+                    }
+                }
+            })
+        },
+    
     }
 </script>
 
@@ -78,6 +102,7 @@
     img{
         width: 100%;
         height: 100%;
+        border-radius: 360px;
     }
    
     .navbar {
@@ -102,6 +127,7 @@
         position: absolute;
         height: 100%;
         margin: 0;
+        /* z-index: 1; */
         right: -50px;
         width: 30%;
         transform: skew(-40deg);
@@ -139,9 +165,14 @@
         margin: 3px;
         margin-right: 10px;
     }
+    p{
+        margin-top: 16px;
+        margin-right: 10px;
+    }
     span{
         margin-right: 200px;
         margin-top: 5%;
         color: #fff;
     }
+    
 </style>

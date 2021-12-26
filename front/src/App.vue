@@ -1,8 +1,7 @@
 <template>
   <v-app>
-   
     <app-nav  app v-if="isSignin" @sign-out="Signout"></app-nav>
-
+  
     <v-main>
       <router-view @sign-in="Signin"/>
     </v-main>
@@ -28,9 +27,10 @@
       }
     },
     mounted() {
-      let userid = localStorage.getItem('userid');
-      if(userid !== null){
+      let userToken = localStorage.getItem('token');
+      if(userToken !== null){
         this.isSignin = true;
+        // this.$router.push('/user');
       }
     },
   };

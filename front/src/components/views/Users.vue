@@ -9,61 +9,126 @@
           <v-card>
               <h3>Create new user</h3>
               <v-card-text>
-                  <input type="text" placeholder="Username">
-                  <input type="email" placeholder="Email">
-                  <input type="password" placeholder="Password">
-                  <label for="role">Role</label>
-                  <select name="role" id="role" >
-                      <option value="0">Admin</option>
-                      <option value="1">Social Affair</option>
-                      <option value="2">Student</option>
-                  </select>
-                  <input type="file" >
+                <v-text-field
+                  v-model="username"
+                  :rules="nameRules"
+                  :counter="20"
+                  label="Username"
+                  color="deep-purple accent-4"
+                  required
+                ></v-text-field>
+
+                <v-text-field
+                  v-model="email"
+                  :rules="emailRules"
+                  label="E-mail"
+                  color="deep-purple accent-4"
+                  required
+                ></v-text-field>
+
+                <v-row>
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="password"
+                      :counter="20"
+                      :rules="passwordrules"
+                      label="password"
+                      color="deep-purple accent-4"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12" sm='6'>
+                    <v-text-field
+                      v-model="password_confirmation"
+                      :counter="20"
+                      :rules="passwordrules"
+                      label="confirm password"
+                      color="deep-purple accent-4"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
+                <v-combobox
+                    v-model="role"
+                    :items="items"
+                    label="Select role"
+                    outlined
+                    dense
+                    color="deep-purple accent-4"
+                  ></v-combobox>
+                </v-col>
+
+                <v-file-input
+                  chips
+                  counter
+                  show-size
+                  small-chips
+                  v-model="image"
+                  color="deep-purple accent-4"
+                  truncate-length="32"
+                ></v-file-input>
+                <p class="message">{{error}}</p>
               </v-card-text>
 
               <v-divider></v-divider>
 
               <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" text @click="dialog = false">Create</v-btn>
+                  <v-btn color="primary" text @click="Adduser">Create</v-btn>
               </v-card-actions>
 
           </v-card>
-          
       </v-dialog>
     </div>
 
+    
 
-      <div class="userLists">
-          <h2>List of users</h2>
-          <v-simple-table>
-              <template v-slot:default>
-              <thead>
-                  <tr>
-                      <th class="text-left">Username</th>
-                      <th class="text-left">Email</th>
-                      <th class="text-left">Role</th>
-                      <th class="text-left">Action</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr v-for="item in desserts" :key="item.username">
-                      <td>{{ item.username }}</td>
-                      <td>{{ item.email }}</td>
-                      <td>{{ item.role }}</td>
-                      
-                      <td><v-list-item-icon>
-                          <v-icon>mdi-pencil-box-multiple-outline</v-icon>
-                      </v-list-item-icon>
-
-                      <v-list-item-icon>
-                          <v-icon>mdi-delete</v-icon>
-                      </v-list-item-icon></td>
+    <div class="userLists">
+        <h2>List of users</h2>
+        <v-simple-table>
+            <template v-slot:default>
+            <thead>
+                <tr>
+                    <th class="text-left">Profile</th>
+                    <th class="text-left">Username</th>
+                    <th class="text-left">Email</th>
+                    <th class="text-left">Role</th>
+                    <th class="text-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="user of users" :key="user.username">
+                  <td>
+                    <img :src="url + user.profile" alt="">
+                  </td>
+                  <td>{{ user.username }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.role }}</td>
                   
-                  </tr>
-              </tbody>
-              </template>
-          </v-simple-table>
+                  <td><v-list-item-icon>
+                      <v-icon @click="Show(user)">mdi-pencil-box-multiple-outline</v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-icon>
+                    <v-icon @click="DeleteUser(user.id)">mdi-delete</v-icon>
+                  </v-list-item-icon></td>
+
+                  <dialog-edit v-if="displayEdit"
+                    :data ="userInfo"
+                    @cancel ="cancel"
+                    @update ="EditUser"
+                  />
+
+                </tr>
+            </tbody>
+            </template>
+        </v-simple-table>
       </div>
 
       
@@ -71,84 +136,200 @@
 </template>
 
 <script>
+import axios from '../../axios-http.js';
+import DialogEdit from './DialogEdit.vue';
+
 export default {
+  components: {
+    DialogEdit
+    },
   data() {
     return {
-      desserts: [
-        {
-          username: 'Chanthy tha',
-          email: 'chanthy@gmail.com',
-          role: 'Admin',
-        },
-        {
-          username: 'Vun yin',
-          email: 'vun@gmail.com',
-          role: 'Social Affair',
-        },
-        {
-          username: 'Chanthea',
-          email: 'chanthea@gmail.com',
-          role: 'Social Affair',
-        },
-      
-      ],
+      userInfo: '',
+      password: '',
+      password_confirmation: '',
+      image: '',
+      users: [],
       dialog: false,
-      role: 'Role',
+      showDialog: false,
+      displayEdit: false,
+      error: '',
+      url: "http://127.0.0.1:8000/storage/imageUser/",
+      role: '',
+      items: [
+        'Admin',
+        'Student',
+        'Social Affiar',
+      ],
+
+      valid: false,
+      username: '',
+      nameRules: [
+        v => !!v || 'Username is required',
+        v => v.length <= 20 || 'Username must be less than 20 characters',
+      ],
+      email: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
+      ],
+
+      passwordrules: [
+        v => !!v || 'Password is required',
+        v => v.length >= 8 || 'Password is must be equal or more than 8 characters',
+        v => v.length <= 20 || 'Password is to long',
+      ]
+
     };
+  },
+  methods: {
+  
+    Adduser(){
+      console.log(this.image);
+      let newUser = new FormData();
+      newUser.append('username', this.username);
+      newUser.append('email', this.email);
+      newUser.append('password', this.password);
+      newUser.append('password_confirmation', this.password_confirmation);
+      newUser.append('role', this.role);
+      newUser.append('profile', this.image);
+  
+      axios.post('/signup', newUser).then(res => {
+        console.log(res.data);
+        this.dialog = false;
+        this.getUsers();
+      })
+      .catch(error => {
+        this.error = "User is not found , please try again!";
+        return error;
+      })
+      
+    },
+    EditUser(id,userupdated,display) {
+      axios.put('/users/' + id , userupdated).then(res => {
+        console.log(res.data);
+        this.displayEdit = display;
+        this.getUsers();
+      })
+    
+    },
+    Show(user){
+      this.userInfo = user;
+      this.displayEdit = true;
+      this.showDialog = true;
+    },
+    cancel() {
+        this.displayEdit = false;
+    },
+
+    DeleteUser(id) {
+      axios.delete('/users/' + id).then(res => {
+        console.log(res.data);
+        this.getUsers();
+      })
+    },
+    getUsers(){
+      axios.get('/users').then(res => {
+        this.users = res.data;
+      })
+    }
+  },
+  mounted() {
+    this.getUsers();
   },
 };
 </script>
 
 <style scoped>
-    .userLists{
-        width: 90%;
-        margin-left: 5%;
-    }
+  .userLists{
+      width: 90%;
+      margin-left: 5%;
+  }
+  .main{
+    height: 90vh;
+    overflow-y: scroll;
+  }
 
-    h2{
-      margin-top: 2%;
-      text-align: center;
-      padding: 10px;
-      color: #fff;
-      background: rgb(108, 185, 226);
-    }
-    h3{
-      text-align: center;
-      padding: 10px;
-      color: #fff;
-      background: rgb(108, 185, 226);
-    }
-    input[type=text],
-    input[type=email],
-    input[type=password]
-    {
-        width: 100%;
-        margin-top: 3%;
-        padding: 5px;
-        outline: none;
-         border: 1px solid rgb(194, 193, 193);
-        border-radius: 5px;
-    }
-    select{
-        width: 100%;
-        margin-top: 2%;
-        padding: 5px;
-        outline: none;
+  h2{
+    margin-top: 2%;
+    text-align: center;
+    padding: 10px;
+    color: #fff;
+    background: rgb(108, 185, 226);
+  }
+  h3{
+    text-align: center;
+    padding: 10px;
+    color: #fff;
+    background: rgb(108, 185, 226);
+  }
+  input[type=text],
+  input[type=email],
+  input[type=password]
+  {
+      width: 100%;
+      margin-top: 3%;
+      padding: 5px;
+      outline: none;
         border: 1px solid rgb(194, 193, 193);
-        border-radius: 5px;
-    }
-    input[type=password]{
-        margin-bottom: 2%;
-    }
-    input[type=file]{
-        width: 100%;
-        margin-top: 3%;
-        padding: 5px 0;
-        outline: none;
-    }
-    .text-center{
-      margin-left: 84%;
-      width: 10%;
-      margin-top: 4%;
-    }
+      border-radius: 5px;
+  }
+  select{
+      width: 100%;
+      margin-top: 2%;
+      padding: 5px;
+      outline: none;
+      border: 1px solid rgb(194, 193, 193);
+      border-radius: 5px;
+  }
+  input[type=password]{
+      margin-bottom: 2%;
+  }
+  input[type=file]{
+      width: 100%;
+      margin-top: 3%;
+      padding: 5px 0;
+      outline: none;
+  }
+  .text-center{
+    margin-left: 84%;
+    width: 10%;
+    margin-top: 4%;
+  
+  }
+  
+  img{
+    width: 70px;
+    height: 70px;
+    border-radius: 360px;
+    margin-top: 5px;
+    padding: 5px;
+  }
+  .message{
+    color: red;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+  :root {
+    --main-color: #750579;
+    --main-color-light: #e21ee9;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .right-main-button {
+    float: right;
+    margin-right: 2rem;
+  }
 </style>

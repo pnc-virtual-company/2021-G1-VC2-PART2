@@ -8,11 +8,13 @@
    
       <v-simple-table>
         <template v-slot:top>
+          
           <v-text-field class="mx-4 search"
             v-on:keyup="search"
             v-model="studentName"
-            label="Search user"
+            label="Search student"
           ></v-text-field>
+
         </template>
       
           <template v-slot:default>
@@ -32,7 +34,7 @@
                   <td>{{ student.firstName }}</td>
                   <td>{{ student.lastName }}</td>
                   <td>{{ student.class }}</td>
-                  <td>{{ student.phone }}</td>
+                  <td>0{{ student.phone }}</td>
                   <td>{{ student.gender }}</td>
                   <td>{{ student.ngo }}</td>
                   
@@ -78,9 +80,11 @@
     },
    
     methods: {
+      // let userName = localStorage.getItem('username');
       getstudent(student){
         console.log(student);
         axios.get('/students').then(res => {
+          
           this.studentdata = res.data;
           console.log(this.studentdata);
         })

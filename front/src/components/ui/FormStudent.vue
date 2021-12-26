@@ -133,7 +133,7 @@
     }
     .text-center{
         margin-top: 3%;
-        margin-left: 80%;
+        margin-left: 79%;
         width: 10%;
     }
 </style>
