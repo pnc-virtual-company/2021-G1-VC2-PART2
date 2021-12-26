@@ -3,7 +3,8 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\PermissionController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,17 +29,26 @@ Route::post('/signin', [UserController::class, 'Signin']);
 // ==================== Route Search User======================================
 Route::get('/username/search/{username}', [UserController::class, 'search']);
 
-//===================== Route Student ==============================
+//===================== Route Student ========================================
 Route::get('/students',[StudentController::class,'getStudent']);
 Route::post('/students',[StudentController::class,'store']);
 Route::put('/students/{id}',[StudentController::class,'updateStudent']);
 Route::delete('/students/{id}',[StudentController::class,'delete']);
 
-//Route search student =============================== 
+//========================Route search student =============================== 
 Route::get('/students/search/{firstName}', [StudentController::class, 'search']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
     
     Route::post('/logout', [UserController::class, 'Logout']);
 });
+
+// ===========================Route Permission ==============================
+Route::get('/permissions',[PermissionController::class,'getPermission']);
+Route::post('/permissions',[PermissionController::class,'store']);
+Route::put('/permissions/{id}',[PermissionController::class,'updatePermission']);
+Route::delete('/permissions/{id}',[PermissionController::class,'delete']);
+
+//Route search Permission =============================== 
+Route::get('/permissions/search/{firstName}', [PermissionController::class, 'search']);
 

@@ -21,6 +21,7 @@
                 <v-form @submit.prevent="submitHandler" ref="form">
                     <v-card-text>
                         <v-text-field
+                            color="blue lighten-2"
                             class="email"
                             v-model="email"
                             :rules="emailRules"
@@ -31,6 +32,7 @@
                             required
                         />
                         <v-text-field
+                            color="blue lighten-2"
                             class="password"
                             v-model="password"
                             :rules="passwordRules"
