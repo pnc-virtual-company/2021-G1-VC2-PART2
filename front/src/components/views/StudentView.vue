@@ -80,9 +80,11 @@
     },
    
     methods: {
+      // let userName = localStorage.getItem('username');
       getstudent(student){
         console.log(student);
         axios.get('/students').then(res => {
+          
           this.studentdata = res.data;
           console.log(this.studentdata);
         })

@@ -56,6 +56,10 @@ class UserController extends Controller
             'token' => $token
             ]);
     }
+    public function Logout(Request $request){
+        auth()->user()->tokens()->delete();
+        return response()->json(['message' => 'User logout']);
+    }
 
     public function UpdateUser(Request $request, $id)
     {
@@ -81,3 +85,6 @@ class UserController extends Controller
         return User::where('username','like','%'.$username.'%')->get();
     }
 }
+
+// 1|6tRwaxZlncw2Dim5uLL3SId7o3pDKfZskLNKH6Hf
+// 2|EpivXWpVr7aSvsMdwCs6nOlYu5GnEG9sK7O2wynO

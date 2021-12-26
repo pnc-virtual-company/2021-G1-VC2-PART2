@@ -8,7 +8,7 @@
                     </div>
                     <p>{{userInfo.username}}</p>
 
-                    <v-list-item :to="{ path: '/user' }">
+                    <v-list-item v-if="isRole" :to="{ path: '/user' }">
                         <v-list-item-icon>
                             <v-icon>mdi-account-circle-outline</v-icon>
                         </v-list-item-icon>
@@ -58,8 +58,11 @@
         data(){
             return{
                 isSignout: false,
+                isRole: false,
                 userID: '',
-                userInfo: '',
+                userInfo: null,
+                profile: '',
+                token: null,
                 url: "http://127.0.0.1:8000/storage/imageUser/",
             }
         },
@@ -71,11 +74,17 @@
             }
         },
         mounted() {
-            this.userID = localStorage.getItem('userid');
+            this.token = localStorage.getItem('token');
+            this.username = localStorage.getItem('username');
+            this.profile = localStorage.getItem('profile');
             axios.get('/users').then(res => {
                 for(let user of res.data){
-                    if(user.id == this.userID){
-                        this.userInfo = user;
+                    if(user.username == this.username && user.profile == this.profile && this.token !== null){
+                        this.userInfo = {username: user.username, role: user.role, profile: user.profile}
+                        
+                        if(user.role == "Admin"){
+                            this.isRole = true;
+                        }
                     }
                 }
             })

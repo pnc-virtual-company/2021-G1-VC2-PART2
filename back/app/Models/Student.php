@@ -17,4 +17,9 @@ class Student extends Model
         'ngo',
         'picture'
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
 }

@@ -91,17 +91,23 @@ export default {
           password: this.password,
         }
 
-        // this.loading = true;
-        // setTimeout(()=> {
+       // this.loading = true;
+        // setTim eout(()=> {
         //   this.loading = false
         //   this.snackbar = true
         // },3000)
         axios.post('/signin', signin).then(res => {
-          localStorage.setItem("userid", res.data.user.id);
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("profile", res.data.user.profile);
+          localStorage.setItem("username", res.data.user.username);
           console.log(res.data);
           // this.loading = false;
           this.$emit('sign-in', this.Issignin);
-          this.$router.push('/user');
+          if(res.data.user.role == 'Admin'){
+            this.$router.push('/user');
+          }else{
+            this.$router.push('/student');
+          }
         })
         
       }
