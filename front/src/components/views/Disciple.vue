@@ -1,5 +1,6 @@
 <template>
   <v-expansion-panels class="main">
+   
    <v-card-title>
       <v-text-field
         v-model="search"
@@ -9,6 +10,9 @@
         hide-details
       ></v-text-field>
     </v-card-title>
+    
+     <form-disciple></form-disciple>
+
     <v-expansion-panel
         v-for="disciple of disciples " :key="disciple.id"
       >
@@ -84,8 +88,10 @@
 </template>
 <script>
  import axios from '../../axios-http.js';
+import formDisciple from '../ui/formDisciple.vue';
+
 export default {
- 
+  components: { formDisciple },
   data () {
     return {
       search: '',

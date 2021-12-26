@@ -24,40 +24,18 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-col
-                                cols="12"
-                                sm="6"
-
-                            >
-                                <v-text-field
-                                v-model="firstname"
-                                label=" input your first name"
-                                hint="input your first name"
-                                required
-                                ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                            >
-                                <v-text-field
-                                v-model="lastName"
-                                label="input your last name"
-                                hint="input your last name"
-                                required
-                                ></v-text-field>
-                            </v-col>
+                           
                             <v-col
                                 cols="12"
                                 sm="12"
                             >
-                                <v-select
-                                v-model="Class"
-                                :items="classlist"
-                                label="Choose Class"
-                                required
-                                ></v-select>
+                                <v-autocomplete
+                                    v-model="student_id"
+                                    :items="studentLists"
+                                    label="Choose student"
+                                ></v-autocomplete>
                             </v-col>
+
                             <v-col
                                 cols="12"
                                 sm="12"
@@ -65,10 +43,11 @@
                                 <v-autocomplete
                                 v-model="leave"
                                 :items="leavelist"
-                                label="Choose type"
+                                label="Choose discipline notice type"
                                 multiple
                                 ></v-autocomplete>
                             </v-col>
+
                             <v-col 
                             cols="12"
                             sm="12"
@@ -77,9 +56,7 @@
                                 v-model="description"
                                 >
                                 <template v-slot:label>
-                                    <div>
-                                    Bio <small>(optional)</small>
-                                    </div>
+                                    Description <small>( Explanations )</small>
                                 </template>
                                 </v-textarea>
                             </v-col>
@@ -109,30 +86,36 @@
 </template>
 
 <script>
-//   import axios from '../../axios-http.js';
+
+  import axios from '../../axios-http.js';
+
   export default {
     data: () => ({
       emits: ['add-user'],
       dialog: false,
       classlist:['WEB 2021A', 'WEB 2021B', 'SNA 2021', 'WEB 2022A','WEB 2022B','SNA 2022'],
       leavelist:['leavelist', 'Oral warning', 'Warning letter', 'Termination'],
+      studentLists: ['A', 'B','C','D'],
       
-      firstname: '',
-      lastName: '',
-      Class:'',
+      student_id: '',
       leave:'',
       description:''
     }),
 
     methods: {
-      createDisciple (){
-        this.dialog = false;
-        console.log(this.firstname);
-        console.log(this.lastName);
-        console.log(this.Class);
-        console.log(this.leave);
-        console.log(this.description);
-      }
+        createDisciple (){
+            let newDiscipline = {
+                student_id: this.student_id,
+                leaveList_discipline:this.leave,
+                description: this.description
+            }
+            axios.post('/disciples', newDiscipline ).then(res => {
+                console.log(this.student_id = res.data);
+                this.$emit('add-user', res.data);
+                this.dialog = false;
+            })
+            console.log(newDiscipline);
+        }
     }
   }
 </script>

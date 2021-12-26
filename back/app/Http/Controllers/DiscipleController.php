@@ -36,11 +36,9 @@ class DiscipleController extends Controller
         ]);
 
         $disciple = new Disciple();
-        $disciple->first_name = $request->first_name;
-        $disciple->last_name= $request->last_name;
-        $disciple->type = $request->type;
+        $disciple->student_id = $request->student_id;
+        $disciple->dnt = $request->dnt;
         $disciple->description = $request->description;
-        $disciple->class = $request->class;
 
         $disciple->save();
        
