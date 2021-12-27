@@ -1,5 +1,5 @@
 <template> 
-    <div class="overlay">
+    <v-dialog width="600" v-model="dialog" class="overlay">
         <v-card>
             <h2>Update Student</h2>
             <v-card-text>
@@ -31,7 +31,7 @@
             </v-card-actions>
 
         </v-card>
-  </div>
+    </v-dialog>
 </template>
 
 <script>
@@ -41,6 +41,7 @@ export default {
 
     data(){
       return{
+        dialog: true,
         firstName: '',
         lastName: '',
         Class: '',
@@ -89,7 +90,7 @@ export default {
       width: 30%;
       z-index: 10;
       border-radius: 10px;
-      box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+      
   }
      h2{
         text-align: center;

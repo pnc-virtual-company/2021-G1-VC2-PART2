@@ -25,12 +25,11 @@
             <v-row>
               
               <v-col cols="12" sm="6">
-                <v-autocomplete
-                  v-model="studentId"
-                  :items="studentlist"
-                  dense
-                  label="Choose Students"
-                ></v-autocomplete>
+                <label for="student">Choose student:</label>
+                <select name="studentid" id="" v-model="studentId">
+                  <option v-for="student of studentlist" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
+                </select>
+                
               </v-col>
 
               <v-col cols="12" sm="6">
@@ -93,11 +92,12 @@
 </template>
 
 <script>
+  import axios from '../../axios-http.js';
   export default {
     emits: ['add-per'],
     data: () => ({
       dialog: false,
-      studentlist:['chanthy', 'chanthea', 'sreytouch', 'srey vun'],
+      studentlist:[],
       teacherlist:['Sim', 'Vandy', 'Davy', 'Thaina', 'Phuty', 'Somkhan'],
       value: null,
       
@@ -111,26 +111,33 @@
     }),
     methods: {
       createPermission (){
-        this.dialog = false;
         let addpermission = {
           student_id: this.studentId,
           teacher: this.teacher,
-          leavetype: this.leavetype,
+          leaveType: this.leavetype,
           startDate: this.startDate,
           endDate: this.endDate,
           description: this.description,
         }
         this.$emit('add-per', addpermission);
-        console.log(addpermission);
-      
+        this.dialog = false;
+      },
+      getStudent(){
+        axios.get('/students').then(res => {
+          this.studentlist = res.data;
+        });
+        
       }
     },
-    
+    mounted() {
+      this.getStudent();
+    },
+       
   }
 </script>
 <style scoped>
   .text-center{
-    margin-left: 76%;
+    margin-left: 68%;
     margin-bottom: -50px;
   }
   .dates {
@@ -139,5 +146,13 @@
   }
   input[type=date]{
     outline: none;
+  }
+  select{
+    width: 50%;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid gray;
+    margin-top: 9px;
+    margin-left: 9%;
   }
 </style>
