@@ -60,8 +60,9 @@
                 isSignout: false,
                 isRole: false,
                 userID: '',
-                userInfo: null,
+                userInfo: '',
                 profile: '',
+                username: '',
                 token: null,
                 url: "http://127.0.0.1:8000/storage/imageUser/",
             }
@@ -77,10 +78,15 @@
             this.token = localStorage.getItem('token');
             this.username = localStorage.getItem('username');
             this.profile = localStorage.getItem('profile');
+
             axios.get('/users').then(res => {
                 for(let user of res.data){
                     if(user.username == this.username && user.profile == this.profile && this.token !== null){
-                        this.userInfo = {username: user.username, role: user.role, profile: user.profile}
+                        this.userInfo = {
+                            username: user.username, 
+                            role: user.role, 
+                            profile: user.profile
+                        }
                         
                         if(user.role == "Admin"){
                             this.isRole = true;
@@ -100,8 +106,9 @@
         font-family: sans-serif;
     }
     img{
-        width: 100%;
-        height: 100%;
+        width: 50px;
+        height: 50px;
+        margin-top: 5px;
         border-radius: 360px;
     }
    
@@ -159,10 +166,8 @@
     }
     .circle {
         float: left;
-        width: 260px;
-        height: 50px;
         border-radius: 50%;
-        margin: 3px;
+        margin: 0px 3px;
         margin-right: 10px;
     }
     p{

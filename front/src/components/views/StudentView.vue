@@ -46,15 +46,15 @@
                       <v-icon @click="DeleteStudent(student.id)">mdi-delete</v-icon>
                   </v-list-item-icon></td>
 
-                  <EditStudent v-if="showDialog"
-                    :studentData = "studentInfo"
-                    @Cancel = "Cancel" 
-                    @Update = "UpdateStudent" 
-                  />
+                 
 
               </tr>
           </tbody>
-
+           <EditStudent v-if="showDialog"
+              :studentData = "studentInfo"
+              @Cancel = "Cancel" 
+              @Update = "UpdateStudent" 
+            />
 
           </template>
       </v-simple-table>

@@ -52,7 +52,7 @@ Route::put('/permissions/{id}',[PermissionController::class,'updatePermission'])
 Route::delete('/permissions/{id}',[PermissionController::class,'delete']);
 
 //Route search Permission =============================== 
-Route::get('/permissions/search/{firstName}', [PermissionController::class, 'search']);
+Route::get('/permissions/search/{teacher}', [PermissionController::class, 'search']);
 
 Route::get('/disciples',[DiscipleController::class,'index']);
 Route::post('disciples',[DiscipleController::class,'store']);

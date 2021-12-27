@@ -15,7 +15,7 @@ class StudentController extends Controller
     public function getStudent()
     {
         //
-        return Student::latest()->get();
+        return Student::with('user')->latest()->get();
     }
 
     /**
