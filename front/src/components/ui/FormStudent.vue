@@ -45,6 +45,7 @@
         emits: ['add-user'],
         data () {
             return {
+                
                 dialog: false,
                 firstName: '',
                 lastName: '',

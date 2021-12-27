@@ -94,11 +94,13 @@
 
 
   <form-permission
+    v-if="userRole !== 'Student' "
     @add-per="Addpermission"
    ></form-permission>
 
   <!-- ==========search button=============== -->
    <v-text-field
+        v-if="userRole !== 'Student' "
         v-on:keyup="Search"
         v-model="teacher"
         append-icon="mdi-magnify"
@@ -149,7 +151,7 @@
           {{per.description}}
       </v-expansion-panel-content>
   
-      <div class="btn" align="center">
+      <div v-if="userRole !== 'Student' " class="btn" align="center">
         <v-icon @click="ShowEditDialog(per)" left>mdi-pencil</v-icon>
         <v-icon @click="ShowDialog(per)" tile color="#EF5350" right>mdi-delete </v-icon>
       </div>
@@ -169,6 +171,7 @@ export default {
     return{
       dialog: false,
       showEdit: false,
+      userRole: '',
       id: '',
       search: '',
       studentId: '',
@@ -258,6 +261,7 @@ export default {
   mounted() {
     this.getStudent();
     this.getPermission();
+    this.userRole = localStorage.getItem('role');
   },
 
 }
