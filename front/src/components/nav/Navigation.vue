@@ -59,10 +59,8 @@
             return{
                 isSignout: false,
                 isRole: false,
-                userID: '',
+                userid: '',
                 userInfo: '',
-                profile: '',
-                username: '',
                 token: null,
                 url: "http://127.0.0.1:8000/storage/imageUser/",
             }
@@ -76,20 +74,17 @@
         },
         mounted() {
             this.token = localStorage.getItem('token');
-            this.username = localStorage.getItem('username');
-            this.profile = localStorage.getItem('profile');
-
+            this.userid = localStorage.getItem('user_id');
+            
             axios.get('/users').then(res => {
-                for(let user of res.data){
-                    if(user.username == this.username && user.profile == this.profile && this.token !== null){
-                        this.userInfo = {
-                            username: user.username, 
-                            role: user.role, 
-                            profile: user.profile
-                        }
-                        
-                        if(user.role == "Admin"){
-                            this.isRole = true;
+                if(this.token !== null && this.token !== null){
+                    for(let user of res.data){
+                        if(user.id == this.userid){
+                            this.userInfo = user
+                            
+                            if(user.role == "Admin"){
+                                this.isRole = true;
+                            }
                         }
                     }
                 }
