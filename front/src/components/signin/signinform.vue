@@ -103,6 +103,7 @@ export default {
           localStorage.setItem("role", res.data.user.role);
           localStorage.setItem("user_id", res.data.user.id);
           localStorage.setItem("studentId", res.data.user.student_id);
+          
           console.log(res.data);
           // this.loading = false;
           this.$emit('sign-in', this.Issignin);

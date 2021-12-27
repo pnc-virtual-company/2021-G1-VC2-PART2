@@ -108,7 +108,10 @@
             </thead>
             <tbody>
                 <tr v-for="user of users" :key="user.username">
-                  <td>
+                  <td v-if="user.role === 'Admin' ">
+                    <img src="../../assets/icon.png" alt="">
+                  </td>
+                  <td v-else>
                     <img :src="url + user.profile" alt="">
                   </td>
                   <td>{{ user.username }}</td>

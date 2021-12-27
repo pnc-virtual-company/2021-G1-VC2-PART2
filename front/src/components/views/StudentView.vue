@@ -86,6 +86,7 @@
         let studentId = localStorage.getItem('studentId');
         let userRole = localStorage.getItem('role');
         console.log(student);
+
         axios.get('/students').then(res => {
           if(userRole === "Student"){
             for(let student of res.data){
@@ -120,6 +121,7 @@
       Cancel(hidden){
         this.showDialog = hidden;
       },
+      
       search(){
         if(this.studentName !== ""){
           axios.get('/students/search/' + this.studentName).then(res => {

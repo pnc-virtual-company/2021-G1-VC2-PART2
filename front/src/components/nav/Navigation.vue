@@ -4,36 +4,29 @@
                
                 <ul>
                     <div class="circle">
-                        <img :src="url + userInfo.profile" alt="">
+                        <img v-if="userInfo.role == 'Admin' " src="../../assets/icon.png" alt="">
+                        <img v-else :src="url + userInfo.profile" alt="">
                     </div>
                     <p>{{userInfo.username}}</p>
 
-                    <v-list-item v-if="isRole" :to="{ path: '/user' }">
-                        <v-list-item-icon>
-                            <v-icon>mdi-account-circle-outline</v-icon>
-                        </v-list-item-icon>
+                    <v-list-item color='green' v-if="isRole" :to="{ path: '/user' }">
+                        <v-icon>mdi-account-circle-outline</v-icon>
                         <v-list-item-title>Users</v-list-item-title>
                     </v-list-item>
 
-                    <v-list-item :to="{ path: '/student' }">
-                        <v-list-item-icon>
-                            <v-icon>mdi-account-group-outline</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Students</v-list-item-title>
+                    <v-list-item color='green' :to="{ path: '/student' }">                     
+                        <v-icon>mdi-account-group-outline</v-icon> 
+                        <v-list-item-title>Students</v-list-item-title>                
                     </v-list-item>
 
-                    <v-list-item :to="{ path: '/permission' }">
-                        <v-list-item-icon>
-                            <v-icon>mdi-comment-account-outline</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Permission</v-list-item-title>
+                    <v-list-item color='green' :to="{ path: '/permission' }">                      
+                        <v-icon>mdi-comment-account-outline</v-icon>
+                        <v-list-item-title>Permission</v-list-item-title>                
                     </v-list-item>
 
-                    <v-list-item :to="{ path: '/disciple' }">
-                        <v-list-item-icon>
-                            <v-icon>mdi-account-multiple-outline</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="white-text">Disciple</v-list-item-title>
+                    <v-list-item color='green' :to="{ path: '/disciple' }">                      
+                        <v-icon>mdi-account-multiple-outline</v-icon> 
+                        <v-list-item-title class="white-text">Disciple</v-list-item-title>                
                     </v-list-item>
 
                 </ul>
@@ -59,10 +52,8 @@
             return{
                 isSignout: false,
                 isRole: false,
-                userID: '',
+                userid: '',
                 userInfo: '',
-                profile: '',
-                username: '',
                 token: null,
                 url: "http://127.0.0.1:8000/storage/imageUser/",
             }
@@ -75,7 +66,22 @@
             }
         },
         mounted() {
-           
+            this.token = localStorage.getItem('token');
+            this.userid = localStorage.getItem('user_id');
+            
+            axios.get('/users').then(res => {
+                if(this.token !== null && this.token !== null){
+                    for(let user of res.data){
+                        if(user.id == this.userid){
+                            this.userInfo = user
+                            
+                            if(user.role == "Admin"){
+                                this.isRole = true;
+                            }
+                        }
+                    }
+                }
+            })
         },
     
     }
@@ -106,6 +112,8 @@
     }
     ul {
         display: flex;
+        padding:0px 10px;
+        margin: 0px 15px;
     }
     .navbar-right {
         padding: 0px;
@@ -116,7 +124,6 @@
         position: absolute;
         height: 100%;
         margin: 0;
-        /* z-index: 1; */
         right: -50px;
         width: 30%;
         transform: skew(-40deg);
