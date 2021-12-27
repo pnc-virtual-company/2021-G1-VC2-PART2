@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('role');
             $table->string('profile')->nullable();
+            $table->foreignId('student_id')->onDelete('CASCADE')->unsigned()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

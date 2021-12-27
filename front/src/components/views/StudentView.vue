@@ -76,17 +76,28 @@
         studentdata:[],
         studentInfo: '',
         studentName: '',
+        
       }
     },
    
     methods: {
-      // let userName = localStorage.getItem('username');
+     
       getstudent(student){
+        let studentId = localStorage.getItem('studentId');
+        let userRole = localStorage.getItem('role');
         console.log(student);
         axios.get('/students').then(res => {
-          
-          this.studentdata = res.data;
-          console.log(this.studentdata);
+          if(userRole === "Student"){
+            for(let student of res.data){
+              if(student.id == studentId ){
+                this.studentdata.push(student);
+              }
+            }
+
+          }else{
+              this.studentdata = res.data;
+            }
+         
         })
       },
       DeleteStudent(id){

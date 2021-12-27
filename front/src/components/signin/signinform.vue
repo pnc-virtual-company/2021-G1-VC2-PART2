@@ -100,8 +100,9 @@ export default {
         // },3000)
         axios.post('/signin', signin).then(res => {
           localStorage.setItem("token", res.data.token);
-          localStorage.setItem("profile", res.data.user.profile);
-          localStorage.setItem("username", res.data.user.username);
+          localStorage.setItem("role", res.data.user.role);
+          localStorage.setItem("user_id", res.data.user.id);
+          localStorage.setItem("studentId", res.data.user.student_id);
           console.log(res.data);
           // this.loading = false;
           this.$emit('sign-in', this.Issignin);

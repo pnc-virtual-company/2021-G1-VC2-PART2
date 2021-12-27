@@ -16,7 +16,6 @@ class Student extends Model
         'gender',
         'ngo',
         'picture',
-        'user_id'
     ];
 
     public function user(){
