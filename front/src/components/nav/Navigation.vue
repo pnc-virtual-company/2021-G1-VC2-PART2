@@ -75,25 +75,7 @@
             }
         },
         mounted() {
-            this.token = localStorage.getItem('token');
-            this.username = localStorage.getItem('username');
-            this.profile = localStorage.getItem('profile');
-
-            axios.get('/users').then(res => {
-                for(let user of res.data){
-                    if(user.username == this.username && user.profile == this.profile && this.token !== null){
-                        this.userInfo = {
-                            username: user.username, 
-                            role: user.role, 
-                            profile: user.profile
-                        }
-                        
-                        if(user.role == "Admin"){
-                            this.isRole = true;
-                        }
-                    }
-                }
-            })
+           
         },
     
     }
@@ -106,9 +88,9 @@
         font-family: sans-serif;
     }
     img{
-        width: 50px;
-        height: 50px;
-        margin-top: 5px;
+        width: 40px;
+        height: 40px;
+        margin-top: 8px;
         border-radius: 360px;
     }
    

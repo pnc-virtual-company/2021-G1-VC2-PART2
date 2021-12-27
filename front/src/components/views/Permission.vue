@@ -108,6 +108,7 @@
         class="search"
       ></v-text-field>
     <!-- ==========card======================== -->
+    
   <v-expansion-panels class="main">
     <v-expansion-panel
       v-for="per of permissions"
@@ -289,7 +290,6 @@ export default {
   .card{
     margin-top: 2%;
     width: 100%;
-
     margin-bottom: 10%;
   }
   #name{
