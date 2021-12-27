@@ -15,7 +15,8 @@ class Student extends Model
         'phone',
         'gender',
         'ngo',
-        'picture'
+        'picture',
+        'user_id'
     ];
 
     public function user(){
