@@ -1,9 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// import StudentView from '../components/views/StudentView.vue'
+import StudentDetail from '../components/views/StudentDetail.vue'
+
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    // path:'/', component: StudentView,
+    path:'/', component: StudentDetail
+
+  },
   
 ]
 
