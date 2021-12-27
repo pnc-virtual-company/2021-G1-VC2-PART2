@@ -1,14 +1,14 @@
 <template>
   <div class="main">
     <formstudent
+        v-if="userRole !== 'Student' "
         @add-user="getstudent"
     />
 
   <div class="userLists">
    
       <v-simple-table>
-        <template v-slot:top>
-          
+        <template v-if="userRole !== 'Student' " v-slot:top>
           <v-text-field class="mx-4 search"
             v-on:keyup="search"
             v-model="studentName"
@@ -26,7 +26,7 @@
                   <th class="text-left">Phone</th>
                   <th class="text-left">Gender</th>
                   <th class="text-left">Ngo</th>
-                  <th class="text-left">Action</th>
+                  <th v-if="userRole !== 'Student' " class="text-left">Action</th>
               </tr>
           </thead>
           <tbody>
@@ -38,7 +38,7 @@
                   <td>{{ student.gender }}</td>
                   <td>{{ student.ngo }}</td>
                   
-                  <td><v-list-item-icon>
+                  <td v-if="userRole !== 'Student' "><v-list-item-icon>
                       <v-icon @click="addShow(student)">mdi-pencil-box-multiple-outline</v-icon>
                   </v-list-item-icon>
 
@@ -76,6 +76,7 @@
         studentdata:[],
         studentInfo: '',
         studentName: '',
+        userRole: '',
         
       }
     },
@@ -84,11 +85,11 @@
      
       getstudent(student){
         let studentId = localStorage.getItem('studentId');
-        let userRole = localStorage.getItem('role');
+        this. userRole = localStorage.getItem('role');
         console.log(student);
 
         axios.get('/students').then(res => {
-          if(userRole === "Student"){
+          if(this.userRole === "Student"){
             for(let student of res.data){
               if(student.id == studentId ){
                 this.studentdata.push(student);
