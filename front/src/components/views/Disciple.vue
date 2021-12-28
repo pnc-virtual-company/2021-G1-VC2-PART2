@@ -1,96 +1,7 @@
 <template>
-  <v-expansion-panels class="main">
+  <v-expansion-panels class="main" id="card">
 
-
-    <!-- ========= Dialog Disciple =================-->
-    <v-dialog width="600" v-model="showEdit">
-        <v-card>
-            <v-card-title class="text-h5 grey lighten-2">
-                Update Disciple form
-            </v-card-title>
-
-            <v-card-text>
-                <v-container>
-                    <v-row>
-                        <v-col
-                        cols="12"
-                        sm="12"
-                        >
-                        <v-autocomplete
-                            v-model="student"
-                            :items="studentlist"
-                            dense
-                            label="Choose Students"
-                        ></v-autocomplete>
-                        </v-col>
-
-                        <v-col 
-                        cols="12" 
-                        sm="12">
-                        <v-select
-                            v-model="leavetype"
-                            :items="['sick', 'have a task to do', 'sick too', 'sick three']"
-                            label="Choose leave type"
-                            required
-                        ></v-select>
-                        </v-col>
-                        <v-col 
-                           cols="12" 
-                          sm="12"
-                        >
-                          <v-menu
-                              v-model="menu2"
-                              :close-on-content-click="false"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="auto"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                v-model="computedDateFormatted"
-                                label="Date (read only text field)"
-                                hint="MM/DD/YYYY format"
-                                persistent-hint
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                v-bind="attrs"
-                                v-on="on"
-                              ></v-text-field>
-                            </template>
-                            <v-date-picker
-                              v-model="date"
-                              no-title
-                              @input="menu2 = false"
-                            ></v-date-picker>
-                          </v-menu>
-                        </v-col>
-
-                        <v-col
-                        cols="12"
-                        sm="12"
-                        >
-                        <v-text-field
-                            label="Description"
-                            hint="input your description"
-                            v-model="description"
-                            required
-                        ></v-text-field>
-                        </v-col>
-
-                    </v-row>
-                </v-container>
-            </v-card-text>
-
-            <v-divider></v-divider>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text @click="showEdit = false">Discard</v-btn>
-                <v-btn color="success" text @click="Update(id)">Save change</v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
-<!-- ===================Edit disciple dialog======================== -->
+    <!-- ===================Edit disciple dialog======================== -->
 
     <v-dialog v-model="editdialog" max-width="600px">
       <v-card class="card">
@@ -149,7 +60,8 @@
       </v-card>
     </v-dialog>
     <!-- ==========================End edit Dialog===================================== -->
-  <!-- ===================Delete disciple dialog======================== -->
+
+    <!-- ===================Delete disciple dialog======================== -->
 
     <v-dialog v-model="dialog" max-width="500px">
       <v-card class="cardForm">
@@ -164,58 +76,47 @@
       </v-card>
     </v-dialog>
     <!-- ==========================End Dialog===================================== -->
-   
+
+<!-- ===================search============= -->
    <v-card-title>
-      <v-text-field
-        v-if="userRole !== 'Student' "
-        v-model="search"
+        <v-text-field
+       v-model="search"
         append-icon="mdi-magnify"
         label="Search"
         single-line
         hide-details
+        class="mx-4"
+        v-on:keyup="searchBotton"
       ></v-text-field>
     </v-card-title>
     
-     <form-disciple v-if="userRole == 'Admin' "></form-disciple>
-
-    <v-expansion-panel
-        v-for="disciple of disciples " :key="disciple.id"
-      >
+     <form-disciple></form-disciple>
+<!-- ==========card=============== -->
+  
+    <v-expansion-panel class="formCard"
+      v-for="disciple of disciples" :key="disciple.id">
       <v-expansion-panel-header class="header">
-        <div
-          class="d-flex sm-6"
-          style="width: 300px"
-        >
-            <v-img
-          max-height="140"
-          max-width="80"
+        <v-img
+          max-height="200"
+          max-width="100"
           src="../../assets/wl.png">
         </v-img>
-          <p
-           class="pt-7"
-          >{{disciple.dnt}}</p>
-        </div>
-        
-        <div
-          class="d-flex sm-6"
-          style="width: 300px"
-        >
-          <v-img
-          max-height="100"
-          max-width="80"
+        <p>Wearning Letter</p>
+        <v-img
+         
+          max-height="120"
+          max-width="90"
           src="../../assets/sreytouch.jpeg">
         </v-img>
-          <div class="username" >
-            <h3 style="margin-bottom: 10px;">{{disciple.first_name}} {{disciple.last_name}}</h3>
-            <p>{{disciple.Class}}</p>
+        <div class="username" >
+          <div>
+          <h3 style="margin-bottom: 10px;">{{ disciple.first_name }} {{ disciple.last_name }}</h3>
           </div>
+          <p>{{ disciple.class }}</p>
         </div>
-        
-        <div
-          style="width: 300px"
-        >
+        <div style="disply:flex;" >
            <div class="date" style="margin-left: 58px; margin-bottom: -23px;" >
-            <h4 >{{disciple.Class}}</h4>
+              <h4 >Jan/23/2021</h4>
            </div>
 
            <v-img
@@ -226,75 +127,50 @@
           </v-img>
         
         </div>
-
-        <div
-          v-if="userRole == 'Admin' "
-          style="
-                 width: 100px;
-                 "
-        >
-         <v-list-item-icon >
+        <!-- ==============start button edit&delete============= -->
+     <v-list-item-icon >
             <v-icon class="edit" @click ="ShowDilogEdit(disciple)">mdi-pencil-box-multiple-outline</v-icon>
         </v-list-item-icon>
 
         <v-list-item-icon  >
             <v-icon class="delete" @click="ShowDialog(disciple)">mdi-delete</v-icon>
         </v-list-item-icon>
-        </div>
-        
-      </v-expansion-panel-header>
-      <v-expansion-panel-content>
-        {{disciple.description}}
-      </v-expansion-panel-content>
 
+        
+        <!-- ===================end button edit&delete============= -->
+      </v-expansion-panel-header>
+      <!-- ====================start show details========== -->
+      <v-expansion-panel-content>
+        {{ disciple.description }} 
+        </v-expansion-panel-content>
+       <!-- ====================end show details=================== -->
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
 <script>
-import axios from '../../axios-http.js';
+
+ import axios from '../../axios-http.js';
 import formDisciple from '../ui/formDisciple.vue';
 
 export default {
   components: { formDisciple },
   data () {
     return {
-      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      menu1: false,
-      showEdit: false,
-      search: '',
       dialog:false,
       editdialog:false,
+      search: '',
+      first_name: '',
+      last_name: '',
+      type: '',
       description: '',
       class: '',
+      categoryInfo: '',
+      disciples: [],
       studentlist:[],
       id:'',
-      students:'',
-      url: "http://127.0.0.1:8000/storage/imagestudent/",
       student_id:'',
       dnt: '',
       leavelist:['leavelist', 'Oral warning', 'Warning letter', 'Termination'],
-      disciples: [
-        {
-          id:1,
-          type:'sick',
-          description:'Welcome to me'
-        },
-        {
-          id:2,
-          type:'sick',
-          description:'Welcome to you'
-        },
-        {
-          id:3,
-          type:'sick',
-          description:'Welcome to her'
-        },
-        {
-          id:4,
-          type:'sick',
-          description:'Welcome to his'
-        }
-      ],
     }
   },
   computed: {
@@ -309,17 +185,19 @@ export default {
       },
     },
   methods: {
-    formatDate(date) {
-        if (!date) return null
-
-        const [year, month, day] = date.split('-')
-        return `${month}/${day}/${year}`
+     Remove(id){
+      axios.delete('/disciples/' + id).then(res => {
+        this.getDisciples();
+        this.dialog = false;
+        return res.data
+      })
     },
-     ShowDilogEdit(disciple){
+    ShowDilogEdit(disciple){
       this.id=disciple.id;
       this.description = disciple.description;
       this.dnt = disciple.type;
       console.log(disciple);
+
       this.editdialog = true;
     },
     Update() {
@@ -330,48 +208,41 @@ export default {
       }
       axios.put('/disciples/' + this.id, updateDic).then(res => {
         this.editdialog = false;
-        this.getDisciple();
+        this.getDisciples();
         return res.data;
       })
     },
-    Adddisciple(disciple){
-      this.disciples.push(disciple);
-    },
-
-     Remove(id){
-      axios.delete('/disciples/' + id).then(res => {
-        this.getDisciple();
-        this.dialog = false;
-        return res.data
-      })},
-    getDisciple(){
-      axios.get('/disciples').then(res => {
+    
+    getDisciples() {
+      axios.get("/disciples").then(res => {
         this.disciples = res.data;
-      })
+      }) 
     },
-      ShowDialog(disciple){
+    ShowDialog(disciple){
       this.dialog = true;
       this.id = disciple.id;
     },
-   getStudent(){
-      axios.get('/students').then(res => {
-        this.studentlist = res.data;
-      });
-    },
-     
-    parseDate (date) {
-      if (!date) return null
-
-      const [month, day, year] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    }
+    // getStudent(){
+    //   axios.get('/students').then(res => {
+    //     this.studentlist = res.data;
+    //   });
+    // },
+     searchBotton(){
+            if(this.search!== ""){
+                axios.get("/disciples/search/" + this.search).then(res => {
+                this.disciples = res.data;
+                })
+            }else{
+                this.getDisciples();
+            }
+            
+        } 
+        
   },
   
   mounted() {
-    // this.getDisciple();
-    this.getDisciple();
-    this.getStudent();
-    this.userRole = localStorage.getItem('role');
+   this.getDisciples();
+
   },
 
   
@@ -392,12 +263,12 @@ export default {
     
   }
   .v-icon {
-    /* background: cornflowerblue; */
+    
     margin-left: 170%;
     padding: 5px;
  }
-.delete {
-    margin-left: 10%;
+ .delete {
+    margin-left: 40%;
     padding: 5px;
      margin-top: 11px;
  }
@@ -413,11 +284,29 @@ export default {
   }
   .header{
     margin-right: 5%;
-    /* background: rgb(245, 250, 250); */
+    /* / background: rgb(245, 250, 250); / */
   }
   .main{
     width: 90%;
     margin-left: 5%;
     margin-top: 5%;
   }
-</style>
+  .main{
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 5%;
+ 
+  }
+  #card{
+    
+    margin-top: 5%;
+    width: 80%;
+    margin-left: 10%;
+  }
+  .card{
+    padding: 15px;
+    border-top: 7px solid rgba(155, 184, 201, 0.733);
+  }
+.cardForm{
+  border-top: 5px solid red;
+}
