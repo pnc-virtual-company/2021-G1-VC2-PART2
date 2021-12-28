@@ -10,8 +10,15 @@ class permission extends Model
     use HasFactory;
     protected $fillable = [
         'student_id',
+        'teacher',
+        'startDate',
+        'endDate',
+        'leaveType',
         'description',
-        'permissionType'
     ];
+
+    public function student(){
+        return $this->belongsTo(Student::class);
+    }
 
 }

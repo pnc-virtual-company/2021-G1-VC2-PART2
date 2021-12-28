@@ -11,7 +11,7 @@ class UserController extends Controller
    
     public function GetUsers()
     {
-        return User::latest()->get();
+        return User::with('student')->latest()->get();
     }
 
 
@@ -31,6 +31,7 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->role = $request->role;
         $user->profile = $request->file('profile')->hashName();
+        $user->student_id = $request->student_id;
         $user->save();
         
         $token = $user->createToken('myToken')->plainTextToken; 

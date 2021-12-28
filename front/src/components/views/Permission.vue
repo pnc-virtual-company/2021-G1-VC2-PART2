@@ -11,41 +11,15 @@
       <v-card-text>
         <v-container>
           <v-row>
-            <v-col
-              cols="12"
-              sm="6"
-              md="6"
-            >
-              <v-text-field
-                label="first name"
-                hint="input your firstname"
-                v-model="firstname"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              sm="6"
-              md="6"
-            >
-              <v-text-field
-                label="last name"
-                hint="input your lastname"
-                v-model="lastName"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              sm="6"
-            >
-              <v-autocomplete
-                v-model="student"
-                :items="studentlist"
-                dense
-                label="Choose Students"
-              ></v-autocomplete>
-            </v-col>
+        
+            <v-col cols="12" sm="6">
+                <label for="student">Choose student:</label>
+                <select name="studentid" id="" v-model="studentId">
+                  <option v-for="student of studentlist" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
+                </select>
+                
+              </v-col>
+
             <v-col cols="12" sm="6">
               <v-autocomplete
                 v-model="teacher"
@@ -57,7 +31,7 @@
 
             <v-col cols="6" sm="12">
               <v-select
-                v-model="leavetype"
+                v-model="leaveType"
                 :items="['sick', 'have a task to do', 'sick too', 'sick three']"
                 label="Choose leave type"
                 required
@@ -91,7 +65,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="showEdit = false">Discard</v-btn>
-        <v-btn color="success" text @click="Update(id)">Save change</v-btn>
+        <v-btn color="success" text @click="Update">Save change</v-btn>
 
       </v-card-actions>
     </v-card>
@@ -120,19 +94,22 @@
 
 
   <form-permission
+    v-if="userRole !== 'Student' "
     @add-per="Addpermission"
    ></form-permission>
 
   <!-- ==========search button=============== -->
    <v-text-field
-        v-model="search"
+        v-if="userRole !== 'Student' "
+        v-on:keyup="Search"
+        v-model="teacher"
         append-icon="mdi-magnify"
         label="Filter"
-        single-line
-        hide-details
         class="search"
+        color="blue darken-1"
       ></v-text-field>
     <!-- ==========card======================== -->
+    
   <v-expansion-panels class="main">
     <v-expansion-panel
       v-for="per of permissions"
@@ -149,21 +126,22 @@
 
           <v-col cols='12' sm='4'>
             <span>{{per.startDate}} / Morning</span>
-            <p>{{per.endDate}} day</p>
+            <p id="endDate">{{per.endDate}} day</p>
           </v-col>
           <v-col cols='12' sm='2'>
             <v-img class="image2"
               lazy-src="https://picsum.photos/id/11/10/6"
               max-height="100"
               max-width="100"
-              src="https://i.pinimg.com/originals/3a/74/5d/3a745d3dcba72feb73e44e399ec97bea.jpg"
+              :src="url + per.student.picture"
             ></v-img>
           </v-col>
 
           <v-col cols='12' sm='2'>
-            <h3 id="name">{{per.firstName}} {{per.lastName}}</h3>
+            <h3 id="name">{{per.student.firstName}} {{per.student.lastName}}</h3>
             <br>
-            <p>{{per.class}}</p>
+            <p>{{per.student.class}}</p>
+            <p>{{per.teacher}}</p>
           </v-col>
 
         </v-row>
@@ -173,7 +151,7 @@
           {{per.description}}
       </v-expansion-panel-content>
   
-      <div class="btn" align="center">
+      <div v-if="userRole !== 'Student' " class="btn" align="center">
         <v-icon @click="ShowEditDialog(per)" left>mdi-pencil</v-icon>
         <v-icon @click="ShowDialog(per)" tile color="#EF5350" right>mdi-delete </v-icon>
       </div>
@@ -185,6 +163,7 @@
 
 <script>
 import formPermission from '../ui/formPermission.vue';
+import axios from '../../axios-http.js';
 export default {
   components: { formPermission },
   
@@ -192,45 +171,19 @@ export default {
     return{
       dialog: false,
       showEdit: false,
-      permission: '',
+      userRole: '',
       id: '',
       search: '',
-      permissions: [
-        {
-          id: 1,
-          firstName: 'Student A',
-          lastName: 'A', 
-          student: 'test',
-          teacher: 'hello',
-          leavetype: 'Oral warning',
-          class: 'Web2021-A',
-          startDate: 'Mon-21-12-2021',
-          endDate: 'Tus-30-12-2021',
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        },
-        {
-          id: 2,
-          firstName: 'Student B',
-          lastName: 'B', 
-          student: 'test',
-          teacher: 'hello',
-          leavetype: 'Warning letter',
-          class: 'Web2021-A',
-          startDate: 'Mon-21-12-2021',
-          endDate: 'Tus-30-12-2021',
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        },
-        
-      ],
-      dates: [],
-      studentlist:['chanthy', 'chanthea', 'sreytouch', 'srey vun'],
+      studentId: '',
+      permissions: [],
+      studentlist:[],
       teacherlist:['Sim', 'Vandy', 'Davy', 'Thaina', 'Phuty', 'Somkhan'],
+      url: "http://127.0.0.1:8000/storage/imagestudent/",
       
-      firstname: '',
+      firstName: '',
       lastName: '',
-      student:'test',
-      teacher:'hello',
-      leavetype:'Warning letter',
+      teacher:'',
+      leaveType:'',
       startDate: '',
       endDate: '',
       description: '',
@@ -239,33 +192,76 @@ export default {
   },
   methods: {
     Addpermission(per){
-      this.permissions.push(per);
+      axios.post('/permissions', per).then(res => {
+        this.getPermission();
+        return res.data;
+      })
     },
     Remove(id){
       this.dialog = false;
-      console.log(id + " Deleted");
+      axios.delete('/permissions/' + id).then(res => {
+        this.getPermission();
+        return res.data
+      })
     },
     Update(){
-      this.showEdit = false;
-      console.log('Save change');
+      let updatePer = {
+        student_id: this.studentId,
+        teacher: this.teacher,
+        leaveType: this.leaveType,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        description: this.description,
+      }
+      axios.put('/permissions/' + this.id, updatePer).then(res => {
+        this.showEdit = false;
+        this.getPermission();
+        return res.data;
+      })
+     
     },
 
     ShowEditDialog(per){
-      this.firstname = per.firstName;
-      this.lastName = per.lastName;
-      this.student = per.student;
+      this.id = per.id;
+      this.studentId = per.student.id;
       this.teacher = per.teacher;
-      this.leavetype = per.leavetype;
+      this.leaveType = per.leaveType;
       this.startDate = per.startDate;
       this.endDate = per.endDate;
       this.description = per.description;
-      console.log(per);
+  
       this.showEdit = true;
     },
     ShowDialog(per){
       this.dialog = true;
       this.id = per.id;
+    },
+    getStudent(){
+      axios.get('/students').then(res => {
+        this.studentlist = res.data;
+      });
+    },
+    getPermission(){
+      axios.get('/permissions').then(res => {
+        this.permissions = res.data;
+      })
+    },
+
+    Search(){
+      if(this.teacher !== ""){
+        axios.get('/permissions/search/' + this.teacher).then(res => {
+          this.permissions = res.data;
+          console.log(res.data);
+        })
+      }else{
+        this.getPermission();
+      }
     }
+  },
+  mounted() {
+    this.getStudent();
+    this.getPermission();
+    this.userRole = localStorage.getItem('role');
   },
 
 }
@@ -275,16 +271,17 @@ export default {
   .card-row{
     padding: 20px;
     margin: 50px;
-    width: 90%;
+    width: 80%;
     margin-left: 5%;
   }
   .header{
     margin-right: 5%;
   }
   .main{
-    width: 90%;
-    margin-left: 5%;
+    width: 80%;
+    margin-left: 10%;
     margin-top: 3%;
+  
   }
   .btn{
     display: flex;
@@ -295,12 +292,10 @@ export default {
   }
   .card{
     margin-top: 2%;
-    width: 90%;
-    margin-left: 5%;
+    width: 100%;
     margin-bottom: 10%;
   }
   #name{
-    margin-left: 22%;
     margin-top: 6%;
   }
   span{
@@ -309,12 +304,9 @@ export default {
     margin-top: 6%;
     margin-bottom: 3%;
   }
-  p{
-    text-align: center;
-  }
   .search{
-    width: 40%;
-    margin-left: 5%;
+    width: 30%;
+    margin-left: 10%;
   }
   input[type=date]{
     outline: none;
@@ -332,5 +324,16 @@ export default {
   .description{
     margin-top: 3%;
   }
-  
+  select{
+    width: 50%;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid gray;
+    margin-top: 9px;
+    margin-left: 9%;
+  }
+  #endDate{
+    text-align: center;
+  }
+
 </style>

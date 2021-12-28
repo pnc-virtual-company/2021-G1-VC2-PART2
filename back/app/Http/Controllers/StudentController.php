@@ -15,7 +15,7 @@ class StudentController extends Controller
     public function getStudent()
     {
         //
-        return Student::latest()->get();
+        return Student::with('user')->latest()->get();
     }
 
     /**
@@ -35,7 +35,6 @@ class StudentController extends Controller
             'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:1999',
             'gender' => 'required',
             'ngo' => 'required',
-            'user_id' => 'required',
         ]);
 
         $request->file('picture')->store('public/imagestudent');
@@ -48,7 +47,6 @@ class StudentController extends Controller
         $student->gender = $request->gender;
         $student->ngo = $request->ngo;
         $student->picture = $request->file('picture')->hashName();
-        $student->user_id = $request->user_id;
 
         $student->save();
 

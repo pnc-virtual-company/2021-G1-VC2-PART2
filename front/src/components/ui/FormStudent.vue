@@ -45,11 +45,12 @@
         emits: ['add-user'],
         data () {
             return {
+                
                 dialog: false,
                 firstName: '',
                 lastName: '',
                 Class:'',
-                phoneNumber:'',
+                phoneNumber:'0',
                 gender:'',
                 ngo: '',
                 picture:'',

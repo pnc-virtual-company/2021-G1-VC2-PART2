@@ -52,7 +52,7 @@
                 
                 <v-col
                   cols="12"
-                  sm="6"
+                  sm="12"
                 >
                 <v-combobox
                     v-model="role"
@@ -62,7 +62,11 @@
                     dense
                     color="deep-purple accent-4"
                   ></v-combobox>
+                
                 </v-col>
+                <select v-if="role === 'Student' " name="" id="" v-model="studentId">
+                  <option v-for="student of studentList" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
+                </select>
 
                 <v-file-input
                   chips
@@ -104,7 +108,10 @@
             </thead>
             <tbody>
                 <tr v-for="user of users" :key="user.username">
-                  <td>
+                  <td v-if="user.role === 'Admin' ">
+                    <img src="../../assets/icon.png" alt="">
+                  </td>
+                  <td v-else>
                     <img :src="url + user.profile" alt="">
                   </td>
                   <td>{{ user.username }}</td>
@@ -145,10 +152,12 @@ export default {
     },
   data() {
     return {
+      studentList: '',
       userInfo: '',
       password: '',
       password_confirmation: '',
       image: '',
+      studentId: '',
       users: [],
       dialog: false,
       showDialog: false,
@@ -193,6 +202,7 @@ export default {
       newUser.append('password_confirmation', this.password_confirmation);
       newUser.append('role', this.role);
       newUser.append('profile', this.image);
+      newUser.append('student_id', this.studentId);
   
       axios.post('/signup', newUser).then(res => {
         console.log(res.data);
@@ -232,10 +242,17 @@ export default {
       axios.get('/users').then(res => {
         this.users = res.data;
       })
+    },
+    getStudent(){
+      axios.get('/students').then(res => {
+        console.log(res.data)
+        this.studentList = res.data
+      })
     }
   },
   mounted() {
     this.getUsers();
+    this.getStudent();
   },
 };
 </script>

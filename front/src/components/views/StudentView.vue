@@ -1,18 +1,20 @@
 <template>
   <div class="main">
     <formstudent
+        v-if="userRole !== 'Student' "
         @add-user="getstudent"
     />
 
   <div class="userLists">
    
       <v-simple-table>
-        <template v-slot:top>
-          
-          <v-text-field class="mx-4 search"
+        <template v-if="userRole !== 'Student' " v-slot:top>
+          <v-text-field 
+            class="mx-4 search"
             v-on:keyup="search"
             v-model="studentName"
             label="Search student"
+            color="blue darken-1"
           ></v-text-field>
 
         </template>
@@ -26,7 +28,7 @@
                   <th class="text-left">Phone</th>
                   <th class="text-left">Gender</th>
                   <th class="text-left">Ngo</th>
-                  <th class="text-left">Action</th>
+                  <th v-if="userRole !== 'Student' " class="text-left">Action</th>
               </tr>
           </thead>
           <tbody>
@@ -38,7 +40,7 @@
                   <td>{{ student.gender }}</td>
                   <td>{{ student.ngo }}</td>
                   
-                  <td><v-list-item-icon>
+                  <td v-if="userRole !== 'Student' "><v-list-item-icon>
                       <v-icon @click="addShow(student)">mdi-pencil-box-multiple-outline</v-icon>
                   </v-list-item-icon>
 
@@ -46,15 +48,15 @@
                       <v-icon @click="DeleteStudent(student.id)">mdi-delete</v-icon>
                   </v-list-item-icon></td>
 
-                  <EditStudent v-if="showDialog"
-                    :studentData = "studentInfo"
-                    @Cancel = "Cancel" 
-                    @Update = "UpdateStudent" 
-                  />
+                 
 
               </tr>
           </tbody>
-
+           <EditStudent v-if="showDialog"
+              :studentData = "studentInfo"
+              @Cancel = "Cancel" 
+              @Update = "UpdateStudent" 
+            />
 
           </template>
       </v-simple-table>
@@ -76,17 +78,30 @@
         studentdata:[],
         studentInfo: '',
         studentName: '',
+        userRole: '',
+        
       }
     },
    
     methods: {
-      // let userName = localStorage.getItem('username');
+     
       getstudent(student){
+        let studentId = localStorage.getItem('studentId');
+        this. userRole = localStorage.getItem('role');
         console.log(student);
+
         axios.get('/students').then(res => {
-          
-          this.studentdata = res.data;
-          console.log(this.studentdata);
+          if(this.userRole === "Student"){
+            for(let student of res.data){
+              if(student.id == studentId ){
+                this.studentdata.push(student);
+              }
+            }
+
+          }else{
+              this.studentdata = res.data;
+            }
+         
         })
       },
       DeleteStudent(id){
@@ -109,6 +124,7 @@
       Cancel(hidden){
         this.showDialog = hidden;
       }, 
+      
       search(){
         if(this.studentName !== ""){
           axios.get('/students/search/' + this.studentName).then(res => {

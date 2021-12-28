@@ -14,7 +14,7 @@ class PermissionController extends Controller
     public function getPermission()
     {
         //
-        return Permission::with('student')->latest()->get();
+        return Permission::with('Student')->latest()->get();
     
     }
 
@@ -29,32 +29,26 @@ class PermissionController extends Controller
         //
          $request->validate([
             'student_id'=> 'required',
+            'teacher'=> 'required',
             'description'=>'required',
-            'permissionType'=>'required',
+            'leaveType'=>'required',
             
         ]);
 
         $permission = new Permission();
         $permission->student_id = $request->student_id;
+        $permission->teacher = $request->teacher;
+        $permission->startDate = $request->startDate;
+        $permission->endDate = $request->endDate;
+        $permission->leaveType = $request->leaveType;
         $permission->description = $request->description;
-        $permission->permissionType = $request->permissionType;
 
         $permission->save();
 
         return response()->json(['message' => "created Successfully!" , "permission" => $permission] ,201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
+   
     /**
      * Update the specified resource in storage.
      *
@@ -83,8 +77,8 @@ class PermissionController extends Controller
         //
         return Permission::destroy($id);
     }
-    public function search($firstName)
+    public function search($teacher)
     {
-        return Permission::where('firstName','like','%'.$firstName. '%')->get();
+        return Permission::where('teacher','like','%'.$teacher. '%')->get();
     }
 }

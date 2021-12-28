@@ -95,6 +95,7 @@
    
    <v-card-title>
       <v-text-field
+        v-if="userRole !== 'Student' "
         v-model="search"
         append-icon="mdi-magnify"
         label="Search"
@@ -103,9 +104,7 @@
       ></v-text-field>
     </v-card-title>
     
-     <form-disciple
-      @add-per="Adddisciple"
-     ></form-disciple>
+     <form-disciple v-if="userRole == 'Admin' "></form-disciple>
 
     <v-expansion-panel
         v-for="disciple of disciples " :key="disciple.id"
@@ -159,6 +158,7 @@
         </div>
 
         <div
+          v-if="userRole == 'Admin' "
           style="
                  width: 100px;
                  "
@@ -265,6 +265,8 @@ export default {
   
   mounted() {
     // this.getDisciple();
+    this.getDisciple();
+    this.userRole = localStorage.getItem('role');
   },
 
   
