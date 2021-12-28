@@ -203,7 +203,8 @@ export default {
       newUser.append('role', this.role);
       newUser.append('profile', this.image);
       newUser.append('student_id', this.studentId);
-  
+
+      console.log(this.studentId);
       axios.post('/signup', newUser).then(res => {
         console.log(res.data);
         this.dialog = false;

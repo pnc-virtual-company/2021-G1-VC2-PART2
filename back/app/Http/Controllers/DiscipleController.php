@@ -14,8 +14,7 @@ class DiscipleController extends Controller
      */
     public function index()
     {
-        //
-        return Disciple::get();
+        return Disciple::with('student')->latest()->get();
     }
 
     /**
@@ -28,11 +27,9 @@ class DiscipleController extends Controller
     {
         //
         $request->validate([
-            'first_name'=>'required',
-            'last_name'=>'required',
-            'type'=>'required',
+            'student_id'=>'required',
+            'dnt'=>'required',
             'description'=>'required',
-            'class'=>'required',
         ]);
 
         $disciple = new Disciple();

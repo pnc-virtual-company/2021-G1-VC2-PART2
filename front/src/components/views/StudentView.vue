@@ -1,76 +1,84 @@
 <template>
   <div class="main">
     <formstudent
-        v-if="userRole !== 'Student' "
+        v-if="userRole != 'Student' "
         @add-user="getstudent"
     />
 
-  <div class="userLists">
-   
-      <v-simple-table>
-        <template v-if="userRole !== 'Student' " v-slot:top>
-          <v-text-field 
-            class="mx-4 search"
-            v-on:keyup="search"
-            v-model="studentName"
-            label="Search student"
-            color="blue darken-1"
-          ></v-text-field>
+    <student-detail v-if="userRole === 'Student' "></student-detail>
 
-        </template>
-      
-          <template v-slot:default>
-          <thead>
-              <tr>
-                  <th class="text-left">First name</th>
-                  <th class="text-left">Last name</th>
-                  <th class="text-left">Class</th>
-                  <th class="text-left">Phone</th>
-                  <th class="text-left">Gender</th>
-                  <th class="text-left">Ngo</th>
-                  <th v-if="userRole !== 'Student' " class="text-left">Action</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr v-for="student in studentdata" :key="student.username">
-                  <td>{{ student.firstName }}</td>
-                  <td>{{ student.lastName }}</td>
-                  <td>{{ student.class }}</td>
-                  <td>0{{ student.phone }}</td>
-                  <td>{{ student.gender }}</td>
-                  <td>{{ student.ngo }}</td>
-                  
-                  <td v-if="userRole !== 'Student' "><v-list-item-icon>
-                      <v-icon @click="addShow(student)">mdi-pencil-box-multiple-outline</v-icon>
-                  </v-list-item-icon>
-
-                  <v-list-item-icon>
-                      <v-icon @click="DeleteStudent(student.id)">mdi-delete</v-icon>
-                  </v-list-item-icon></td>
-
-                 
-
-              </tr>
-          </tbody>
-           <EditStudent v-if="showDialog"
-              :studentData = "studentInfo"
-              @Cancel = "Cancel" 
-              @Update = "UpdateStudent" 
-            />
+    <div class="userLists" v-else>
+    
+        <v-simple-table>
+          <template v-slot:top>
+            <v-text-field 
+              class="mx-4 search"
+              v-on:keyup="search"
+              v-model="studentName"
+              label="Search student"
+              color="blue darken-1"
+            ></v-text-field>
 
           </template>
-      </v-simple-table>
-  </div>
+        
+            <template v-slot:default>
+            <thead>
+                <tr>
+                    <th class="text-left">First name</th>
+                    <th class="text-left">Last name</th>
+                    <th class="text-left">Class</th>
+                    <th class="text-left">Phone</th>
+                    <th class="text-left">Gender</th>
+                    <th class="text-left">Ngo</th>
+                    <th v-if="userRole !== 'Student' " class="text-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="student in studentdata" :key="student.username">
+                    <td>{{ student.firstName }}</td>
+                    <td>{{ student.lastName }}</td>
+                    <td>{{ student.class }}</td>
+                    <td>0{{ student.phone }}</td>
+                    <td>{{ student.gender }}</td>
+                    <td>{{ student.ngo }}</td>
+                    
+                    <td v-if="userRole !== 'Student' "><v-list-item-icon>
+                        <v-icon @click="addShow(student)">mdi-pencil-box-multiple-outline</v-icon>
+                    </v-list-item-icon>
+
+                    <v-list-item-icon>
+                        <v-icon @click="DeleteStudent(student.id)">mdi-delete</v-icon>
+                    </v-list-item-icon></td>
+
+                  
+
+                </tr>
+            </tbody>
+            <EditStudent v-if="showDialog"
+                :studentData = "studentInfo"
+                @Cancel = "Cancel" 
+                @Update = "UpdateStudent" 
+              />
+
+            </template>
+        </v-simple-table>
+    </div>
+  
   </div>
 </template>
 
 <script>
   import FormStudent from '../ui/FormStudent.vue';
   import EditStudent from './EditStudent.vue';
+  import StudentDetail from './StudentDetail.vue';
   import axios from '../../axios-http.js';
  
   export default {
-    components: {'formstudent': FormStudent, EditStudent},
+    components: {
+      'formstudent': FormStudent,
+      EditStudent,
+      StudentDetail,
+    },
     data () {
       return {
         dialog: false,
@@ -134,7 +142,6 @@
           this.getstudent();
         }
       }
-
     },
     mounted() {
       this.getstudent()
