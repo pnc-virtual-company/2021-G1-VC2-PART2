@@ -5,7 +5,6 @@
           <template v-slot:activator="{ on, attrs }">
               <v-btn color="blue lighten" dark v-bind="attrs" v-on="on">+ Create user</v-btn>
           </template>
-
           <v-card>
               <h3>Create new user</h3>
               <v-card-text>
@@ -23,9 +22,8 @@
                   :rules="emailRules"
                   label="E-mail"
                   color="deep-purple accent-4"
-                  required
-                ></v-text-field>
-
+                  required>
+                  </v-text-field>
                 <v-row>
                   <v-col cols="12" sm="6">
                     <v-text-field
@@ -34,10 +32,9 @@
                       :rules="passwordrules"
                       label="password"
                       color="deep-purple accent-4"
-                      required
-                    ></v-text-field>
+                      required>
+                    </v-text-field>
                   </v-col>
-
                   <v-col cols="12" sm='6'>
                     <v-text-field
                       v-model="password_confirmation"
@@ -49,7 +46,6 @@
                     ></v-text-field>
                   </v-col>
                 </v-row>
-                
                 <v-col
                   cols="12"
                   sm="12"
@@ -62,7 +58,6 @@
                     dense
                     color="deep-purple accent-4"
                   ></v-combobox>
-                
                 </v-col>
                 <select v-if="role === 'Student' " name="" id="" v-model="studentId">
                   <option v-for="student of studentList" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
@@ -86,13 +81,9 @@
                   <v-spacer></v-spacer>
                   <v-btn color="primary" text @click="Adduser">Create</v-btn>
               </v-card-actions>
-
           </v-card>
       </v-dialog>
     </div>
-
-    
-
     <div class="userLists">
         <h2>List of users</h2>
         <v-simple-table>
@@ -117,7 +108,6 @@
                   <td>{{ user.username }}</td>
                   <td>{{ user.email }}</td>
                   <td>{{ user.role }}</td>
-                  
                   <td><v-list-item-icon>
                       <v-icon @click="Show(user)" color='green'>mdi-pencil-box-multiple-outline</v-icon>
                   </v-list-item-icon>
@@ -125,9 +115,6 @@
                   <v-list-item-icon>
                     <v-icon @click="DeleteUser(user.id)" color="#EF5350">mdi-delete</v-icon>
                   </v-list-item-icon></td>
-
-                 
-
                 </tr>
             </tbody>
             </template>
