@@ -1,5 +1,97 @@
 <template>
   <v-expansion-panels class="main">
+
+
+    <!-- ========= Dialog Disciple =================-->
+    <v-dialog width="600" v-model="showEdit">
+        <v-card>
+            <v-card-title class="text-h5 grey lighten-2">
+                Update Disciple form
+            </v-card-title>
+
+            <v-card-text>
+                <v-container>
+                    <v-row>
+                        <v-col
+                        cols="12"
+                        sm="12"
+                        >
+                        <v-autocomplete
+                            v-model="student"
+                            :items="studentlist"
+                            dense
+                            label="Choose Students"
+                        ></v-autocomplete>
+                        </v-col>
+
+                        <v-col 
+                        cols="12" 
+                        sm="12">
+                        <v-select
+                            v-model="leavetype"
+                            :items="['sick', 'have a task to do', 'sick too', 'sick three']"
+                            label="Choose leave type"
+                            required
+                        ></v-select>
+                        </v-col>
+                        <v-col 
+                           cols="12" 
+                          sm="12"
+                        >
+                          <v-menu
+                              v-model="menu2"
+                              :close-on-content-click="false"
+                              transition="scale-transition"
+                              offset-y
+                              max-width="290px"
+                              min-width="auto"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                v-model="computedDateFormatted"
+                                label="Date (read only text field)"
+                                hint="MM/DD/YYYY format"
+                                persistent-hint
+                                prepend-icon="mdi-calendar"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker
+                              v-model="date"
+                              no-title
+                              @input="menu2 = false"
+                            ></v-date-picker>
+                          </v-menu>
+                        </v-col>
+
+                        <v-col
+                        cols="12"
+                        sm="12"
+                        >
+                        <v-text-field
+                            label="Description"
+                            hint="input your description"
+                            v-model="description"
+                            required
+                        ></v-text-field>
+                        </v-col>
+
+                    </v-row>
+                </v-container>
+            </v-card-text>
+
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text @click="showEdit = false">Discard</v-btn>
+                <v-btn color="success" text @click="Update(id)">Save change</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
+
    
    <v-card-title>
       <v-text-field
@@ -72,7 +164,7 @@
                  "
         >
           <v-list-item-icon >
-            <v-icon @click="Update(disciple)" class="edit">mdi-pencil-box-multiple-outline</v-icon>
+            <v-icon @click="ShowEditDialog(disciple)" class="edit">mdi-pencil-box-multiple-outline</v-icon>
           </v-list-item-icon>
 
           <v-list-item-icon  >
@@ -89,21 +181,68 @@
   </v-expansion-panels>
 </template>
 <script>
- import axios from '../../axios-http.js';
+import axios from '../../axios-http.js';
 import formDisciple from '../ui/formDisciple.vue';
 
 export default {
   components: { formDisciple },
   data () {
     return {
+      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      menu1: false,
+      showEdit: false,
       search: '',
-      disciples: [],
-      userRole: '',
+      disciples: [
+        {
+          id:1,
+          type:'sick',
+          description:'Welcome to me'
+        },
+        {
+          id:2,
+          type:'sick',
+          description:'Welcome to you'
+        },
+        {
+          id:3,
+          type:'sick',
+          description:'Welcome to her'
+        },
+        {
+          id:4,
+          type:'sick',
+          description:'Welcome to his'
+        }
+      ],
     }
   },
+  computed: {
+      computedDateFormatted () {
+        return this.formatDate(this.date)
+      },
+    },
+
+    watch: {
+      date () {
+        this.dateFormatted = this.formatDate(this.date)
+      },
+    },
   methods: {
+    formatDate(date) {
+        if (!date) return null
+
+        const [year, month, day] = date.split('-')
+        return `${month}/${day}/${year}`
+    },
+    ShowEditDialog() {
+      this.showEdit = true;
+    },
+    Adddisciple(disciple){
+      this.disciples.push(disciple);
+    },
+
     Delete(id){
-      axios.delete('/disciples/'+ id) .then(res => {
+      axios.delete('/disciples/'+ id).then(res => {
         console.log(res.data);
         this.getDisciple();
       })
@@ -115,12 +254,22 @@ export default {
       axios.get('/disciples').then(res => {
         this.disciples = res.data;
       })
+    },
+    parseDate (date) {
+      if (!date) return null
+
+      const [month, day, year] = date.split('/')
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     }
   },
+  
   mounted() {
+    // this.getDisciple();
     this.getDisciple();
     this.userRole = localStorage.getItem('role');
   },
+
+  
 }
 </script>
 

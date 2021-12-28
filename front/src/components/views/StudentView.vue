@@ -123,7 +123,7 @@
       },
       Cancel(hidden){
         this.showDialog = hidden;
-      },
+      }, 
       
       search(){
         if(this.studentName !== ""){
