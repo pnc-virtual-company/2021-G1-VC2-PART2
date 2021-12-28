@@ -5,8 +5,7 @@
         @add-user="getstudent"
     />
 
-
-  <!-- ===================Delete disciple dialog======================== -->
+    <!-- ===================Delete disciple dialog======================== -->
 
     <v-dialog v-model="deleteDialog" max-width="500px">
       <v-card class="cardForm">
@@ -21,8 +20,8 @@
       </v-card>
     </v-dialog>
     <!-- ==========================End Dialog===================================== -->
-
-  <div class="userLists">
+  <student-detail v-if="userRole === 'Student' "></student-detail>
+  <div class="userLists" v-else>
    
       <v-simple-table>
         <template v-if="userRole !== 'Student' " v-slot:top>
