@@ -3,23 +3,72 @@
         <v-card>
             <h2>Update Student</h2>
             <v-card-text>
-                <input type="text" placeholder="First name" v-model="firstName">
-                <input type="text" placeholder="last name" v-model="lastName">
-                <select name="class" id="class" v-model="Class">
-                    <option selected disabled>Choose class</option>
-                    <option value="WEB 2021A">WEB 2021A</option>
-                    <option value="WEB 2021B">WEB 2021B</option>
-                    <option value="SNA 2021">SNA 2021</option>
-                    <option value="WEB 2022A">WEB 2022A</option>
-                    <option value="WEB 2022B">WEB 2022B</option>
-                    <option value="SNA 2022">SNA 2022</option>
-                </select>
-            
-                <input type="radio" name="fav_language" value="Female" v-model="gender">Female
-                <input type="radio" name="fav_language" value="Male" v-model="gender">Male
-                <input type="number" placeholder="Phone number" v-model="phoneNumber">
-                <input type="text" placeholder="NGO" v-model="ngo">
-                <input type="file" name="picture" style="width:100%" >
+              <v-row class='row'>
+                <v-col cols="6" sm="6">
+                    <v-text-field 
+                    class="firstName"
+                    v-model="firstName"
+                    label="first name"  
+                    outlined 
+                    dense>
+                    </v-text-field>
+                </v-col>
+
+                <v-col cols="6" sm="6">
+                    <v-text-field 
+                    class="lastName"
+                    v-model="lastName"
+                    label="last name"  
+                    outlined 
+                    dense>
+                    </v-text-field>
+                </v-col>
+            </v-row>
+            <v-col cols="12" sm="12">
+                <input type="radio" id="male" name="gender" v-model="gender" value="Male" placeholder="Male"> Male
+                <input type="radio" id="female" name="gender" v-model="gender" value="Female" placeholder="Female"> Female
+            </v-col>
+            <v-select
+                v-model="Class"
+                :items="items"
+                label="class"
+                dense
+                outlined
+            ></v-select>
+            <v-row>
+            <v-col cols="12" sm="6">
+                <v-text-field 
+                    v-model="phoneNumber"
+                    label="Phone number"  
+                    outlined 
+                    dense>
+                </v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6">
+                <v-text-field 
+                    v-model="ngo"
+                    label="Ngo"  
+                    outlined 
+                    dense>
+                </v-text-field>
+            </v-col>
+            </v-row>
+
+            <v-col
+            class="d-flex"
+            cols="12"
+            sm="12"
+            >
+                <v-file-input
+                  chips
+                  counter
+                  show-size
+                  small-chips
+                  v-model="picture"
+                  color="deep-purple accent-4"
+                  truncate-length="32"
+                ></v-file-input>
+            </v-col>
             </v-card-text>
 
             <v-divider></v-divider>
@@ -41,7 +90,9 @@ export default {
 
     data(){
       return{
+        items: ['WEB 2021A', 'WEB 2021B', 'SNA 2021','WEB 2022A','WEB 2022B','SNA 2022'],
         dialog: true,
+        row: null,
         firstName: '',
         lastName: '',
         Class: '',
@@ -136,6 +187,12 @@ export default {
         outline: none;
          border: 1px solid rgb(194, 193, 193);
         border-radius: 5px;
+    }
+    .row{
+        margin-top: 2%;
+    }
+    #female{
+        margin-left: 3%;
     }
  
 </style>

@@ -3,17 +3,61 @@
       <v-card>
         <h2 id="edit">Do you want to update?</h2>
         <v-card-text>
-          <input type="text" placeholder="Username" v-model="username">
-          <input type="email" placeholder="Email" v-model="email">
-          <!-- <input type="password" placeholder="Password" v-model="password"> -->
-          <label for="role">Role :</label>
-          <select name="role" v-model="role">
-              <option value="Select role" disabled>select role</option>
-              <option value="Admin">Admin</option>
-              <option value="Social Affair">Social Affair</option>
-              <option value="Student">Student</option>
-          </select>
-          <input type="file" >
+          <v-col
+            cols="12"
+            sm="12"
+          >
+              <div>
+                <v-text-field 
+                v-model="username"
+                label="Username"  
+                outlined 
+                dense>
+                </v-text-field>
+              </div>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="12"
+          >
+            <div>
+              <v-text-field 
+              v-model="email"
+              label="Email"  
+              outlined 
+              dense>
+              </v-text-field>
+            </div>
+          </v-col>
+          
+          <v-col
+            cols="12"
+            sm="12"
+          >
+            <v-select
+              v-model="role"
+              :items="items"
+              label="Role"
+              dense
+              outlined
+            ></v-select>
+          </v-col>
+
+           <v-col
+            cols="12"
+            sm="12"
+            >
+                <v-file-input
+                  chips
+                  counter
+                  show-size
+                  small-chips
+                  v-model="image"
+                  color="deep-purple accent-4"
+                  truncate-length="32"
+                ></v-file-input>
+            </v-col>
+          
           </v-card-text>
     
          <v-divider></v-divider>
@@ -34,11 +78,14 @@ export default {
     emits:['update', 'cancel'],
 
     data(){
+      
       return{
+        items: ['Admin', 'Social Affair', 'Student'],
         dialog: true,
         username: '',
         email: '',
         role: '',
+        image: '',
       }
     },
 
