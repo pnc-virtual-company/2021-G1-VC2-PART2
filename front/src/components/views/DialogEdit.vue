@@ -1,11 +1,11 @@
 <template> 
-    <div class="overlay">
+   <v-dialog persistent width="600" v-model="dialog" class="overlay">
       <v-card>
         <h2 id="edit">Do you want to update?</h2>
         <v-card-text>
           <input type="text" placeholder="Username" v-model="username">
           <input type="email" placeholder="Email" v-model="email">
-          <input type="password" placeholder="Password" v-model="password">
+          <!-- <input type="password" placeholder="Password" v-model="password"> -->
           <label for="role">Role :</label>
           <select name="role" v-model="role">
               <option value="Select role" disabled>select role</option>
@@ -25,7 +25,7 @@
         </v-card-actions>
       
       </v-card>
-  </div>
+   </v-dialog>
 </template>
 
 <script>
@@ -35,9 +35,9 @@ export default {
 
     data(){
       return{
+        dialog: true,
         username: '',
         email: '',
-        password: '',
         role: '',
       }
     },
@@ -47,7 +47,6 @@ export default {
         let user = {
           username: this.username,
           email: this.email,
-          password: this.password,
           role: this.role,
         }
 
@@ -60,7 +59,6 @@ export default {
     mounted() {
       this.username = this.data.username;
       this.email = this.data.email;
-      this.password = this.data.password;
       this.role = this.data.role;
       console.log(this.data);
     },

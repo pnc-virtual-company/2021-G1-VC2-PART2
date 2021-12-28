@@ -5,50 +5,65 @@
         @add-user="getstudent"
     />
 
-    <student-detail v-if="userRole === 'Student' "></student-detail>
 
-    <div class="userLists" v-else>
-    
-        <v-simple-table>
-          <template v-slot:top>
-            <v-text-field 
-              class="mx-4 search"
-              v-on:keyup="search"
-              v-model="studentName"
-              label="Search student"
-              color="blue darken-1"
-            ></v-text-field>
+  <!-- ===================Delete disciple dialog======================== -->
 
-          </template>
-        
-            <template v-slot:default>
-            <thead>
-                <tr>
-                    <th class="text-left">First name</th>
-                    <th class="text-left">Last name</th>
-                    <th class="text-left">Class</th>
-                    <th class="text-left">Phone</th>
-                    <th class="text-left">Gender</th>
-                    <th class="text-left">Ngo</th>
-                    <th v-if="userRole !== 'Student' " class="text-left">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="student in studentdata" :key="student.username">
-                    <td>{{ student.firstName }}</td>
-                    <td>{{ student.lastName }}</td>
-                    <td>{{ student.class }}</td>
-                    <td>0{{ student.phone }}</td>
-                    <td>{{ student.gender }}</td>
-                    <td>{{ student.ngo }}</td>
-                    
-                    <td v-if="userRole !== 'Student' "><v-list-item-icon>
-                        <v-icon @click="addShow(student)">mdi-pencil-box-multiple-outline</v-icon>
-                    </v-list-item-icon>
+    <v-dialog v-model="deleteDialog" max-width="500px">
+      <v-card class="cardForm">
+        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="gray darken-1" text @click="deleteDialog = false">Cancel</v-btn>
+          <v-btn color="green darken-1" text @click="DeleteStudent(id)">OK</v-btn>
+          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- ==========================End Dialog===================================== -->
 
-                    <v-list-item-icon>
-                        <v-icon @click="DeleteStudent(student.id)">mdi-delete</v-icon>
-                    </v-list-item-icon></td>
+  <div class="userLists">
+   
+      <v-simple-table>
+        <template v-if="userRole !== 'Student' " v-slot:top>
+          <v-text-field 
+            class="mx-4 search"
+            v-on:keyup="search"
+            v-model="studentName"
+            label="Search student"
+            color="blue darken-1"
+          ></v-text-field>
+
+        </template>
+      
+          <template v-slot:default>
+          <thead>
+              <tr>
+                  <th class="text-left">First name</th>
+                  <th class="text-left">Last name</th>
+                  <th class="text-left">Class</th>
+                  <th class="text-left">Phone</th>
+                  <th class="text-left">Gender</th>
+                  <th class="text-left">Ngo</th>
+                  <th v-if="userRole !== 'Student' " class="text-left">Action</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="student in studentdata" :key="student.username">
+                  <td>{{ student.firstName }}</td>
+                  <td>{{ student.lastName }}</td>
+                  <td>{{ student.class }}</td>
+                  <td>0{{ student.phone }}</td>
+                  <td>{{ student.gender }}</td>
+                  <td>{{ student.ngo }}</td>
+                  
+                  <td v-if="userRole !== 'Student' "><v-list-item-icon>
+                      <v-icon @click="addShow(student)" color='green'>mdi-pencil-box-multiple-outline</v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-icon>
+                      <v-icon @click="showDeleteStudent(student)">mdi-delete</v-icon>
+                  </v-list-item-icon></td>
 
                   
 
@@ -87,6 +102,9 @@
         studentInfo: '',
         studentName: '',
         userRole: '',
+        deleteDialog: false,
+        id:''
+
         
       }
     },
@@ -117,6 +135,11 @@
           console.log(res.data);
           this.getstudent();
         })
+        this.deleteDialog= false;
+      },
+      showDeleteStudent(student){
+        this.deleteDialog = true;
+        this.id = student.id;
       },
       UpdateStudent(id,student,hidden){
           axios.put('/students/' + id , student).then(res => {
@@ -131,7 +154,7 @@
       },
       Cancel(hidden){
         this.showDialog = hidden;
-      },
+      }, 
       
       search(){
         if(this.studentName !== ""){
@@ -212,5 +235,8 @@
   .search{
     width: 30%;
     margin-left: 1%;
+  }
+  .cardForm{
+    border-top: 5px solid red;
   }
 </style>
