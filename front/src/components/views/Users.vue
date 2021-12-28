@@ -91,7 +91,21 @@
       </v-dialog>
     </div>
 
-    
+ <!-- ===================Delete disciple dialog======================== -->
+
+    <v-dialog v-model="deleteDialog" max-width="500px">
+      <v-card class="cardForm">
+        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="gray darken-1" text @click="deleteDialog = false">Cancel</v-btn>
+          <v-btn color="green darken-1" text @click="DeleteUser(id)">OK</v-btn>
+          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- ==========================End Dialog===================================== -->
 
     <div class="userLists">
         <h2>List of users</h2>
@@ -123,7 +137,7 @@
                   </v-list-item-icon>
 
                   <v-list-item-icon>
-                    <v-icon @click="DeleteUser(user.id)">mdi-delete</v-icon>
+                    <v-icon @click="showDeleteUser(user)">mdi-delete</v-icon>
                   </v-list-item-icon></td>
 
                   <dialog-edit v-if="displayEdit"
@@ -160,6 +174,7 @@ export default {
       studentId: '',
       users: [],
       dialog: false,
+      deleteDialog: false,
       showDialog: false,
       displayEdit: false,
       error: '',
@@ -170,6 +185,7 @@ export default {
         'Student',
         'Social Affiar',
       ],
+      id:'',
 
       valid: false,
       username: '',
@@ -237,7 +253,14 @@ export default {
         console.log(res.data);
         this.getUsers();
       })
+      this.deleteDialog = false
     },
+    showDeleteUser(user){
+      this.deleteDialog = true
+      this.id = user.id
+
+    },
+    
     getUsers(){
       axios.get('/users').then(res => {
         this.users = res.data;
@@ -348,5 +371,9 @@ export default {
   .right-main-button {
     float: right;
     margin-right: 2rem;
+  }
+  .cardForm{
+    border-top: 5px solid red;
+    
   }
 </style>

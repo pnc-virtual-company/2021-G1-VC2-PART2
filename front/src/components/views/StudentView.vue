@@ -5,6 +5,23 @@
         @add-user="getstudent"
     />
 
+
+  <!-- ===================Delete disciple dialog======================== -->
+
+    <v-dialog v-model="deleteDialog" max-width="500px">
+      <v-card class="cardForm">
+        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="gray darken-1" text @click="deleteDialog = false">Cancel</v-btn>
+          <v-btn color="green darken-1" text @click="DeleteStudent(id)">OK</v-btn>
+          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- ==========================End Dialog===================================== -->
+
   <div class="userLists">
    
       <v-simple-table>
@@ -43,7 +60,7 @@
                   </v-list-item-icon>
 
                   <v-list-item-icon>
-                      <v-icon @click="DeleteStudent(student.id)">mdi-delete</v-icon>
+                      <v-icon @click="showDeleteStudent(student)">mdi-delete</v-icon>
                   </v-list-item-icon></td>
 
                  
@@ -77,6 +94,9 @@
         studentInfo: '',
         studentName: '',
         userRole: '',
+        deleteDialog: false,
+        id:''
+
         
       }
     },
@@ -107,6 +127,11 @@
           console.log(res.data);
           this.getstudent();
         })
+        this.deleteDialog= false;
+      },
+      showDeleteStudent(student){
+        this.deleteDialog = true;
+        this.id = student.id;
       },
       UpdateStudent(id,student,hidden){
           axios.put('/students/' + id , student).then(res => {
@@ -203,5 +228,8 @@
   .search{
     width: 30%;
     margin-left: 1%;
+  }
+  .cardForm{
+    border-top: 5px solid red;
   }
 </style>
