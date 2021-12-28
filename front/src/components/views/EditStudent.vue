@@ -1,5 +1,5 @@
 <template> 
-    <v-dialog width="600" v-model="dialog" class="overlay">
+    <v-dialog persistent width="600" v-model="dialog" class="overlay">
         <v-card>
             <h2>Update Student</h2>
             <v-card-text>

@@ -41,11 +41,11 @@
                   <td>{{ student.ngo }}</td>
                   
                   <td v-if="userRole !== 'Student' "><v-list-item-icon>
-                      <v-icon @click="addShow(student)">mdi-pencil-box-multiple-outline</v-icon>
+                      <v-icon @click="addShow(student)" color='green'>mdi-pencil-box-multiple-outline</v-icon>
                   </v-list-item-icon>
 
                   <v-list-item-icon>
-                      <v-icon @click="DeleteStudent(student.id)">mdi-delete</v-icon>
+                      <v-icon @click="DeleteStudent(student.id)" color="#EF5350">mdi-delete</v-icon>
                   </v-list-item-icon></td>
 
                  

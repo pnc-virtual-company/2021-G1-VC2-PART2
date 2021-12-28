@@ -119,18 +119,14 @@
                   <td>{{ user.role }}</td>
                   
                   <td><v-list-item-icon>
-                      <v-icon @click="Show(user)">mdi-pencil-box-multiple-outline</v-icon>
+                      <v-icon @click="Show(user)" color='green'>mdi-pencil-box-multiple-outline</v-icon>
                   </v-list-item-icon>
 
                   <v-list-item-icon>
-                    <v-icon @click="DeleteUser(user.id)">mdi-delete</v-icon>
+                    <v-icon @click="DeleteUser(user.id)" color="#EF5350">mdi-delete</v-icon>
                   </v-list-item-icon></td>
 
-                  <dialog-edit v-if="displayEdit"
-                    :data ="userInfo"
-                    @cancel ="cancel"
-                    @update ="EditUser"
-                  />
+                 
 
                 </tr>
             </tbody>
@@ -138,7 +134,11 @@
         </v-simple-table>
       </div>
 
-      
+       <dialog-edit v-if="displayEdit"
+          :data ="userInfo"
+          @cancel ="cancel"
+          @update ="EditUser"
+        />
     </div>
 </template>
 
