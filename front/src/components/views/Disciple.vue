@@ -128,6 +128,7 @@
             max-width="50"
             src="../../assets/date.png" alt="">
           </v-img>
+        
         </div>
         <!-- ==============start button edit&delete============= -->
         <v-list-item-icon >
@@ -314,4 +315,3 @@ export default {
 .cardForm{
   border-top: 5px solid red;
 }
-</style>
