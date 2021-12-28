@@ -105,9 +105,8 @@
         v-model="teacher"
         append-icon="mdi-magnify"
         label="Filter"
-        single-line
-        hide-details
         class="search"
+        color="blue darken-1"
       ></v-text-field>
     <!-- ==========card======================== -->
     

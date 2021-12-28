@@ -9,10 +9,12 @@
    
       <v-simple-table>
         <template v-if="userRole !== 'Student' " v-slot:top>
-          <v-text-field class="mx-4 search"
+          <v-text-field 
+            class="mx-4 search"
             v-on:keyup="search"
             v-model="studentName"
             label="Search student"
+            color="blue darken-1"
           ></v-text-field>
 
         </template>
