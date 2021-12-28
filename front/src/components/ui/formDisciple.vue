@@ -2,7 +2,6 @@
     <v-row justify="center">
         <v-dialog
         v-model="dialog"
-        persistent
         max-width="600px"
         >
             <template v-slot:activator="{ on, attrs }">
@@ -33,6 +32,8 @@
                                     v-model="student_id"
                                     :items="studentLists"
                                     label="Choose student"
+                                    rows='1'
+                                    prepend-icon='mdi-account'
                                 ></v-autocomplete>
                             </v-col>
 
@@ -45,20 +46,22 @@
                                 :items="leavelist"
                                 label="Choose discipline notice type"
                                 multiple
+                                rows='1'
+                                prepend-icon='mdi-alert-outline'
                                 ></v-autocomplete>
                             </v-col>
 
-                            <v-col 
-                            cols="12"
-                            sm="12"
-                            >
+                             <v-col
+                                cols="12"
+                                sm="12"
+                                >
                                 <v-textarea
                                 v-model="description"
-                                >
-                                <template v-slot:label>
-                                    Description <small>( Explanations )</small>
-                                </template>
-                                </v-textarea>
+                                class="mx-2"
+                                label="Description"
+                                rows="1"
+                                prepend-icon="mdi-comment-processing-outline"
+                            ></v-textarea>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -73,7 +76,7 @@
                         Close
                     </v-btn>
                     <v-btn
-                        color="blue darken-1"
+                        color="green darken-1"
                         text
                         @click="createDisciple"
                     >

@@ -242,8 +242,18 @@ export default {
       });
     },
     getPermission(){
+      let studentId = localStorage.getItem('studentId');
       axios.get('/permissions').then(res => {
-        this.permissions = res.data;
+        if(this.userRole === "Student"){
+            for(let permission of res.data){
+              if(permission.student.id == studentId ){
+                this.permissions.push(permission)
+              }
+            }
+
+          }else{
+              this.permissions = res.data;
+            }
       })
     },
 
