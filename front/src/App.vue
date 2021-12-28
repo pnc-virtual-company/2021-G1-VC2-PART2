@@ -27,8 +27,9 @@
       }
     },
     mounted() {
-      let userid = localStorage.getItem('userid');
-      if(userid !== null){
+      let userToken = localStorage.getItem('token');
+      let userid = localStorage.getItem('user_id');
+      if(userToken !== null && userid !== null){
         this.isSignin = true;
         // this.$router.push('/user');
       }

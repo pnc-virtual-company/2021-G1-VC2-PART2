@@ -15,7 +15,7 @@ class StudentController extends Controller
     public function getStudent()
     {
         //
-        return Student::latest()->get();
+        return Student::with('user')->latest()->get();
     }
 
     /**
@@ -34,7 +34,7 @@ class StudentController extends Controller
             'phone' => 'required',
             'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:1999',
             'gender' => 'required',
-            'ngo' => 'required'
+            'ngo' => 'required',
         ]);
 
         $request->file('picture')->store('public/imagestudent');
@@ -53,18 +53,7 @@ class StudentController extends Controller
         return response()->json(['message' => "created Successfully!" , "student" => $student] ,201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-        
-    }
-
+   
     /**
      * Update the specified resource in storage.
      *

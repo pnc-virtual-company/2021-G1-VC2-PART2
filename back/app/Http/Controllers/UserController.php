@@ -11,7 +11,7 @@ class UserController extends Controller
    
     public function GetUsers()
     {
-        return User::latest()->get();
+        return User::with('student')->latest()->get();
     }
 
 
@@ -31,6 +31,7 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->role = $request->role;
         $user->profile = $request->file('profile')->hashName();
+        $user->student_id = $request->student_id;
         $user->save();
         
         $token = $user->createToken('myToken')->plainTextToken; 
@@ -55,6 +56,10 @@ class UserController extends Controller
             'user' => $user,
             'token' => $token
             ]);
+    }
+    public function Logout(Request $request){
+        auth()->user()->tokens()->delete();
+        return response()->json(['message' => 'User logout']);
     }
 
     public function UpdateUser(Request $request, $id)
@@ -81,3 +86,6 @@ class UserController extends Controller
         return User::where('username','like','%'.$username.'%')->get();
     }
 }
+
+// 1|6tRwaxZlncw2Dim5uLL3SId7o3pDKfZskLNKH6Hf
+// 2|EpivXWpVr7aSvsMdwCs6nOlYu5GnEG9sK7O2wynO

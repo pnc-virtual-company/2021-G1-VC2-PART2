@@ -15,6 +15,14 @@ class Student extends Model
         'phone',
         'gender',
         'ngo',
-        'picture'
+        'picture',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    public function permission(){
+        return $this->hasMany(permission::class);
+    }
+
 }

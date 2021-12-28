@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="text-center">
-      <v-dialog v-model="dialog" width="450">
+      <v-dialog v-model="dialog" width="500">
           <template v-slot:activator="{ on, attrs }">
               <v-btn color="blue lighten" dark v-bind="attrs" v-on="on">+ Create user</v-btn>
           </template>
@@ -9,18 +9,75 @@
           <v-card>
               <h3>Create new user</h3>
               <v-card-text>
-                  <input type="text" placeholder="Username" v-model="username" required>
-                  <input type="email" placeholder="Email" v-model="email" required>
-                  <input type="password" placeholder="Password" v-model="password" required>
-                  <input type="password" placeholder="Confirm password" v-model="password_confirmation" required>
-                  <label for="role">Role</label>
-                  <select name="role" id="role" v-model="role" required>
-                      <option value="Admin">Admin</option>
-                      <option value="Social Affair">Social Affair</option>
-                      <option value="Student">Student</option>
-                  </select>
-                  <input type="file" name="profile" @change="Image" required>
-                  <p class="message">{{error}}</p>
+                <v-text-field
+                  v-model="username"
+                  :rules="nameRules"
+                  :counter="20"
+                  label="Username"
+                  color="deep-purple accent-4"
+                  required
+                ></v-text-field>
+
+                <v-text-field
+                  v-model="email"
+                  :rules="emailRules"
+                  label="E-mail"
+                  color="deep-purple accent-4"
+                  required
+                ></v-text-field>
+
+                <v-row>
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="password"
+                      :counter="20"
+                      :rules="passwordrules"
+                      label="password"
+                      color="deep-purple accent-4"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12" sm='6'>
+                    <v-text-field
+                      v-model="password_confirmation"
+                      :counter="20"
+                      :rules="passwordrules"
+                      label="confirm password"
+                      color="deep-purple accent-4"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                
+                <v-col
+                  cols="12"
+                  sm="12"
+                >
+                <v-combobox
+                    v-model="role"
+                    :items="items"
+                    label="Select role"
+                    outlined
+                    dense
+                    color="deep-purple accent-4"
+                  ></v-combobox>
+                
+                </v-col>
+                <select v-if="role === 'Student' " name="" id="" v-model="studentId">
+                  <option v-for="student of studentList" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
+                </select>
+
+                <v-file-input
+                  chips
+                  counter
+                  show-size
+                  small-chips
+                  v-model="image"
+                  color="deep-purple accent-4"
+                  truncate-length="32"
+                ></v-file-input>
+                <p class="message">{{error}}</p>
               </v-card-text>
 
               <v-divider></v-divider>
@@ -51,7 +108,10 @@
             </thead>
             <tbody>
                 <tr v-for="user of users" :key="user.username">
-                  <td>
+                  <td v-if="user.role === 'Admin' ">
+                    <img src="../../assets/icon.png" alt="">
+                  </td>
+                  <td v-else>
                     <img :src="url + user.profile" alt="">
                   </td>
                   <td>{{ user.username }}</td>
@@ -60,11 +120,9 @@
                   
                   <td><v-list-item-icon>
                       <v-icon @click="Show(user)">mdi-pencil-box-multiple-outline</v-icon>
-
                   </v-list-item-icon>
 
                   <v-list-item-icon>
-                    <!-- <Dialog /> -->
                     <v-icon @click="DeleteUser(user.id)">mdi-delete</v-icon>
                   </v-list-item-icon></td>
 
@@ -86,36 +144,57 @@
 
 <script>
 import axios from '../../axios-http.js';
-// import DialogRemove from './DialogRemove.vue';
 import DialogEdit from './DialogEdit.vue';
 
 export default {
   components: {
-    // DialogRemove,
     DialogEdit
     },
   data() {
     return {
+      studentList: '',
       userInfo: '',
-      username: '',
-      email: '',
       password: '',
       password_confirmation: '',
-      role: '',
       image: '',
+      studentId: '',
       users: [],
       dialog: false,
       showDialog: false,
       displayEdit: false,
       error: '',
       url: "http://127.0.0.1:8000/storage/imageUser/",
+      role: '',
+      items: [
+        'Admin',
+        'Student',
+        'Social Affiar',
+      ],
+
+      valid: false,
+      username: '',
+      nameRules: [
+        v => !!v || 'Username is required',
+        v => v.length <= 20 || 'Username must be less than 20 characters',
+      ],
+      email: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
+      ],
+
+      passwordrules: [
+        v => !!v || 'Password is required',
+        v => v.length >= 8 || 'Password is must be equal or more than 8 characters',
+        v => v.length <= 20 || 'Password is to long',
+      ]
+
     };
   },
   methods: {
-    Image(event){
-      this.image = event.target.files[0];
-    },
+  
     Adduser(){
+      console.log(this.image);
       let newUser = new FormData();
       newUser.append('username', this.username);
       newUser.append('email', this.email);
@@ -123,6 +202,7 @@ export default {
       newUser.append('password_confirmation', this.password_confirmation);
       newUser.append('role', this.role);
       newUser.append('profile', this.image);
+      newUser.append('student_id', this.studentId);
   
       axios.post('/signup', newUser).then(res => {
         console.log(res.data);
@@ -162,10 +242,17 @@ export default {
       axios.get('/users').then(res => {
         this.users = res.data;
       })
+    },
+    getStudent(){
+      axios.get('/students').then(res => {
+        console.log(res.data)
+        this.studentList = res.data
+      })
     }
   },
   mounted() {
     this.getUsers();
+    this.getStudent();
   },
 };
 </script>

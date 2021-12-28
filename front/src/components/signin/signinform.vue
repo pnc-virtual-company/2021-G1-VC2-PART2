@@ -21,6 +21,7 @@
                 <v-form @submit.prevent="submitHandler" ref="form">
                     <v-card-text>
                         <v-text-field
+                            color="blue lighten-2"
                             class="email"
                             v-model="email"
                             :rules="emailRules"
@@ -31,6 +32,7 @@
                             required
                         />
                         <v-text-field
+                            color="blue lighten-2"
                             class="password"
                             v-model="password"
                             :rules="passwordRules"
@@ -91,16 +93,25 @@ export default {
           password: this.password,
         }
 
-        this.loading = true;
-        setTimeout(()=> {
-          this.loading = false
-          this.snackbar = true
-        },3000)
+       // this.loading = true;
+        // setTim eout(()=> {
+        //   this.loading = false
+        //   this.snackbar = true
+        // },3000)
         axios.post('/signin', signin).then(res => {
-          localStorage.setItem("userid", res.data.user.id);
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("role", res.data.user.role);
+          localStorage.setItem("user_id", res.data.user.id);
+          localStorage.setItem("studentId", res.data.user.student_id);
+          
           console.log(res.data);
+          // this.loading = false;
           this.$emit('sign-in', this.Issignin);
-          this.$router.push('/user');
+          if(res.data.user.role == 'Admin'){
+            this.$router.push('/user');
+          }else{
+            this.$router.push('/student');
+          }
         })
         
       }
