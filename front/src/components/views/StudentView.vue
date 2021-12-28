@@ -26,10 +26,12 @@
    
       <v-simple-table>
         <template v-if="userRole !== 'Student' " v-slot:top>
-          <v-text-field class="mx-4 search"
+          <v-text-field 
+            class="mx-4 search"
             v-on:keyup="search"
             v-model="studentName"
             label="Search student"
+            color="blue darken-1"
           ></v-text-field>
 
         </template>
@@ -56,7 +58,7 @@
                   <td>{{ student.ngo }}</td>
                   
                   <td v-if="userRole !== 'Student' "><v-list-item-icon>
-                      <v-icon @click="addShow(student)">mdi-pencil-box-multiple-outline</v-icon>
+                      <v-icon @click="addShow(student)" color='green'>mdi-pencil-box-multiple-outline</v-icon>
                   </v-list-item-icon>
 
                   <v-list-item-icon>
@@ -146,7 +148,7 @@
       },
       Cancel(hidden){
         this.showDialog = hidden;
-      },
+      }, 
       
       search(){
         if(this.studentName !== ""){
