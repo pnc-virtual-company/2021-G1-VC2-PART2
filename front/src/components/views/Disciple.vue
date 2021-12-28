@@ -80,7 +80,8 @@
 <!-- ===================search============= -->
    <v-card-title>
         <v-text-field
-       v-model="search"
+        v-if="userRole !== 'Student' "
+        v-model="search"
         append-icon="mdi-magnify"
         label="Search"
         single-line
@@ -90,7 +91,9 @@
       ></v-text-field>
     </v-card-title>
     
-     <form-disciple></form-disciple>
+     <form-disciple
+       v-if="userRole !== 'Student' "
+     ></form-disciple>
 <!-- ==========card=============== -->
   
     <v-expansion-panel class="formCard"
@@ -127,7 +130,7 @@
           </v-img>
         </div>
         <!-- ==============start button edit&delete============= -->
-     <v-list-item-icon >
+        <v-list-item-icon >
             <v-icon class="edit" @click ="ShowDilogEdit(disciple)">mdi-pencil-box-multiple-outline</v-icon>
         </v-list-item-icon>
 
@@ -169,6 +172,7 @@ export default {
       id:'',
       student_id:'',
       dnt: '',
+      userRole:'',
       leavelist:['leavelist', 'Oral warning', 'Warning letter', 'Termination'],
     }
   },
@@ -241,6 +245,7 @@ export default {
   
   mounted() {
    this.getDisciples();
+   this.userRole = localStorage.getItem('role');
 
   },
 
