@@ -110,11 +110,10 @@
    
     methods: {
      
-      getstudent(student){
+      getstudent(){
         let studentId = localStorage.getItem('studentId');
         this. userRole = localStorage.getItem('role');
-        console.log(student);
-
+        
         axios.get('/students').then(res => {
           if(this.userRole === "Student"){
             for(let student of res.data){
@@ -142,9 +141,9 @@
       },
       UpdateStudent(id,student,hidden){
           axios.put('/students/' + id , student).then(res => {
-            console.log(res.data);
             this.showDialog = hidden;
             this.getstudent();
+            return res.data;
           })
       },
       addShow(student){
@@ -172,6 +171,11 @@
 </script>
 
 <style scoped>
+  .main{
+    height: 84vh;
+    margin-top: 3%;
+    overflow-y: scroll;
+  }
   .btn-student {
       float: right;
       margin-top: 20px;

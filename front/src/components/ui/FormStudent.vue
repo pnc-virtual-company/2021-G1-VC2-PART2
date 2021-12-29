@@ -133,8 +133,7 @@
         outline: none;
     }
     .text-center{
-        margin-top: 3%;
-        margin-left: 79%;
+        margin-left: 78.5%;
         width: 10%;
     }
 </style>

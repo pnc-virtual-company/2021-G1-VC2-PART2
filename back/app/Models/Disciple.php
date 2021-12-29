@@ -11,6 +11,7 @@ class Disciple extends Model
     protected $fillable = [
         'student_id',
         'dnt',
+        'date',
         'description',
     ];
     protected $hidden = [

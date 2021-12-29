@@ -3,6 +3,7 @@
             <div class="navbar">
                
                 <ul>
+                    
                     <div class="circle">
                         <img v-if="userInfo.role == 'Admin' " src="../../assets/icon.png" alt="">
                         <img v-else :src="url + userInfo.profile" alt="">
@@ -160,8 +161,10 @@
         margin-right: 10px;
     }
     p{
+        width: 90%;
         margin-top: 16px;
         margin-right: 10px;
+        font-weight: bole;
     }
     span{
         margin-right: 200px;

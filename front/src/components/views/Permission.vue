@@ -1,5 +1,5 @@
 <template>
-<div class="card">
+  <div class="card">
 
   <!-- ================Edete permission dialog================== -->
   <v-dialog width="600" v-model="showEdit">
@@ -251,7 +251,7 @@ export default {
       if(this.teacher !== ""){
         axios.get('/permissions/search/' + this.teacher).then(res => {
           this.permissions = res.data;
-          console.log(res.data);
+          console.log(this.permissions);
         })
       }else{
         this.getPermission();
@@ -280,7 +280,7 @@ export default {
   .main{
     width: 80%;
     margin-left: 10%;
-    margin-top: 3%;
+    /* margin-top: 3%; */
   
   }
   .btn{
@@ -291,9 +291,9 @@ export default {
     margin-bottom: 10px;
   }
   .card{
-    margin-top: 2%;
-    width: 100%;
-    margin-bottom: 10%;
+    margin-top: 3%;
+    height: 84vh;
+    overflow-y: scroll;
   }
   #name{
     margin-top: 6%;

@@ -29,12 +29,14 @@ class DiscipleController extends Controller
         $request->validate([
             'student_id'=>'required',
             'dnt'=>'required',
+            'date'=>'required',
             'description'=>'required',
         ]);
 
         $disciple = new Disciple();
         $disciple->student_id = $request->student_id;
         $disciple->dnt = $request->dnt;
+        $disciple->date = $request->date;
         $disciple->description = $request->description;
 
         $disciple->save();

@@ -273,11 +273,12 @@ export default {
 
 <style scoped>
   .userLists{
-      width: 90%;
-      margin-left: 5%;
+      width: 80%;
+      margin-left: 10%;
   }
   .main{
-    height: 90vh;
+    height: 84vh;
+    margin-top: 3%;
     overflow-y: scroll;
   }
 
@@ -323,10 +324,7 @@ export default {
       outline: none;
   }
   .text-center{
-    margin-left: 84%;
-    width: 10%;
-    margin-top: 4%;
-  
+    margin-left: 69%;
   }
   
   img{

@@ -1,6 +1,6 @@
 <template>
-  <v-expansion-panels class="main" id="card">
-
+  <v-expansion-panels class="main">
+    <div class="headerManin">
     <!-- ===================Edit disciple dialog======================== -->
 
     <v-dialog v-model="editdialog" max-width="600px">
@@ -78,72 +78,92 @@
     <!-- ==========================End Dialog===================================== -->
 
 <!-- ===================search============= -->
-   <v-card-title>
+    <div class="cardheader">
+      <v-card-title>
         <v-text-field
-       v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-        class="mx-4"
-        v-on:keyup="searchBotton"
-      ></v-text-field>
-    </v-card-title>
+          v-if="userRole !== 'Student' "
+          class="searchbtn"
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          color="blue darken-1"
+          v-on:keyup="searchBotton"
+        ></v-text-field>
+      </v-card-title>
+      
+      <form-disciple v-if="userRole == 'Admin' " @add-discipline="getDisciples"></form-disciple>
+    </div>
     
-     <form-disciple></form-disciple>
 <!-- ==========card=============== -->
   
     <v-expansion-panel class="formCard"
       v-for="disciple of disciples" :key="disciple.id">
       <v-expansion-panel-header class="header">
-        <v-img
-          max-height="200"
-          max-width="100"
-          src="../../assets/wl.png">
-        </v-img>
-        <p>Wearning Letter</p>
-        <v-img
-         
-          max-height="120"
-          max-width="90"
-          src="../../assets/sreytouch.jpeg">
-        </v-img>
-        <div class="username" >
-          <div>
-          <h3 style="margin-bottom: 10px;">{{ disciple.first_name }} {{ disciple.last_name }}</h3>
-          </div>
-          <p>{{ disciple.class }}</p>
-        </div>
-        <div style="disply:flex;" >
-           <div class="date" style="margin-left: 58px; margin-bottom: -23px;" >
-              <h4 >Jan/23/2021</h4>
-           </div>
-
-           <v-img
+        <v-row>
+          <v-col cols="12" sm="1">
+            <v-img
+              id="wearning"
+              max-height="70"
+              max-width="70"
+              src="../../assets/wl.png">
+            </v-img>
+            
+          </v-col>
+          <v-col cols="12" sm="2">
+            <p id="dnt">{{disciple.dnt}}</p>
+          </v-col>
           
-            max-height="50"
-            max-width="50"
-            src="../../assets/date.png" alt="">
-          </v-img>
-        </div>
-        <!-- ==============start button edit&delete============= -->
-     <v-list-item-icon >
-            <v-icon class="edit" @click ="ShowDilogEdit(disciple)">mdi-pencil-box-multiple-outline</v-icon>
-        </v-list-item-icon>
+          <v-col cols="12" sm="3">
+              <v-img
+                max-height="120"
+                max-width="90"
+                :src="url + disciple.student.picture">
+              </v-img>
+          </v-col >
 
-        <v-list-item-icon  >
-            <v-icon class="delete" @click="ShowDialog(disciple)">mdi-delete</v-icon>
-        </v-list-item-icon>
-
+          <v-col cols="12" sm="4">
+            <div class="username" >
+              <div>
+                <h3 style="margin-bottom: 10px;">{{ disciple.student.firstName }} {{ disciple.student.lastName }}</h3>
+                </div>
+                <p>{{ disciple.class }}</p>
+            </div>
         
+            <div style="disply:flex;" >
+                <div class="date" style="margin-left: 58px; margin-bottom: -23px;" >
+                    <h4 >Jan/23/2021</h4>
+                </div>
+
+                <v-img
+                  max-height="50"
+                  max-width="50"
+                  src="../../assets/date.png" alt="">
+                </v-img>
+            </div>
+          </v-col>
+
+          <v-col cols="12" sm="2">
+            <!-- ==============start button edit&delete============= -->
+            <v-list-item-icon >
+                <v-icon class="edit" @click ="ShowDilogEdit(disciple)">mdi-pencil-box-multiple-outline</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-icon  >
+                <v-icon class="delete" @click="ShowDialog(disciple)">mdi-delete</v-icon>
+            </v-list-item-icon>
+          </v-col>
+         
+        </v-row>
         <!-- ===================end button edit&delete============= -->
       </v-expansion-panel-header>
       <!-- ====================start show details========== -->
       <v-expansion-panel-content>
         {{ disciple.description }} 
-        </v-expansion-panel-content>
+      </v-expansion-panel-content>
+
        <!-- ====================end show details=================== -->
     </v-expansion-panel>
+    </div>
   </v-expansion-panels>
 </template>
 <script>
@@ -169,6 +189,8 @@ export default {
       id:'',
       student_id:'',
       dnt: '',
+      userRole: '',
+      url: "http://127.0.0.1:8000/storage/imagestudent/",
       leavelist:['leavelist', 'Oral warning', 'Warning letter', 'Termination'],
     }
   },
@@ -200,8 +222,7 @@ export default {
       this.editdialog = true;
     },
     Update() {
-      // this.editdialog = false;
-      // console.log("updated");
+      this.editdialog = false;
       let updateDic = {
         description: this.description,
       }
@@ -221,11 +242,12 @@ export default {
       this.dialog = true;
       this.id = disciple.id;
     },
-    // getStudent(){
-    //   axios.get('/students').then(res => {
-    //     this.studentlist = res.data;
-    //   });
-    // },
+    getStudent(){
+      axios.get('/students').then(res => {
+        this.studentlist = res.data;
+        console.log(res.data);
+      });
+    },
      searchBotton(){
             if(this.search!== ""){
                 axios.get("/disciples/search/" + this.search).then(res => {
@@ -233,15 +255,14 @@ export default {
                 })
             }else{
                 this.getDisciples();
-            }
-            
-        } 
-        
+            }           
+        }        
   },
   
   mounted() {
-   this.getDisciples();
-
+    this.getDisciples();
+    this.getStudent();
+    this.userRole = localStorage.getItem('role');
   },
 
   
@@ -249,20 +270,19 @@ export default {
 </script>
 
 <style scoped>
-  .card-row{
-    background:rgb(76, 231, 231);
-    padding: 20px;
-    margin: 50px;
-    width: 90%;
-    margin-left: 5%;
+  .cardheader{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .headerManin{
+    width: 80%;
   }
   .username{
     padding: 10px;
-    margin: 10px;
-    
+    margin: 10px; 
   }
   .v-icon {
-    
     margin-left: 170%;
     padding: 5px;
  }
@@ -276,37 +296,25 @@ export default {
     padding: 5px;
     margin-top: 11px;
  }
-  img {
-    width: 20px;
-    height: 50px;
-    padding: 40px;
-  }
   .header{
     margin-right: 5%;
-    /* / background: rgb(245, 250, 250); / */
   }
   .main{
-    width: 90%;
-    margin-left: 5%;
-    margin-top: 5%;
+    height: 84vh;
+    overflow-y: scroll;
+    margin-top: 3%;
   }
-  .main{
-    width: 90%;
-    margin-left: 5%;
-    margin-top: 5%;
- 
+  .cardForm{
+    border-top: 5px solid red;
   }
-  #card{
-    
-    margin-top: 5%;
-    width: 80%;
-    margin-left: 10%;
+  #dnt{
+    margin-top: 25%;
   }
-  .card{
-    padding: 15px;
-    border-top: 7px solid rgba(155, 184, 201, 0.733);
+  #wearning{
+    margin-top: 25%;
   }
-.cardForm{
-  border-top: 5px solid red;
-}
+  .searchbtn{
+    margin-left: -7%;
+    margin-top: -9%;
+  }
 </style>
