@@ -152,7 +152,7 @@
       </v-expansion-panel-content>
   
       <div v-if="userRole !== 'Student' " class="btn" align="center">
-        <v-icon @click="ShowEditDialog(per)" left>mdi-pencil</v-icon>
+        <v-icon @click="ShowEditDialog(per)" left color='green'>mdi-pencil-box-multiple-outline</v-icon>
         <v-icon @click="ShowDialog(per)" tile color="#EF5350" right>mdi-delete </v-icon>
       </div>
     </v-expansion-panel>

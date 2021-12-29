@@ -61,7 +61,7 @@
                   </v-list-item-icon>
 
                   <v-list-item-icon>
-                      <v-icon @click="showDeleteStudent(student)">mdi-delete</v-icon>
+                      <v-icon @click="showDeleteStudent(student)" color="#EF5350">mdi-delete</v-icon>
                   </v-list-item-icon></td>
 
                   
@@ -104,7 +104,6 @@
         deleteDialog: false,
         id:''
 
-        
       }
     },
    

@@ -145,11 +145,11 @@
           <v-col cols="12" sm="2">
             <!-- ==============start button edit&delete============= -->
             <v-list-item-icon >
-                <v-icon class="edit" @click ="ShowDilogEdit(disciple)">mdi-pencil-box-multiple-outline</v-icon>
+                <v-icon class="edit" @click ="ShowDilogEdit(disciple)" color='green'>mdi-pencil-box-multiple-outline</v-icon>
             </v-list-item-icon>
 
             <v-list-item-icon  >
-                <v-icon class="delete" @click="ShowDialog(disciple)">mdi-delete</v-icon>
+                <v-icon class="delete" @click="ShowDialog(disciple)" color="#EF5350">mdi-delete</v-icon>
             </v-list-item-icon>
           </v-col>
          

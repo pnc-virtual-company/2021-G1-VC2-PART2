@@ -130,7 +130,7 @@
                   </v-list-item-icon>
 
                   <v-list-item-icon>
-                    <v-icon @click="showDeleteUser(user)">mdi-delete</v-icon>
+                    <v-icon @click="showDeleteUser(user)" color="#EF5350">mdi-delete</v-icon>
                   </v-list-item-icon></td>
                 </tr>
             </tbody>
