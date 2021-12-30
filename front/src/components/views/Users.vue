@@ -173,7 +173,7 @@ export default {
       items: [
         'Admin',
         'Student',
-        'Social Affiar',
+        'Social Affair',
       ],
       id:'',
 

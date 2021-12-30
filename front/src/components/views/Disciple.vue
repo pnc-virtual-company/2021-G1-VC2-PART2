@@ -81,7 +81,7 @@
     <div class="cardheader">
       <v-card-title>
         <v-text-field
-          v-if="userRole !== 'Student' "
+          v-if="userRole !== 'Student' && userRole !== 'Social Affair' "
           class="searchbtn"
           v-model="search"
           append-icon="mdi-magnify"
@@ -234,9 +234,19 @@ export default {
     },
     
     getDisciples() {
-      axios.get("/disciples").then(res => {
-        this.disciples = res.data;
-      }) 
+      let studentId = localStorage.getItem('studentId');
+      axios.get('/disciples').then(res => {
+        if(this.userRole === "Student"){
+            for(let disciple of res.data){
+              if(disciple.student.id == studentId ){
+                this.disciples.push(disciple)
+              }
+            }
+
+          }else{
+              this.disciples = res.data;
+            }
+      })
     },
     ShowDialog(disciple){
       this.dialog = true;
