@@ -104,7 +104,7 @@
       ></v-text-field>
     </v-card-title>
     
-     <form-disciple v-if="userRole == 'Admin' "></form-disciple>
+    <form-disciple v-if="userRole == 'Admin' "></form-disciple>
 
     <v-expansion-panel
         v-for="disciple of disciples " :key="disciple.id"

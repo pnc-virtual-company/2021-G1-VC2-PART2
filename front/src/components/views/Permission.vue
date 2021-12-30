@@ -239,11 +239,13 @@ export default {
     getStudent(){
       axios.get('/students').then(res => {
         this.studentlist = res.data;
+        
       });
     },
     getPermission(){
       axios.get('/permissions').then(res => {
         this.permissions = res.data;
+        console.log(this.permissions = res.data);
       })
     },
 
