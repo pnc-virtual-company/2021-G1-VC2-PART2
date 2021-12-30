@@ -5,7 +5,6 @@
           <template v-slot:activator="{ on, attrs }">
               <v-btn color="blue lighten" dark v-bind="attrs" v-on="on">+ Create user</v-btn>
           </template>
-
           <v-card>
               <h3>Create new user</h3>
               <v-card-text>
@@ -23,9 +22,8 @@
                   :rules="emailRules"
                   label="E-mail"
                   color="deep-purple accent-4"
-                  required
-                ></v-text-field>
-
+                  required>
+                  </v-text-field>
                 <v-row>
                   <v-col cols="12" sm="6">
                     <v-text-field
@@ -34,10 +32,9 @@
                       :rules="passwordrules"
                       label="password"
                       color="deep-purple accent-4"
-                      required
-                    ></v-text-field>
+                      required>
+                    </v-text-field>
                   </v-col>
-
                   <v-col cols="12" sm='6'>
                     <v-text-field
                       v-model="password_confirmation"
@@ -49,7 +46,6 @@
                     ></v-text-field>
                   </v-col>
                 </v-row>
-                
                 <v-col
                   cols="12"
                   sm="12"
@@ -62,7 +58,6 @@
                     dense
                     color="deep-purple accent-4"
                   ></v-combobox>
-                
                 </v-col>
                 <select v-if="role === 'Student' " name="" id="" v-model="studentId">
                   <option v-for="student of studentList" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
@@ -86,12 +81,25 @@
                   <v-spacer></v-spacer>
                   <v-btn color="primary" text @click="Adduser">Create</v-btn>
               </v-card-actions>
-
           </v-card>
       </v-dialog>
     </div>
 
-    
+ <!-- ===================Delete disciple dialog======================== -->
+
+    <v-dialog v-model="deleteDialog" max-width="500px">
+      <v-card class="cardForm">
+        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="gray darken-1" text @click="deleteDialog = false">Cancel</v-btn>
+          <v-btn color="green darken-1" text @click="DeleteUser(id)">OK</v-btn>
+          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- ==========================End Dialog=================================== -->
 
     <div class="userLists">
         <h2>List of users</h2>
@@ -117,28 +125,24 @@
                   <td>{{ user.username }}</td>
                   <td>{{ user.email }}</td>
                   <td>{{ user.role }}</td>
-                  
                   <td><v-list-item-icon>
-                      <v-icon @click="Show(user)">mdi-pencil-box-multiple-outline</v-icon>
+                      <v-icon @click="Show(user)" color='green'>mdi-pencil-box-multiple-outline</v-icon>
                   </v-list-item-icon>
 
                   <v-list-item-icon>
-                    <v-icon @click="DeleteUser(user.id)">mdi-delete</v-icon>
+                    <v-icon @click="showDeleteUser(user)" color="#EF5350">mdi-delete</v-icon>
                   </v-list-item-icon></td>
-
-                  <dialog-edit v-if="displayEdit"
-                    :data ="userInfo"
-                    @cancel ="cancel"
-                    @update ="EditUser"
-                  />
-
                 </tr>
             </tbody>
             </template>
         </v-simple-table>
       </div>
 
-      
+       <dialog-edit v-if="displayEdit"
+          :data ="userInfo"
+          @cancel ="cancel"
+          @update ="EditUser"
+        />
     </div>
 </template>
 
@@ -160,6 +164,7 @@ export default {
       studentId: '',
       users: [],
       dialog: false,
+      deleteDialog: false,
       showDialog: false,
       displayEdit: false,
       error: '',
@@ -170,6 +175,7 @@ export default {
         'Student',
         'Social Affiar',
       ],
+      id:'',
 
       valid: false,
       username: '',
@@ -203,7 +209,8 @@ export default {
       newUser.append('role', this.role);
       newUser.append('profile', this.image);
       newUser.append('student_id', this.studentId);
-  
+
+      console.log(this.studentId);
       axios.post('/signup', newUser).then(res => {
         console.log(res.data);
         this.dialog = false;
@@ -237,7 +244,14 @@ export default {
         console.log(res.data);
         this.getUsers();
       })
+      this.deleteDialog = false
     },
+    showDeleteUser(user){
+      this.deleteDialog = true
+      this.id = user.id
+
+    },
+    
     getUsers(){
       axios.get('/users').then(res => {
         this.users = res.data;
@@ -259,11 +273,12 @@ export default {
 
 <style scoped>
   .userLists{
-      width: 90%;
-      margin-left: 5%;
+      width: 80%;
+      margin-left: 10%;
   }
   .main{
-    height: 90vh;
+    height: 84vh;
+    margin-top: 3%;
     overflow-y: scroll;
   }
 
@@ -309,10 +324,7 @@ export default {
       outline: none;
   }
   .text-center{
-    margin-left: 84%;
-    width: 10%;
-    margin-top: 4%;
-  
+    margin-left: 69%;
   }
   
   img{
@@ -348,5 +360,9 @@ export default {
   .right-main-button {
     float: right;
     margin-right: 2rem;
+  }
+  .cardForm{
+    border-top: 5px solid red;
+    
   }
 </style>

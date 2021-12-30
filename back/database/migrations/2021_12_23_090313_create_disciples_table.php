@@ -17,6 +17,7 @@ class CreateDisciplesTable extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained()->onDelete('CASCADE');
             $table->string('dnt');
+            $table->string('date');
             $table->string('description');
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ import Users from '../components/views/Users.vue';
 import Permission from '../components/views/Permission.vue';
 import Disciple from '../components/views/Disciple.vue';
 import signinform from '../components/signin/signinform.vue';
+import NotAuthorized from '../components/nav/NotAuthorized.vue';
 Vue.use(VueRouter)
 
 const routes = [
@@ -14,6 +15,7 @@ const routes = [
     {path: '/student' , component: StudentView},
     {path: '/permission' , component: Permission},
     {path: '/disciple' , component: Disciple},
+    {path: "/:notFound(.*)", component: NotAuthorized}, 
  
 ]
 // let userID = localStorage.getItem('userid');

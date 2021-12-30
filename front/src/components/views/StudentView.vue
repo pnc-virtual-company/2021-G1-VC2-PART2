@@ -1,11 +1,27 @@
 <template>
   <div class="main">
     <formstudent
-        v-if="userRole !== 'Student' "
+        v-if="userRole != 'Student' "
         @add-user="getstudent"
     />
 
-  <div class="userLists">
+    <!-- ===================Delete disciple dialog======================== -->
+
+    <v-dialog v-model="deleteDialog" max-width="500px">
+      <v-card class="cardForm">
+        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="gray darken-1" text @click="deleteDialog = false">Cancel</v-btn>
+          <v-btn color="green darken-1" text @click="DeleteStudent(id)">OK</v-btn>
+          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- ==========================End Dialog===================================== -->
+  <student-detail v-if="userRole === 'Student' "></student-detail>
+  <div class="userLists" v-else>
    
       <v-simple-table>
         <template v-if="userRole !== 'Student' " v-slot:top>
@@ -41,36 +57,42 @@
                   <td>{{ student.ngo }}</td>
                   
                   <td v-if="userRole !== 'Student' "><v-list-item-icon>
-                      <v-icon @click="addShow(student)">mdi-pencil-box-multiple-outline</v-icon>
+                      <v-icon @click="addShow(student)" color='green'>mdi-pencil-box-multiple-outline</v-icon>
                   </v-list-item-icon>
 
                   <v-list-item-icon>
-                      <v-icon @click="DeleteStudent(student.id)">mdi-delete</v-icon>
+                      <v-icon @click="showDeleteStudent(student)" color="#EF5350">mdi-delete</v-icon>
                   </v-list-item-icon></td>
 
-                 
+                  
 
-              </tr>
-          </tbody>
-           <EditStudent v-if="showDialog"
-              :studentData = "studentInfo"
-              @Cancel = "Cancel" 
-              @Update = "UpdateStudent" 
-            />
+                </tr>
+            </tbody>
+            <EditStudent v-if="showDialog"
+                :studentData = "studentInfo"
+                @Cancel = "Cancel" 
+                @Update = "UpdateStudent" 
+              />
 
-          </template>
-      </v-simple-table>
-  </div>
+            </template>
+        </v-simple-table>
+    </div>
+  
   </div>
 </template>
 
 <script>
   import FormStudent from '../ui/FormStudent.vue';
   import EditStudent from './EditStudent.vue';
+  import StudentDetail from './StudentDetail.vue';
   import axios from '../../axios-http.js';
  
   export default {
-    components: {'formstudent': FormStudent, EditStudent},
+    components: {
+      'formstudent': FormStudent,
+      EditStudent,
+      StudentDetail,
+    },
     data () {
       return {
         dialog: false,
@@ -79,17 +101,18 @@
         studentInfo: '',
         studentName: '',
         userRole: '',
-        
+        deleteDialog: false,
+        id:''
+
       }
     },
    
     methods: {
      
-      getstudent(student){
+      getstudent(){
         let studentId = localStorage.getItem('studentId');
         this. userRole = localStorage.getItem('role');
-        console.log(student);
-
+        
         axios.get('/students').then(res => {
           if(this.userRole === "Student"){
             for(let student of res.data){
@@ -109,12 +132,17 @@
           console.log(res.data);
           this.getstudent();
         })
+        this.deleteDialog= false;
+      },
+      showDeleteStudent(student){
+        this.deleteDialog = true;
+        this.id = student.id;
       },
       UpdateStudent(id,student,hidden){
           axios.put('/students/' + id , student).then(res => {
-            console.log(res.data);
             this.showDialog = hidden;
             this.getstudent();
+            return res.data;
           })
       },
       addShow(student){
@@ -134,7 +162,6 @@
           this.getstudent();
         }
       }
-
     },
     mounted() {
       this.getstudent()
@@ -143,6 +170,11 @@
 </script>
 
 <style scoped>
+  .main{
+    height: 84vh;
+    margin-top: 3%;
+    overflow-y: scroll;
+  }
   .btn-student {
       float: right;
       margin-top: 20px;
@@ -205,5 +237,8 @@
   .search{
     width: 30%;
     margin-left: 1%;
+  }
+  .cardForm{
+    border-top: 5px solid red;
   }
 </style>

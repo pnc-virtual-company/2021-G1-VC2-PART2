@@ -1,5 +1,5 @@
 <template>
-<div class="card">
+  <div class="card">
 
   <!-- ================Edete permission dialog================== -->
   <v-dialog width="600" v-model="showEdit">
@@ -17,7 +17,6 @@
                 <select name="studentid" id="" v-model="studentId">
                   <option v-for="student of studentlist" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
                 </select>
-                
               </v-col>
 
             <v-col cols="12" sm="6">
@@ -152,7 +151,7 @@
       </v-expansion-panel-content>
   
       <div v-if="userRole !== 'Student' " class="btn" align="center">
-        <v-icon @click="ShowEditDialog(per)" left>mdi-pencil</v-icon>
+        <v-icon @click="ShowEditDialog(per)" left color='green'>mdi-pencil-box-multiple-outline</v-icon>
         <v-icon @click="ShowDialog(per)" tile color="#EF5350" right>mdi-delete </v-icon>
       </div>
     </v-expansion-panel>
@@ -243,9 +242,18 @@ export default {
       });
     },
     getPermission(){
+      let studentId = localStorage.getItem('studentId');
       axios.get('/permissions').then(res => {
-        this.permissions = res.data;
-        console.log(this.permissions = res.data);
+        if(this.userRole === "Student"){
+            for(let permission of res.data){
+              if(permission.student.id == studentId ){
+                this.permissions.push(permission)
+              }
+            }
+
+          }else{
+              this.permissions = res.data;
+            }
       })
     },
 
@@ -253,7 +261,7 @@ export default {
       if(this.teacher !== ""){
         axios.get('/permissions/search/' + this.teacher).then(res => {
           this.permissions = res.data;
-          console.log(res.data);
+          console.log(this.permissions);
         })
       }else{
         this.getPermission();
@@ -282,7 +290,7 @@ export default {
   .main{
     width: 80%;
     margin-left: 10%;
-    margin-top: 3%;
+    /* margin-top: 3%; */
   
   }
   .btn{
@@ -293,9 +301,9 @@ export default {
     margin-bottom: 10px;
   }
   .card{
-    margin-top: 2%;
-    width: 100%;
-    margin-bottom: 10%;
+    margin-top: 3%;
+    height: 84vh;
+    overflow-y: scroll;
   }
   #name{
     margin-top: 6%;
