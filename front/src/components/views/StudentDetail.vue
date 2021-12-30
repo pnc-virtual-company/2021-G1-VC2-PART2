@@ -18,13 +18,23 @@
         </div>
 
       </div>
-     
-      <v-expansion-panels class="main">
+     <br>
+      <v-expansion-panels class="main"  v-for="disciple of students.disciple" :key="disciple.firstName">
         
-        <span>Wearning letter</span>
+        <!-- <span>Wearning letter</span> -->
+        <div>
+         <v-badge
+          color="red"
+         :content="messages"
+        :value="messages"
+      
+        >
+       {{disciple.dnt}}
+        </v-badge>
+        </div>
         <v-expansion-panel
           v-for="disciple of students.disciple" :key="disciple.firstName">
-          <v-expansion-panel-header>
+          <v-expansion-panel-header >
 
             <div class="d-flex">
               <v-col cols="12" sm="1">
@@ -87,6 +97,8 @@ import axios from '../../axios-http.js';
 export default {
   data(){
     return {
+      messages: 1,
+      
       students:'',
       url: "http://127.0.0.1:8000/storage/imagestudent/",
     }
