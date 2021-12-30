@@ -19,24 +19,25 @@
 
       </div>
      <br>
-      <v-expansion-panels class="main"  v-for="disciple of students.disciple" :key="disciple.firstName">
+      <v-expansion-panels class="main" >
         
         <!-- <span>Wearning letter</span> -->
         <div>
          <v-badge
           color="red"
          :content="messages"
-        :value="messages"
-      
+         :value="messages"
         >
-       {{disciple.dnt}}
+        Oral warning
+        
         </v-badge>
         </div>
         <v-expansion-panel
           v-for="disciple of students.disciple" :key="disciple.firstName">
-          <v-expansion-panel-header >
+          <v-expansion-panel-header>
 
             <div class="d-flex">
+              
               <v-col cols="12" sm="1">
                 <v-img
                   max-height="100"
@@ -97,8 +98,8 @@ import axios from '../../axios-http.js';
 export default {
   data(){
     return {
-      messages: 1,
-      
+      messages: 0,
+      disciples:[],
       students:'',
       url: "http://127.0.0.1:8000/storage/imagestudent/",
     }
@@ -113,10 +114,26 @@ export default {
           }
         }
       })
+    },
+    getDisciple(){
+      let studentId = localStorage.getItem('studentId');
+      axios.get('/disciples').then(res => {
+            for(let disciple of res.data){
+              if(disciple.student.id == studentId ){
+                if(disciple.dnt == 'Oral warning' || disciple.dnt == 'Warning letter'){
+                  this.messages+=1
+                  this.disciples.push(disciple);
+                }
+                
+              }
+            }
+        
+      })
     }
   },
   mounted() {
     this.getStudent();
+    this.getDisciple();
   },
 }
 </script>
