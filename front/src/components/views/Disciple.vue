@@ -105,7 +105,7 @@
               id="wearning"
               max-height="70"
               max-width="70"
-              src="../../assets/wl.png">
+              src="../../assets/stop.png">
             </v-img>
             
           </v-col>
