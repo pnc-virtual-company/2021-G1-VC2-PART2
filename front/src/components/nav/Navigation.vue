@@ -62,7 +62,7 @@
         methods: {
             Signout(){
                 this.$emit('sign-out', this.isSignout);
-                this.$router.push('/');
+                this.$router.push('/signin');
                 localStorage.clear();
             }
         },

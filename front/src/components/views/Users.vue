@@ -115,7 +115,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="user of users" :key="user.username">
+                <tr v-for="user of users" :key="user.id">
                   <td v-if="user.role === 'Admin' ">
                     <img src="../../assets/icon.png" alt="">
                   </td>
@@ -200,7 +200,6 @@ export default {
   methods: {
   
     Adduser(){
-      console.log(this.image);
       let newUser = new FormData();
       newUser.append('username', this.username);
       newUser.append('email', this.email);
@@ -209,12 +208,11 @@ export default {
       newUser.append('role', this.role);
       newUser.append('profile', this.image);
       newUser.append('student_id', this.studentId);
-
-      console.log(this.studentId);
+     
       axios.post('/signup', newUser).then(res => {
-        console.log(res.data);
         this.dialog = false;
         this.getUsers();
+        return res.data;
       })
       .catch(error => {
         this.error = "User is not found , please try again!";
@@ -224,9 +222,9 @@ export default {
     },
     EditUser(id,userupdated,display) {
       axios.put('/users/' + id , userupdated).then(res => {
-        console.log(res.data);
         this.displayEdit = display;
         this.getUsers();
+        return res.data;
       })
     
     },
@@ -241,15 +239,14 @@ export default {
 
     DeleteUser(id) {
       axios.delete('/users/' + id).then(res => {
-        console.log(res.data);
         this.getUsers();
+        return res.data;
       })
       this.deleteDialog = false
     },
     showDeleteUser(user){
       this.deleteDialog = true
       this.id = user.id
-
     },
     
     getUsers(){
@@ -259,7 +256,6 @@ export default {
     },
     getStudent(){
       axios.get('/students').then(res => {
-        console.log(res.data)
         this.studentList = res.data
       })
     }
