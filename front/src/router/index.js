@@ -9,21 +9,69 @@ import NotAuthorized from '../components/nav/NotAuthorized.vue';
 Vue.use(VueRouter)
 
 const routes = [
-    {path: '/' , component: signinform},
-    {path: '/signin' , component: signinform},
-    {path: '/user' , component: Users},
-    {path: '/student' , component: StudentView},
-    {path: '/permission' , component: Permission},
-    {path: '/disciple' , component: Disciple},
-    {path: "/:notFound(.*)", component: NotAuthorized}, 
- 
+    { 
+        path: '/',
+        component: signinform,
+        // meta: { needLogin: true, needAdmin: true },
+    },
+    { path: '/signin', component: signinform },
+    { 
+        path: '/user',
+        component: Users,
+        meta: { needLogin: true, needAdmin: true },
+    },
+    { 
+        path: '/student', 
+        component: StudentView,
+        meta: { needLogin: true, needAdmin: true },
+    },
+    { 
+        path: '/permission', 
+        component: Permission ,
+        meta: { needLogin: true, needAdmin: true },
+    },
+    { 
+        path: '/disciple', 
+        component: Disciple ,
+        meta: { needLogin: true, needAdmin: true },
+    },
+    { 
+        path: "/:pathMatch(.*)*", 
+        component: NotAuthorized ,
+    },
+    { 
+        path: "/unauthorized", 
+        component: NotAuthorized ,
+    },
+
 ]
-// let userID = localStorage.getItem('userid');
+
+let authenticationGuard = (to, from, next) => {
+    let needLogin = to.meta.needLogin;
+    
+    if (needLogin) {
+
+        let isLoggedIn = localStorage.getItem("user_id") !== null;
+      
+        if (!isLoggedIn) {
+            next("/unauthorized");
+        }else {
+            next();
+        }
+      
+    } else {
+      next();
+    }
+
+  };
 
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
 })
+
+
+router.beforeEach(authenticationGuard);
 
 export default router

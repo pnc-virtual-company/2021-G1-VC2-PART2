@@ -31,15 +31,15 @@
     mounted() {
       let userToken = localStorage.getItem('token');
       let userid = localStorage.getItem('user_id');
-      let userRole = localStorage.getItem('role');
+      // let userRole = localStorage.getItem('role');
 
       if(userToken !== null && userid !== null){
         this.isSignin = true;
-        if(userRole == 'Admin'){
-          this.$router.push('/user');
-        }else{
-          this.$router.push('/student');
-        }
+        // if(userRole == 'Admin'){
+        //   this.$router.push('/user');
+        // }else{
+        //   this.$router.push('/student');
+        // }
         
       }
     },

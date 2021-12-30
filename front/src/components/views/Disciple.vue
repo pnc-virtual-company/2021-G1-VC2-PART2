@@ -105,7 +105,7 @@
               id="wearning"
               max-height="70"
               max-width="70"
-              src="../../assets/wl.png">
+              src="../../assets/stop.png">
             </v-img>
             
           </v-col>
@@ -152,6 +152,7 @@
                 <v-icon class="delete" @click="ShowDialog(disciple)" color="#EF5350">mdi-delete</v-icon>
             </v-list-item-icon>
           </v-col>
+          
          
         </v-row>
         <!-- ===================end button edit&delete============= -->
