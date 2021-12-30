@@ -10,16 +10,16 @@
         </v-card-title>
         <v-container>
           <v-row>
-            <v-col
-                cols="6"
-                sm="6"
-            >
-                <v-autocomplete
-                    v-model="student_id"
-                    label="Choose student"
-                    rows='1'
-                    prepend-icon='mdi-account'
-                ></v-autocomplete>
+            <v-col cols="6" sm="6" id="date">
+              <img src="../../assets/date.png" alt="">
+              <input
+                  type="date"
+                  v-model="date"
+                  label="Date"
+                  multiple
+                  rows='1'
+                  prepend-icon='mdi-alert-outline'
+              />
             </v-col>
 
             <v-col
@@ -30,7 +30,7 @@
                   v-model="dnt"
                   :items="leavelist"
                   label="Choose discipline notice type"
-                  multiple
+                
                   rows='1'
                   prepend-icon='mdi-alert-outline'
                 ></v-autocomplete>
@@ -77,7 +77,7 @@
     </v-dialog>
     <!-- ==========================End Dialog===================================== -->
 
-<!-- ===================search============= -->
+    <!-- ===================search============= -->
     <div class="cardheader">
       <v-card-title>
         <v-text-field
@@ -92,12 +92,12 @@
       </v-card-title>
       
       <form-disciple v-if="userRole == 'Admin' " @add-discipline="getDisciples"></form-disciple>
+
     </div>
     
-<!-- ==========card=============== -->
-  
-    <v-expansion-panel class="formCard"
-      v-for="disciple of disciples" :key="disciple.id">
+    <v-expansion-panel
+        v-for="disciple of disciples " :key="disciple.id"
+      >
       <v-expansion-panel-header class="header">
         <v-row>
           <v-col cols="12" sm="1">
@@ -131,7 +131,7 @@
         
             <div style="disply:flex;" >
                 <div class="date" style="margin-left: 58px; margin-bottom: -23px;" >
-                    <h4 >Jan/23/2021</h4>
+                    <h4 >{{ disciple.date}}</h4>
                 </div>
 
                 <v-img
@@ -152,6 +152,7 @@
                 <v-icon class="delete" @click="ShowDialog(disciple)" color="#EF5350">mdi-delete</v-icon>
             </v-list-item-icon>
           </v-col>
+          
          
         </v-row>
         <!-- ===================end button edit&delete============= -->
@@ -177,17 +178,13 @@ export default {
       dialog:false,
       editdialog:false,
       search: '',
-      first_name: '',
-      last_name: '',
-      type: '',
       description: '',
       class: '',
-      categoryInfo: '',
       disciples: [],
-      studentlist:[],
       id:'',
       student_id:'',
       dnt: '',
+      date: '',
       userRole: '',
       url: "http://127.0.0.1:8000/storage/imagestudent/",
       leavelist:['leavelist', 'Oral warning', 'Warning letter', 'Termination'],
@@ -213,16 +210,23 @@ export default {
       })
     },
     ShowDilogEdit(disciple){
-      this.id=disciple.id;
-      this.description = disciple.description;
-      this.dnt = disciple.type;
       this.editdialog = true;
+      this.id = disciple.id;
+      this.date = disciple.date;
+      this.description = disciple.description;
+      this.dnt = disciple.dnt;
+
     },
     Update() {
+
       this.editdialog = false;
       let updateDic = {
+        date: this.date,
+        dnt: this.dnt,
         description: this.description,
       }
+      console.log(updateDic);
+
       axios.put('/disciples/' + this.id, updateDic).then(res => {
         this.editdialog = false;
         this.getDisciples();
@@ -249,25 +253,20 @@ export default {
       this.dialog = true;
       this.id = disciple.id;
     },
-    getStudent(){
-      axios.get('/students').then(res => {
-        this.studentlist = res.data;
-      });
-    },
+  
     searchBotton(){
-        if(this.search!== ""){
-            axios.get("/disciples/search/" + this.search).then(res => {
-            this.disciples = res.data;
-            })
-        }else{
-            this.getDisciples();
-        }           
+      if(this.search!== ""){
+          axios.get("/disciples/search/" + this.search).then(res => {
+          this.disciples = res.data;
+          })
+      }else{
+          this.getDisciples();
+      }           
     }        
   },
   
   mounted() {
     this.getDisciples();
-    this.getStudent();
     this.userRole = localStorage.getItem('role');
   },
   
@@ -321,5 +320,20 @@ export default {
   .searchbtn{
     margin-left: -7%;
     margin-top: -9%;
+  }
+  
+  img{
+      width: 45px;
+      height: 35px;
+  }
+  
+  #date{
+    padding-left: 7px;
+    display: flex;
+    align-items: center;
+  }
+  input[type=date]{
+    width: 80%;
+    border-bottom: 1px solid gray;
   }
 </style>

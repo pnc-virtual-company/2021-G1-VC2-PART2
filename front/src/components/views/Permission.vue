@@ -17,7 +17,6 @@
                 <select name="studentid" id="" v-model="studentId">
                   <option v-for="student of studentlist" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
                 </select>
-                
               </v-col>
 
             <v-col cols="12" sm="6">
@@ -239,6 +238,7 @@ export default {
     getStudent(){
       axios.get('/students').then(res => {
         this.studentlist = res.data;
+        
       });
     },
     getPermission(){
