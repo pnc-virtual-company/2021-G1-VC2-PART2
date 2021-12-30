@@ -11,9 +11,9 @@
                     dark
                     v-bind="attrs"
                     v-on="on"
-                    style="margin-left: 87%"
+                    style="margin-left: 78%"
                 >
-                Create
+                Create disciple
                 </v-btn>
             </template>
             <v-card>
