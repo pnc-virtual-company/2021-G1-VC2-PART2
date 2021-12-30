@@ -152,6 +152,7 @@
                 <v-icon class="delete" @click="ShowDialog(disciple)" color="#EF5350">mdi-delete</v-icon>
             </v-list-item-icon>
           </v-col>
+          
          
         </v-row>
         <!-- ===================end button edit&delete============= -->
