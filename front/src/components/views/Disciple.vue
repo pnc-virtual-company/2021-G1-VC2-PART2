@@ -166,11 +166,10 @@
     </div>
   </v-expansion-panels>
 </template>
+
 <script>
-
- import axios from '../../axios-http.js';
+import axios from '../../axios-http.js';
 import formDisciple from '../ui/formDisciple.vue';
-
 export default {
   components: { formDisciple },
   data () {
@@ -217,8 +216,6 @@ export default {
       this.id=disciple.id;
       this.description = disciple.description;
       this.dnt = disciple.type;
-      console.log(disciple);
-
       this.editdialog = true;
     },
     Update() {
@@ -255,18 +252,17 @@ export default {
     getStudent(){
       axios.get('/students').then(res => {
         this.studentlist = res.data;
-        console.log(res.data);
       });
     },
-     searchBotton(){
-            if(this.search!== ""){
-                axios.get("/disciples/search/" + this.search).then(res => {
-                this.disciples = res.data;
-                })
-            }else{
-                this.getDisciples();
-            }           
-        }        
+    searchBotton(){
+        if(this.search!== ""){
+            axios.get("/disciples/search/" + this.search).then(res => {
+            this.disciples = res.data;
+            })
+        }else{
+            this.getDisciples();
+        }           
+    }        
   },
   
   mounted() {
@@ -274,7 +270,6 @@ export default {
     this.getStudent();
     this.userRole = localStorage.getItem('role');
   },
-
   
 }
 </script>

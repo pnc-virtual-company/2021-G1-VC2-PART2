@@ -6,15 +6,19 @@ import Permission from '../components/views/Permission.vue';
 import Disciple from '../components/views/Disciple.vue';
 import signinform from '../components/signin/signinform.vue';
 import NotAuthorized from '../components/nav/NotAuthorized.vue';
+
 Vue.use(VueRouter)
 
 const routes = [
     { 
         path: '/',
         component: signinform,
-        // meta: { needLogin: true, needAdmin: true },
+      
     },
-    { path: '/signin', component: signinform },
+    { 
+        path: '/signin',
+        component: signinform
+    },
     { 
         path: '/user',
         component: Users,
@@ -54,7 +58,7 @@ let authenticationGuard = (to, from, next) => {
         let isLoggedIn = localStorage.getItem("user_id") !== null;
       
         if (!isLoggedIn) {
-            next("/unauthorized");
+            next("/");
         }else {
             next();
         }

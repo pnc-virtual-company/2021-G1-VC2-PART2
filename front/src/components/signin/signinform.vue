@@ -1,73 +1,81 @@
 <template>
   <v-app>
-        <div class="main">
-            <v-col cols="10" lg="4" class="title">
-              <v-avatar size="130">
-                  <img src="../../assets/pn-logo.png" alt="">
-              </v-avatar>
-              <div class="head">
-                <h2>STUDENT LIFE</h2>
-                <p>Cambodia</p>
-              </div>
-            </v-col>
-            <v-col cols="10" lg="4" class="content">
-                <!-- =============logo/header======== -->
-                <div class="text-center">
-                    <v-avatar size="130">
-                        <img src="../../assets/icon.png" alt="">
-                    </v-avatar>
-                </div>
-                    <!-- =============form login======== -->
-                <v-form @submit.prevent="submitHandler" ref="form">
-                    <v-card-text>
-                        <v-text-field
-                            color="blue lighten-2"
-                            class="email"
-                            v-model="email"
-                            :rules="emailRules"
-                            type="email"
-                            label="Email"
-                            placeholder="Email"
-                            prepend-inner-icon="mdi-account"
-                            required
-                        />
-                        <v-text-field
-                            color="blue lighten-2"
-                            class="password"
-                            v-model="password"
-                            :rules="passwordRules"
-                            :type="passwordShow?'text':'password'"
-                            label="Password"
-                            placeholder="Password"
-                            prepend-inner-icon="mdi-key"
-                            :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
-                            @click:append="passwordShow = !passwordShow"
-                            required
-                        />
-                   
-                    </v-card-text>
-                    
-                    <v-card-actions class="justify-center">
-                    <!-- =============button submit signin======== -->
-                    <v-btn :loading="loading" type="submit" color="blue" class="button">
-                        <span class="white--text px-8">Login</span>
-                    </v-btn>
-                    </v-card-actions>
-                </v-form>
-            
-            </v-col>
-        </div>
-        <!-- =============Message when we signin success======== -->
-        <v-snackbar top class="message" color="green" v-model="snackbar">Login success</v-snackbar>
+      <loading-page v-if="loading"></loading-page>
+
+      <div v-if="!loading" class="main">
+        <v-col cols="10" lg="4" class="title">
+          <v-avatar size="130">
+              <img src="../../assets/pn-logo.png" alt="">
+          </v-avatar>
+          <div class="head">
+            <h2>STUDENT LIFE</h2>
+            <p>Cambodia</p>
+          </div>
+        </v-col>
+        <v-col cols="10" lg="4" class="content">
+            <!-- =============logo/header======== -->
+            <div class="text-center">
+                <v-avatar size="130">
+                    <img src="../../assets/icon.png" alt="">
+                </v-avatar>
+            </div>
+                <!-- =============form login======== -->
+            <v-form @submit.prevent="submitHandler" ref="form">
+                <v-card-text>
+                    <v-text-field
+                        color="blue lighten-2"
+                        class="email"
+                        v-model="email"
+                        :rules="emailRules"
+                        type="email"
+                        label="Email"
+                        placeholder="Email"
+                        prepend-inner-icon="mdi-account"
+                        required
+                    />
+                    <v-text-field
+                        color="blue lighten-2"
+                        class="password"
+                        v-model="password"
+                        :rules="passwordRules"
+                        :type="passwordShow?'text':'password'"
+                        label="Password"
+                        placeholder="Password"
+                        prepend-inner-icon="mdi-key"
+                        :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
+                        @click:append="passwordShow = !passwordShow"
+                        required
+                    />
+                
+                </v-card-text>
+                
+                <v-card-actions class="justify-center">
+                <!-- =============button submit signin======== -->
+                <v-btn :loading="loading" type="submit" color="blue" class="button">
+                    <span class="white--text px-8">Login</span>
+                </v-btn>
+                </v-card-actions>
+            </v-form>
+        
+        </v-col>
+    </div>
+    <!-- =============Message when we signin success======== -->
+    <v-snackbar top class="message" color="green" v-if="logined" v-model="snackbar">{{messageerror}}</v-snackbar>
+    <v-snackbar top class="message" color="error" v-else v-model="snackbar">{{messageerror}}</v-snackbar>
+   
         
   </v-app>
 </template>
 
 <script>
 import axios from '../../axios-http';
+
+import LoadingPage from './LoadingPage.vue';
 export default {
+  components: { LoadingPage },
   emits: ['sign-in'],
   data: () => ({
+    logined: false,
     loading:false,
     snackbar:false,
     passwordShow:false,
@@ -81,8 +89,9 @@ export default {
       v => !!v || 'Password is required',
       v => (v && v.length >= 8) || 'Password must be 8  characters or more!',
     ],
-    message: '',
+    messageerror: '',
     Issignin: true,
+    isLoading: true,
   }),
 
   methods:{
@@ -93,30 +102,48 @@ export default {
           password: this.password,
         }
 
-       // this.loading = true;
-        // setTim eout(()=> {
-        //   this.loading = false
-        //   this.snackbar = true
-        // },3000)
-        axios.post('/signin', signin).then(res => {
-          localStorage.setItem("token", res.data.token);
-          localStorage.setItem("role", res.data.user.role);
-          localStorage.setItem("user_id", res.data.user.id);
-          localStorage.setItem("studentId", res.data.user.student_id);
-          
-          console.log(res.data);
-          // this.loading = false;
-          this.$emit('sign-in', this.Issignin);
-          if(res.data.user.role == 'Admin'){
-            this.$router.push('/user');
-          }else{
-            this.$router.push('/student');
-          }
-        })
-        
+        this.loading = true;
+      
+        setInterval(()=> {
+            this.loading = false ;
+        },5000); 
+
+          axios.post('/signin', signin).then(res => {
+              this.snackbar = true;
+              this.logined = true;
+              localStorage.setItem("token", res.data.token);
+              localStorage.setItem("role", res.data.user.role);
+              localStorage.setItem("user_id", res.data.user.id);
+              localStorage.setItem("studentId", res.data.user.student_id);
+              
+              this.messageerror = "Login successfully!"
+             
+              setInterval(() => { 
+                this.$emit('sign-in',res.data, this.Issignin);
+              
+                if(this.snackbar){
+
+                  if(res.data.user.role == 'Admin'){
+                    this.$router.push('/user');
+                  }else{
+                    this.$router.push('/student');
+                  }
+                }
+                
+                this.snackbar = false;
+              },3000)
+            })
+            .catch(error => {
+              this.snackbar = true;
+              this.messageerror = "User is not found , please try again!";
+              return error;
+            })
+       
       }
-    }
-  }
+    },
+
+  },
+ 
 };
 </script>
 
@@ -146,7 +173,7 @@ export default {
     align-items: center;
   }
   .message{
-    margin-left: 25%;
+    margin-top: 2%;
   }
   .head{
     margin-top: 7%;
