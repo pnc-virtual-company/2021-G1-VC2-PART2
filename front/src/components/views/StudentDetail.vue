@@ -49,12 +49,6 @@
             Oral Warning
           </v-badge>
         </v-tab>
-        <v-tab @click="Oral" v-else>
-          <v-badge color="yellow" :content="messages1" :value="messages1">
-            Oral Warning
-          </v-badge>
-          
-        </v-tab>
 
         <!-- ===================Warning letter================= -->
         <v-tab @click="Weaning" v-if="num3 == 1">
@@ -73,7 +67,7 @@
           </v-badge>
         </v-tab>
         <v-tab @click="Weaning" v-else >
-          <v-badge>
+          <v-badge :content="num3" :value="num3">
             Warning letter
           </v-badge>
         </v-tab>
