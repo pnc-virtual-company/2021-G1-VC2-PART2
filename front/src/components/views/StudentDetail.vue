@@ -11,10 +11,16 @@
         <p class="paragrab">{{ students.class }}</p>
       </div>
 
-      <div class="student">
-        <img class="profile-1" src="../../assets/school.png" alt="" />
-        <p class="paragrab" style="color: green">AT SCHOOL</p>
+      <div class="student" v-if="messages2 <=2">
+        <img class="profile-1" src="../../assets/school.png" alt=""/>
+        <p class="paragrab" style="color: green" >AT SCHOOL</p>
       </div>
+
+      <div class="student" v-else>
+        <img class="profile-1" src="../../assets/emoji.png" alt="" style="margin-left:30px"/>
+        <p class="paragrab" style="color:red" >OUT SCHOOL</p>
+      </div>
+
     </div>
     <br />
     <v-expansion-panels class="main">
@@ -42,12 +48,12 @@
 
         
         <v-tab @click="Weaning" v-if="messages2 == 1">
-          <v-badge color="orange" :content="messages2" :value="messages2">
+          <v-badge color="yellow" :content="messages2" :value="messages2">
             Warning letter
           </v-badge>
         </v-tab>
         <v-tab @click="Weaning" v-if="messages2 == 2">
-          <v-badge color="red" :content="messages2" :value="messages2">
+          <v-badge color="orange" :content="messages2" :value="messages2">
             Warning letter
           </v-badge>
         </v-tab>
