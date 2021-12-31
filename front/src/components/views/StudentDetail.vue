@@ -39,6 +39,12 @@
           </v-badge>
           
         </v-tab>
+        <v-tab @click="Oral" v-else>
+          <v-badge color="yellow" :content="messages1" :value="messages1">
+            Oral Warning
+          </v-badge>
+          
+        </v-tab>
 
         
         <v-tab @click="Weaning" v-if="messages2 == 1">
@@ -228,9 +234,7 @@ export default {
 
 <style scoped>
 .containner {
-  /* margin-top: 3%; */
   height: 86vh;
-  /* overflow-y: scroll; */
   background: none;
 }
 .mainContent {
@@ -241,13 +245,12 @@ export default {
   height: 25vh;
   margin-left: 10%;
   border-radius: 10px;
-  /* margin-top: 1%; */
   background-color: #4397dbb0;
 }
-img {
-  margin: 10px;
-  width: 50px;
-  height: 50px;
+
+.profile-1{
+  width: 30px;
+  height: 30px;
 }
 span {
   margin-right: 87%;
@@ -289,5 +292,6 @@ h5 {
 .student {
   display: flex;
   align-items: center;
+  margin-left: 5%;
 }
 </style>
