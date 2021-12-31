@@ -101,9 +101,9 @@
    <v-text-field
         v-if="userRole !== 'Student' "
         v-on:keyup="Search"
-        v-model="teacher"
+        v-model="search"
         append-icon="mdi-magnify"
-        label="Filter"
+        label="Search permission"
         class="search"
         color="blue darken-1"
       ></v-text-field>
@@ -258,16 +258,18 @@ export default {
     },
 
     Search(){
-      if(this.teacher !== ""){
-        axios.get('/permissions/search/' + this.teacher).then(res => {
-          this.permissions = res.data;
+      if(this.search !== "") {
+        this.permissions = this.permissions.filter(
+          (per) => (per.student.firstName.toLowerCase().includes(this.search.toLowerCase()) ||
+          (per.student.lastName.toLowerCase().includes(this.search.toLowerCase()))))
           console.log(this.permissions);
-        })
       }else{
         this.getPermission();
       }
-    }
+    },
+
   },
+
   mounted() {
     this.getStudent();
     this.getPermission();
@@ -290,7 +292,7 @@ export default {
   .main{
     width: 80%;
     margin-left: 10%;
-    /* margin-top: 3%; */
+    margin-bottom: 5%;
   
   }
   .btn{
@@ -315,8 +317,11 @@ export default {
     margin-bottom: 3%;
   }
   .search{
-    width: 30%;
+    width: 20%;
     margin-left: 10%;
+    margin-top: 12px;
+    margin-bottom: 2%;
+    height: 10vh;
   }
   input[type=date]{
     outline: none;
