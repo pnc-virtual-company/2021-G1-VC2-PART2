@@ -101,10 +101,16 @@
           v-on:keyup="searchBotton"
         ></v-text-field>
       </v-card-title>
+      <!-- <label for="Choose Class"></label> -->
+      <select>
+          <option selected disabled>Choose Class:</option>
+          <option value="WEB 2021A">WEB 2021A</option>
+      </select>
       
       <form-disciple v-if="userRole == 'Admin' " @add-discipline="getDisciples"></form-disciple>
 
     </div>
+   
     
     <v-expansion-panel
         v-for="disciple of disciples " :key="disciple.id"

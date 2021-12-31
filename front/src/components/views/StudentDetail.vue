@@ -11,13 +11,19 @@
         <p class="paragrab">{{ students.class }}</p>
       </div>
 
-      <div class="student" v-if="num2 <=2 && num4 != true">
-        <img class="profile-1" src="../../assets/school.png" alt=""/>
-        <p class="paragrab" style="color: green" >AT SCHOOL</p>
+      <div class="student" v-if="num3 >= 3">
+        <img class="profile-1" src="../../assets/emoji.png" alt=""/>
+        <p class="paragrab" style="color: red" >Out SCHOOL</p>
       </div>
-      <div class="student" v-else>
-        <img class="profile-1" src="../../assets/emoji.png" alt="" style="margin-left:30px"/>
-        <p class="paragrab" style="color:red" >OUT SCHOOL</p>
+
+      <div class="student" v-else-if="num4">
+        <img class="profile-1" src="../../assets/emoji.png" alt=""/>
+        <p class="paragrab" style="color: red" >Out SCHOOL</p>
+      </div>
+     
+      <div class="student" v-else> 
+        <img class="profile-1" src="../../assets/school.png" alt="" style="margin-left:30px"/>
+        <p class="paragrab" style="color:green" >At SCHOOL</p>
       </div>
 
     </div>
