@@ -54,14 +54,6 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <!-- ==========================End edit Dialog===================================== -->
-
-        <v-card-actions > 
-          <v-spacer></v-spacer>
-          <v-btn color="gray darken-1" text @click="editdialog = false">Cancel</v-btn>
-          <v-btn color="green darken-1" text @click="Update(id)">OK</v-btn>
-        
-        </v-card-actions>
      
     <!-- ==========================End edit Dialog===================================== -->
 
@@ -104,7 +96,7 @@
           class="searchbtn"
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Search discipline"
           color="blue darken-1"
           v-on:keyup="searchBotton"
         ></v-text-field>
@@ -287,7 +279,7 @@ export default {
     searchBotton(){
       if(this.search !== "") {
         this.disciples = this.disciples.filter(
-          (disciple) => (disciple.student.firstName.toLowerCase().includes(this.search.toLowerCase())||
+          (disciple) => (disciple.student.firstName.toLowerCase().includes(this.search.toLowerCase()) ||
           (disciple.student.lastName.toLowerCase().includes(this.search.toLowerCase()))))
       }else{
         this.getDisciples();
@@ -348,8 +340,9 @@ export default {
     margin-top: 25%;
   }
   .searchbtn{
+    width: 270px;
     margin-left: -7%;
-    margin-top: -9%;
+    margin-top: -7%;
   }
   
   img{

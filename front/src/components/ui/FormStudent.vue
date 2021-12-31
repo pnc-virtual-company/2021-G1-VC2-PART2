@@ -132,8 +132,5 @@
         padding: 5px 0;
         outline: none;
     }
-    .text-center{
-        margin-left: 78.5%;
-        width: 10%;
-    }
+   
 </style>

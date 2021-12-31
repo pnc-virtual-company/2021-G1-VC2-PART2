@@ -1,10 +1,22 @@
 <template>
   <div class="main">
-    <formstudent
-        v-if="userRole != 'Student' "
-        @add-user="getstudent"
-    />
+    <div class="header">
+      <v-text-field 
+      v-if="userRole !== 'Student' "
+      class="search"
+      v-on:keyup="search"
+      v-model="studentName"
+      label="Search student"
+      color="blue darken-1"
+      append-icon="mdi-magnify"
+      ></v-text-field>
 
+      <formstudent
+          v-if="userRole != 'Student' "
+          @add-user="getstudent"
+      />
+    </div>
+    
     <!-- ===================Delete disciple dialog======================== -->
 
     <v-dialog v-model="deleteDialog" max-width="500px">
@@ -24,16 +36,6 @@
   <div class="userLists" v-else>
    
       <v-simple-table>
-        <template v-if="userRole !== 'Student' " v-slot:top>
-          <v-text-field 
-            class="mx-4 search"
-            v-on:keyup="search"
-            v-model="studentName"
-            label="Search student"
-            color="blue darken-1"
-          ></v-text-field>
-
-        </template>
       
           <template v-slot:default>
           <thead>
@@ -152,7 +154,7 @@
       Cancel(hidden){
         this.showDialog = hidden;
       }, 
-      
+
       search(){
         if(this.studentName !== ""){
           axios.get('/students/search/' + this.studentName).then(res => {
@@ -170,6 +172,13 @@
 </script>
 
 <style scoped>
+  .header{
+    display: flex;
+    align-items: flex-start;
+   
+    width: 80%;
+    margin-left: 10%;
+  }
   .main{
     height: 84vh;
     margin-top: 3%;
@@ -235,8 +244,8 @@
     height: 90vh;
   }
   .search{
-    width: 30%;
-    margin-left: 1%;
+    margin-right: 60.7%;
+    margin-top: -2px;
   }
   .cardForm{
     border-top: 5px solid red;
