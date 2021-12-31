@@ -18,26 +18,36 @@
     </div>
     <br />
     <v-expansion-panels class="main">
-      <!-- <span>Wearning letter</span> -->
-  
+
       <v-tabs dark background-color="blue" grow>
-        <v-tab>
-          <v-badge color="green" :content="messages" :value="messages">
+
+        <v-tab @click="getDisciple" > 
+          <v-badge color="green" :content="messages" :value="num">
             All discipline
           </v-badge>
         </v-tab>
-        
-        <v-tab @click="Oral" v-if="messages1 == 1">
-          <v-badge  color="green" :content="messages1" :value="messages1">
-            Oral Warning
+
+        <v-tab>
+          <v-badge color="green" :content="messages" :value="num1">
+            Misconduct
           </v-badge>
         </v-tab>
 
-        <v-tab @click="Oral" v-if="messages1 == 2">
-          <v-badge color="yellow" :content="messages1" :value="messages1">
+        <!-- ================Oral warning================== -->
+        <v-tab @click="Oral" v-if="num2 == 1">
+          <v-badge color="green" :content="num2" :value="num2">
             Oral Warning
           </v-badge>
-          
+        </v-tab>
+        <v-tab @click="Oral" v-else-if="num2 == 2">
+          <v-badge color="yellow" :content="num2" :value="num2">
+            Oral Warning
+          </v-badge>
+        </v-tab>
+        <v-tab @click="Oral" v-else>
+          <v-badge :content="num2" :value="num2">
+            Oral Warning
+          </v-badge>
         </v-tab>
         <v-tab @click="Oral" v-else>
           <v-badge color="yellow" :content="messages1" :value="messages1">
@@ -46,27 +56,32 @@
           
         </v-tab>
 
-        
-        <v-tab @click="Weaning" v-if="messages2 == 1">
-          <v-badge color="orange" :content="messages2" :value="messages2">
+        <!-- ===================Warning letter================= -->
+        <v-tab @click="Weaning" v-if="num3 == 1">
+          <v-badge color="orange" :content="num3" :value="num3">
             Warning letter
           </v-badge>
         </v-tab>
-        <v-tab @click="Weaning" v-if="messages2 == 2">
-          <v-badge color="red" :content="messages2" :value="messages2">
+        <v-tab @click="Weaning" v-else-if="num3 == 2">
+          <v-badge color="yellow" :content="num3" :value="num3">
             Warning letter
           </v-badge>
         </v-tab>
+        <v-tab @click="Weaning" v-else-if="num3 == 3">
+          <v-badge color="red" :content="num3" :value="num3">
+            Warning letter
+          </v-badge>
+        </v-tab>
+        <v-tab @click="Weaning" v-else >
+          <v-badge>
+            Warning letter
+          </v-badge>
+        </v-tab>
+
 
         <v-tab @click="Terminated">
-          <v-badge color="red" :content="messages3" :value="messages3">
+          <v-badge color="error" icon="mdi-lock" :value="num4">
             Termination
-          </v-badge>
-        </v-tab>
-
-        <v-tab @click="Leavelist">
-          <v-badge color="error" icon="mdi-lock" :value="messages4">
-            leavelist
           </v-badge>
         </v-tab>
       </v-tabs>
@@ -138,11 +153,11 @@ import axios from "../../axios-http.js";
 export default {
   data() {
     return {
-      messages: 0,
-      messages1: 0,
-      messages2: 0,
-      messages3: 0,
-      messages4: false,
+      num: 0,
+      num1: 0,
+      num2: 0,
+      num3: 0,
+      num4: false,
       disciples: [],
       students: "",
       studentId: "",
@@ -162,22 +177,23 @@ export default {
     },
     getDisciple() {
       axios.get("/disciples").then((res) => {
+        this.disciples = [];
+        this.num1 = 0;
+        this.num2 = 0;
+        this.num3 = 0;
         
         for (let disciple of res.data) {
           if (disciple.student.id == this.studentId) {
             this.disciples.push(disciple);
-            if (disciple.dnt == "Oral warning") {
-              this.messages1 += 1;
-            
+            if (disciple.dnt == "Misconduct") {
+              this.num1 += 1;
+            } else if (disciple.dnt == "Oral warning") {
+              this.num2 += 1;
             } else if (disciple.dnt == "Warning letter") {
-              this.messages2 += 1;
-              
-            } else if (disciple.dnt == "Termination") {
-              this.messages3 += 1;
-            
+              this.num3 += 1;
             } else {
-              if (disciple.dnt == "leavelist") {
-                this.messages4 = true;
+              if (disciple.dnt == "Termination") {
+                this.num4 = true;
               }
             }
           }
@@ -189,7 +205,6 @@ export default {
       for (let dis of this.students.disciple) {
         if (dis.dnt == "Oral warning") {
           this.disciples.push(dis);
-          console.log(dis.dnt);
         }
       }
     },
@@ -199,17 +214,6 @@ export default {
       for (let dis of this.students.disciple) {
         if (dis.dnt == "Termination") {
           this.disciples.push(dis);
-          console.log(dis.dnt);
-        }
-      }
-    },
-
-    Leavelist() {
-      this.disciples = [];
-      for (let dis of this.students.disciple) {
-        if (dis.dnt == "leavelist") {
-          this.disciples.push(dis);
-          console.log(dis.dnt);
         }
       }
     },
@@ -219,7 +223,6 @@ export default {
       for (let dis of this.students.disciple) {
         if (dis.dnt == "Warning letter") {
           this.disciples.push(dis);
-          console.log(dis.dnt);
         }
       }
     },
