@@ -8,6 +8,7 @@
       v-model="studentName"
       label="Search student"
       color="blue darken-1"
+      single-line
       append-icon="mdi-magnify"
       ></v-text-field>
 

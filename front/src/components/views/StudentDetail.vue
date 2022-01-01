@@ -2,33 +2,40 @@
   <div class="containner">
     <div class="mainContent">
       <div class="student" style="">
-        <img class="profile-1" src="../../assets/icon.png" alt="" />
-        <p class="paragrab">BATCH 2021</p>
+        <img class="batch" src="../../assets/batch.png" alt="" />
+        <p class="paragrab1">BATCH 2021</p>
       </div>
 
       <div class="student">
-        <img class="profile-1" src="../../assets/icon.png" alt="" />
-        <p class="paragrab">{{ students.class }}</p>
+        <img class="classroom" src="../../assets/class.png" alt="" />
+        <p class="paragrab2">{{ students.class }}</p>
       </div>
 
-      <div class="student">
-        <img class="profile-1" src="../../assets/school.png" alt="" />
-        <p class="paragrab" style="color: green">AT SCHOOL</p>
+      <!-- =======================Managage Termination============== -->
+      <div class="student" v-if="num3 >= 3">
+        <img class="action" src="../../assets/emoji.png" alt="" />
+        <p class="paragrab3" style="color: #E53935">OUT SCHOOL</p>
+      </div>
+
+      <div class="student" v-else-if="num4">
+        <img class="action" src="../../assets/emoji.png" alt="" />
+        <p class="paragrab3" style="color: #E53935">OUT SCHOOL</p>
+      </div>
+
+      <div class="student" v-else>
+        <img class="action1" src="../../assets/school.png" alt=""/>
+        <p class="paragrab3" style="color: #388E3C">AT SCHOOL</p>
       </div>
     </div>
     <br />
     <v-expansion-panels class="main">
-
       <v-tabs dark background-color="blue" grow>
-
-        <v-tab @click="getDisciple" > 
-          <v-badge color="green" :content="messages" :value="num">
-            All discipline
-          </v-badge>
+        <v-tab @click="getDisciple">
+          <v-badge :content="messages" :value="num"> All discipline </v-badge>
         </v-tab>
 
-        <v-tab>
-          <v-badge color="green" :content="messages" :value="num1">
+        <v-tab @click="Misconduct">
+          <v-badge color="green" :content="num1" :value="num1">
             Misconduct
           </v-badge>
         </v-tab>
@@ -45,19 +52,17 @@
           </v-badge>
         </v-tab>
         <v-tab @click="Oral" v-else>
-          <v-badge :content="num2" :value="num2">
-            Oral Warning
-          </v-badge>
+          <v-badge :content="num2" :value="num2"> Oral Warning </v-badge>
         </v-tab>
 
         <!-- ===================Warning letter================= -->
         <v-tab @click="Weaning" v-if="num3 == 1">
-          <v-badge color="orange" :content="num3" :value="num3">
+          <v-badge color="yellow" :content="num3" :value="num3">
             Warning letter
           </v-badge>
         </v-tab>
         <v-tab @click="Weaning" v-else-if="num3 == 2">
-          <v-badge color="yellow" :content="num3" :value="num3">
+          <v-badge color="orange" :content="num3" :value="num3">
             Warning letter
           </v-badge>
         </v-tab>
@@ -66,12 +71,9 @@
             Warning letter
           </v-badge>
         </v-tab>
-        <v-tab @click="Weaning" v-else >
-          <v-badge :content="num3" :value="num3">
-            Warning letter
-          </v-badge>
+        <v-tab @click="Weaning" v-else>
+          <v-badge :content="num3" :value="num3"> Warning letter </v-badge>
         </v-tab>
-
 
         <v-tab @click="Terminated">
           <v-badge color="error" icon="mdi-lock" :value="num4">
@@ -175,7 +177,7 @@ export default {
         this.num1 = 0;
         this.num2 = 0;
         this.num3 = 0;
-        
+
         for (let disciple of res.data) {
           if (disciple.student.id == this.studentId) {
             this.disciples.push(disciple);
@@ -193,6 +195,14 @@ export default {
           }
         }
       });
+    },
+    Misconduct() {
+      this.disciples = [];
+      for (let dis of this.students.disciple) {
+        if (dis.dnt == "Misconduct") {
+          this.disciples.push(dis);
+        }
+      }
     },
     Oral() {
       this.disciples = [];
@@ -230,10 +240,6 @@ export default {
 </script>
 
 <style scoped>
-.containner {
-  height: 86vh;
-  background: none;
-}
 .mainContent {
   display: flex;
   align-items: center;
@@ -242,13 +248,26 @@ export default {
   height: 25vh;
   margin-left: 10%;
   border-radius: 10px;
-  background-color: #4397dbb0;
+  background-color: #0a89f1b0;
+}
+.batch {
+  width: 55px;
+  height: 55px;
+}
+.classroom {
+  width: 60px;
+  height: 60px;
+}
+.action {
+  width: 40px;
+  height: 40px;
+}
+.action1 {
+  width: 35px;
+  height: 35px;
+  margin-bottom: 10px;
 }
 
-.profile-1{
-  width: 30px;
-  height: 30px;
-}
 span {
   margin-right: 87%;
   margin: 1% 0%;
@@ -283,8 +302,15 @@ h5 {
 .updateMain {
   margin-top: -10%;
 }
-.paragrab {
-  font-size: 15px;
+.paragrab1,
+.paragrab2,
+.paragrab3 {
+  font-size: 20px;
+  font-weight: bold;
+}
+.paragrab1,
+.paragrab2 {
+  color: #fff;
 }
 .student {
   display: flex;
