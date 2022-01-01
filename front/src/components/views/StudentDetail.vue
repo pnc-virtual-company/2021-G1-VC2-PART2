@@ -26,6 +26,7 @@
         <img class="action1" src="../../assets/school.png" alt=""/>
         <p class="paragrab3" style="color: #388E3C">AT SCHOOL</p>
       </div>
+
     </div>
     <br />
     <v-expansion-panels class="main">
