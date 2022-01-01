@@ -101,11 +101,13 @@
           v-on:keyup="searchBotton"
         ></v-text-field>
       </v-card-title>
-      <!-- <label for="Choose Class"></label> -->
-      <select>
-          <option selected disabled>Choose Class:</option>
-          <option value="WEB 2021A">WEB 2021A</option>
-      </select>
+      <v-combobox
+        :items="items"
+        label="Select class"
+        outlined
+        dense
+        color="deep-purple accent-4"
+      ></v-combobox>
       
       <form-disciple v-if="userRole == 'Admin' " @add-discipline="getDisciples"></form-disciple>
 
@@ -208,6 +210,14 @@ export default {
       student_id:'',
       dnt: '',
       date: '',
+      items: [
+        'WEB 2021A',
+        'WEB 2021B',
+        'SNA 2021',
+        'WEB 2022A',
+        'WEB 2022B',
+        'SNA 2022'
+        ],
       userRole: '',
       url: "http://127.0.0.1:8000/storage/imagestudent/",
       leavelist:['leavelist', 'Oral warning', 'Warning letter', 'Termination'],
@@ -279,7 +289,7 @@ export default {
     },
     getStudent(){
       axios.get('/students').then(res => {
-        this.studentlist = res.data;
+          this.studentlist = res.data;
       });
     },
     searchBotton(){
