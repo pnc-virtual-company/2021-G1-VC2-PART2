@@ -102,6 +102,7 @@
         ></v-text-field>
       </v-card-title>
       <v-combobox
+        v-if="userRole !== 'Student'"
         :items="items"
         label="Select class"
         outlined
