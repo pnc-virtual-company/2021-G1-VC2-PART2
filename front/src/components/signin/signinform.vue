@@ -69,7 +69,6 @@
 
 <script>
 import axios from '../../axios-http';
-
 import LoadingPage from './LoadingPage.vue';
 export default {
   components: { LoadingPage },

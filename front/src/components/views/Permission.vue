@@ -101,6 +101,7 @@
         label="Search permission"
         class="search"
         color="blue darken-1"
+        single-line
       ></v-text-field>
     <!-- ==========card======================== -->
     
