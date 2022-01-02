@@ -48,12 +48,12 @@
     span{
         font-size: 35px;
         text-transform: uppercase;
-        color: rgb(55, 161, 223);
+        color:white;
     }
     h1{
         margin-top: 6%;
         text-transform: uppercase;
-        color: rgb(212, 165, 79);
+        color: orange;
     }
     .loading{
         margin-left: 34%;
