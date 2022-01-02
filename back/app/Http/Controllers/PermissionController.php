@@ -40,6 +40,8 @@ class PermissionController extends Controller
         $permission->teacher = $request->teacher;
         $permission->startDate = $request->startDate;
         $permission->endDate = $request->endDate;
+        $permission->time = $request->time;
+        $permission->manyDay = $request->manyDay;
         $permission->leaveType = $request->leaveType;
         $permission->description = $request->description;
 

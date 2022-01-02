@@ -19,6 +19,8 @@ class CreatePermissionsTable extends Migration
             $table->string('teacher');
             $table->string('startDate');
             $table->string('endDate');
+            $table->string('time');
+            $table->string('manyDay');
             $table->string('leaveType');
             $table->string('description');
             $table->timestamps();

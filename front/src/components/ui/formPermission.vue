@@ -29,7 +29,6 @@
                 <select name="studentid" id="" v-model="studentId">
                   <option v-for="student of studentlist" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
                 </select>
-                
               </v-col>
 
               <v-col cols="12" sm="6">
@@ -55,6 +54,30 @@
                 <input type="date" name="date" v-model="startDate">
                 <label for="endDate" style="margin-left:15%">End date: </label>
                 <input type="date" name="date" v-model="endDate">
+              </v-col>
+
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="6"
+              >
+                <v-select
+                   v-model="time"
+                  :items="items"
+                  label="Choose"
+                ></v-select>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                
+              >
+                 <v-text-field
+                  v-model="manyDay"
+                  :counter="7"
+                  label="How many of day."
+                  required
+                ></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="12">
@@ -96,21 +119,31 @@
   export default {
     emits: ['add-per'],
     data: () => ({
+      
+      items: ['Morning', 'Afternoon'],
       dialog: false,
       studentlist:[],
       teacherlist:['Sim', 'Vandy', 'Davy', 'Thaina', 'Phuty', 'Somkhan'],
       value: null,
       
+      time:'',
+      manyDay:'',
       studentId:'',
       teacher:'',
       leavetype:'',
-      startDate: '',
-      endDate: '',
+      startDate:'',
+      endDate:'',
       description: '',
 
     }),
     methods: {
       createPermission (){
+        console.log(this.studentId);
+        console.log(this.teacher);
+        console.log(this.leavetype);
+        console.log(this.description);
+        console.log(this.time);
+        console.log(this.manyDay)
         let addpermission = {
           student_id: this.studentId,
           teacher: this.teacher,
@@ -126,7 +159,6 @@
         axios.get('/students').then(res => {
           this.studentlist = res.data;
         });
-        
       }
     },
     mounted() {

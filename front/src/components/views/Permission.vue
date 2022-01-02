@@ -37,12 +37,7 @@
               ></v-select>
             </v-col>
 
-            <v-col cols="6" sm="12">
-              <label for="startDate">Start date: </label>
-              <input type="date" name="date" v-model="startDate">
-              <label for="endDate" style="margin-left:15%">End date: </label>
-              <input type="date" name="date" v-model="endDate">
-            </v-col>
+            
 
              <v-col
               cols="12"
@@ -124,8 +119,8 @@
           </v-col>
 
           <v-col cols='12' sm='4'>
-            <span>{{per.startDate}} / Morning</span>
-            <p id="endDate">{{per.endDate}} day</p>
+            <span>{{per.startDate}} / {{per.time}}</span>
+            <p id="endDate">{{per.endDate}} </p>
           </v-col>
           <v-col cols='12' sm='2'>
             <v-img class="image2"
