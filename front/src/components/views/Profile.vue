@@ -55,8 +55,9 @@ export default {
 img{
   width: 80px;
   height: 80px;
-  margin-left: 40%;
+  margin-left: 39%;
   margin-top: 10%;
+  border-radius: 360px;
 }
 p{
   text-align: center;

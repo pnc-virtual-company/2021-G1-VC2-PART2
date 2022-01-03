@@ -131,12 +131,9 @@
           disciple.description
         }}</v-expansion-panel-content>
       </v-expansion-panel>
+      
       <v-tabs v-if="permission != ''" dark background-color="orange" grow>
-        <v-tab>
-          <v-icon left> mdi-chat-processing </v-icon>
-     
-          Permission
-        </v-tab>
+        <v-tab><v-icon left> mdi-chat-processing </v-icon>Permission</v-tab>
       </v-tabs>
 
       <v-expansion-panel v-for="per of permission" :key="per.id">
