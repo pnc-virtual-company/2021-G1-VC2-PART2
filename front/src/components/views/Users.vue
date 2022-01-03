@@ -165,7 +165,7 @@
     <v-dialog v-model="deleteDialog" max-width="500px">
       <v-card class="cardForm">
         <v-card-title class="text-h5"
-          >Are you sure you want to delete this item?</v-card-title
+          >Are you sure you want to delete this user?</v-card-title
         >
         <v-divider></v-divider>
         <v-card-actions>
@@ -173,7 +173,7 @@
           <v-btn color="gray darken-1" text @click="deleteDialog = false"
             >Cancel</v-btn
           >
-          <v-btn color="green darken-1" text @click="DeleteUser(id)">OK</v-btn>
+          <v-btn color="primary" text @click="DeleteUser(id)">OK</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -194,11 +194,12 @@
           </thead>
           <tbody>
             <tr v-for="user of users" :key="user.id">
+
               <!-- =============Display image user or student======== -->
-              <td v-if="user.role === 'Admin'">
+              <td v-if="user.role == 'Admin'">
                 <img src="../../assets/icon.png" alt="" />
               </td>
-              <td v-else-if="user.role === 'Student'">
+              <td v-else-if="user.role == 'Student'">
                 <img :src="student_url + user.student.picture" alt="" />
               </td>
               <td v-else>

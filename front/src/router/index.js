@@ -9,8 +9,6 @@ import NotAuthorized from '../components/nav/NotAuthorized.vue';
 
 
 
-
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -18,62 +16,60 @@ const routes = [
     { 
         path: '/',
         component: signinform,
-      
+
     },
-    { 
+    {
         path: '/signin',
         component: signinform
     },
-    { 
+    {
         path: '/user',
         component: Users,
         meta: { needLogin: true, needAdmin: true },
     },
-    { 
-        path: '/student', 
+    {
+        path: '/student',
         component: StudentView,
         meta: { needLogin: true, needAdmin: true },
     },
-    { 
-        path: '/permission', 
-        component: Permission ,
+    {
+        path: '/permission',
+        component: Permission,
         meta: { needLogin: true, needAdmin: true },
     },
-    { 
-        path: '/disciple', 
-        component: Disciple ,
+    {
+        path: '/disciple',
+        component: Disciple,
         meta: { needLogin: true, needAdmin: true },
     },
-    { 
-        path: "/:pathMatch(.*)*", 
-        component: NotAuthorized ,
+    {
+        path: "/:pathMatch(.*)*",
+        component: NotAuthorized,
     },
-    { 
-        path: "/unauthorized", 
-        component: NotAuthorized ,
+    {
+        path: "/unauthorized",
+        component: NotAuthorized,
     },
 
 ]
 
 let authenticationGuard = (to, from, next) => {
     let needLogin = to.meta.needLogin;
-    
+
     if (needLogin) {
 
         let isLoggedIn = localStorage.getItem("user_id") !== null;
-      
+
         if (!isLoggedIn) {
             next("/");
-        }else {
+        } else {
             next();
         }
-      
+
     } else {
-      next();
+        next();
     }
-
-  };
-
+};
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,

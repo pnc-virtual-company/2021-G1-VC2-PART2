@@ -25,10 +25,10 @@
 
         <div class="student">
           <img class="classroom" src="../../assets/class.png" alt="" />
-          <p class="paragrab2">{{ students.class }}</p>
+          <p class="paragrab2">{{ student.class }}</p>
         </div>
 
-        <!-- =======================Managage Termination============== -->
+        <!-- ===================Managage Termination============== -->
         <div class="student" v-if="num3 >= 3">
           <img class="action" src="../../assets/emoji.png" alt="" />
           <p class="paragrab3" style="color: #e53935">OUT SCHOOL</p>
