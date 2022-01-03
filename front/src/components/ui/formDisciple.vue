@@ -11,7 +11,7 @@
                     dark
                     v-bind="attrs"
                     v-on="on"
-                    style="margin-left: 76%"
+                    style="margin-left: 35%"
                 >
                 Create disciple
                 </v-btn>
@@ -118,7 +118,7 @@
       emits: ['add-discipline'],
       dialog: false,
       classlist:['WEB 2021A', 'WEB 2021B', 'SNA 2021', 'WEB 2022A','WEB 2022B','SNA 2022'],
-      leavelist:['leavelist', 'Oral warning', 'Warning letter', 'Termination'],
+      leavelist:['Misconduct', 'Oral warning', 'Warning letter', 'Termination'],
       studentLists: [],
       
       student_id:'',

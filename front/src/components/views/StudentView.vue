@@ -8,14 +8,28 @@
       v-model="studentName"
       label="Search student"
       color="blue darken-1"
+      single-line
       append-icon="mdi-magnify"
       ></v-text-field>
+      <v-combobox
+          v-if="userRole !== 'Student'"
+          v-on:keyup="Selectclass"
+          v-model="classes"
+          :items="items"
+          label="Select Class"
+          class="combobox"
+          outlined
+          single-line
+          dense
+          color="deep-purple accent-4"
+    ></v-combobox>
 
       <formstudent
           v-if="userRole != 'Student' "
           @add-user="getstudent"
       />
     </div>
+    
     
     <!-- ===================Delete disciple dialog======================== -->
 
@@ -104,7 +118,17 @@
         studentName: '',
         userRole: '',
         deleteDialog: false,
-        id:''
+        id:'',
+        items: [
+        "WEB 2021A",
+        "WEB 2021B",
+        "SNA 2021",
+        "WEB 2022A",
+        "WEB 2022B",
+        "SNA 2022",
+      ],
+      classes:'',
+      classFilter:[],
 
       }
     },
@@ -116,6 +140,7 @@
         this. userRole = localStorage.getItem('role');
         
         axios.get('/students').then(res => {
+          this.classFilter = res.data;
           if(this.userRole === "Student"){
             for(let student of res.data){
               if(student.id == studentId ){
@@ -160,6 +185,18 @@
           axios.get('/students/search/' + this.studentName).then(res => {
             this.studentdata = res.data;
           })
+        }else{
+          this.getstudent();
+        }
+      },
+      Selectclass() {
+        this.studentdata = [];
+        if (this.classes !== "") {
+          for (let cls of this.classFilter) {
+            if (cls.class === this.classes) {
+              this.studentdata.push(cls);
+            }
+          }
         }else{
           this.getstudent();
         }
@@ -244,8 +281,15 @@
     height: 90vh;
   }
   .search{
-    margin-right: 60.7%;
-    margin-top: -2px;
+    margin-top: -4px;
+    margin-right: 55px;
+    width: 260px;
+    
+  }
+  .combobox{
+    width: 230px;
+    /* margin-left: 20px; */
+    margin-right: 130px;
   }
   .cardForm{
     border-top: 5px solid red;

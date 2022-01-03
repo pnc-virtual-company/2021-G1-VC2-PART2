@@ -137,7 +137,7 @@
 </script>
 <style scoped>
   .text-center{
-    margin-left: 67.5%;
+    margin-left: 9.5%;
     margin-bottom: -50px;
   }
   .dates {
