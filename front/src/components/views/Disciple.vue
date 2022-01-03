@@ -104,6 +104,18 @@
             single-line
           ></v-text-field>
         </v-card-title>
+        <v-combobox
+          v-if="userRole !== 'Student'"
+          v-on:keyup="selectClass"
+          v-model="classes"
+          :items="items"
+          class="select"
+          label="Select Class"
+          outlined
+          single-line
+          dense
+          color="deep-purple accent-4"
+        ></v-combobox>
 
         <form-disciple
           v-if="userRole == 'Admin'"
@@ -212,10 +224,12 @@ export default {
     return {
       dialog: false,
       editdialog: false,
+      classes: "",
       search: "",
       description: "",
       class: "",
       disciples: [],
+      disFilter: [],
       id: "",
       student_id: "",
       dnt: "",
@@ -227,6 +241,14 @@ export default {
         "Oral warning",
         "Warning letter",
         "Termination",
+      ],
+      items: [
+        "WEB 2021A",
+        "WEB 2021B",
+        "SNA 2021",
+        "WEB 2022A",
+        "WEB 2022B",
+        "SNA 2022",
       ],
     };
   },
@@ -275,6 +297,7 @@ export default {
     getDisciples() {
       let studentId = localStorage.getItem("studentId");
       axios.get("/disciples").then((res) => {
+        this.disFilter = res.data;
         if (this.userRole === "Student") {
           for (let disciple of res.data) {
             if (disciple.student.id == studentId) {
@@ -284,7 +307,7 @@ export default {
         } else {
           this.disciples = res.data;
         }
-        console.log("disciples", this.disciples);
+    
       });
     },
     ShowDialog(disciple) {
@@ -313,9 +336,24 @@ export default {
         this.getDisciples();
       }
     },
+    selectClass() {
+      this.disciples = [];
+      if (this.classes !== "") {
+        for (let dis of this.disFilter) {
+          if (dis.student.class === this.classes) {
+            this.disciples.push(dis);
+          }
+        }
+      }else{
+        this.getDisciples();
+      }
+
+    },
   },
   mounted() {
     this.getDisciples();
+    this.getStudent();
+
     this.userRole = localStorage.getItem("role");
   },
 };
@@ -366,9 +404,14 @@ export default {
   margin-top: 25%;
 }
 .searchbtn {
-  width: 270px;
-  margin-left: -7%;
-  margin-top: -7%;
+  width: 380px;
+  margin-left: -4%;
+  margin-top: -5%;
+}
+.select{
+  width: 250px;
+  margin-left: 20px;
+
 }
 
 img {

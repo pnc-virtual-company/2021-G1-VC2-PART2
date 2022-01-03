@@ -11,10 +11,21 @@
         single-line
         append-icon="mdi-magnify"
       ></v-text-field>
+      <v-combobox
+          v-if="userRole !== 'Student'"
+          v-on:keyup="Selectclass"
+          v-model="classes"
+          :items="items"
+          label="Select Class"
+          class="combobox"
+          outlined
+          single-line
+          dense
+          color="deep-purple accent-4"
+    ></v-combobox>
 
       <formstudent v-if="userRole != 'Student' && !isDetail" @add-user="getstudent" />
     </div>
-
     <!-- ===================Delete disciple dialog======================== -->
 
     <v-dialog v-model="deleteDialog" max-width="500px">
@@ -91,92 +102,114 @@
 </template>
 
 <script>
-import FormStudent from "../ui/FormStudent.vue";
-import EditStudent from "./EditStudent.vue";
-import StudentDetail from "./StudentDetail.vue";
-import StudentInfo from "./StudentInfo.vue";
-import axios from "../../axios-http.js";
+  import FormStudent from '../ui/FormStudent.vue';
+  import EditStudent from './EditStudent.vue';
+  import StudentDetail from './StudentDetail.vue';
+  import StudentInfo from './StudentInfo.vue';
+  import axios from '../../axios-http.js';
 
-export default {
-  components: {
-    formstudent: FormStudent,
-    EditStudent,
-    StudentDetail,
-    StudentInfo,
-  },
-  data() {
-    return {
-      isDetail: false,
-      dialog: false,
-      showDialog: false,
-      studentdata: [],
-      studentInfo: "",
-      studentName: "",
-      userRole: "",
-      deleteDialog: false,
-      id: "",
-    };
-  },
-
-  methods: {
-    Studentdetail(student) {
-      this.isDetail = true;
-      this.studentInfo = student;
+ 
+  export default {
+    components: {
+      'formstudent': FormStudent,
+      EditStudent,
+      StudentDetail,
+      StudentInfo,
     },
-    Back(back) {
-      this.isDetail = back;
+    data () {
+      return {
+        dialog: false,
+        showDialog: false,
+        studentdata:[],
+        studentInfo: '',
+        studentName: '',
+        userRole: '',
+        deleteDialog: false,
+        id:'',
+        items: [
+        "WEB 2021A",
+        "WEB 2021B",
+        "SNA 2021",
+        "WEB 2022A",
+        "WEB 2022B",
+        "SNA 2022",
+      ],
+      classes:'',
+      classFilter:[],
+      };
     },
-    getstudent() {
-      let studentId = localStorage.getItem("studentId");
-      this.userRole = localStorage.getItem("role");
+    methods: {
+      Studentdetail(student) {
+        this.isDetail = true;
+        this.studentInfo = student;
+      },
+      Back(back) {
+        this.isDetail = back;
+      },
+      getstudent() {
+        let studentId = localStorage.getItem("studentId");
+        this.userRole = localStorage.getItem("role");
 
-      axios.get("/students").then((res) => {
-        if (this.userRole === "Student") {
-          for (let student of res.data) {
-            if (student.id == studentId) {
-              this.studentdata.push(student);
+        axios.get("/students").then((res) => {
+          this.classFilter = res.data
+          if (this.userRole === "Student") {
+            for (let student of res.data) {
+              if (student.id == studentId) {
+                this.studentdata.push(student);
+              }
             }
+          } else {
+            this.studentdata = res.data;
           }
-        } else {
-          this.studentdata = res.data;
-        }
-      });
-    },
-    DeleteStudent(id) {
-      axios.delete("/students/" + id).then((res) => {
-        console.log(res.data);
-        this.getstudent();
-      });
-      this.deleteDialog = false;
-    },
-    showDeleteStudent(student) {
-      this.deleteDialog = true;
-      this.id = student.id;
-    },
-    UpdateStudent(id, student, hidden) {
-      axios.put("/students/" + id, student).then((res) => {
-        this.showDialog = hidden;
-        this.getstudent();
-        return res.data;
-      });
-    },
-    addShow(student) {
-      this.studentInfo = student;
-      this.showDialog = true;
-    },
-    Cancel(hidden) {
-      this.showDialog = hidden;
-    },
-
-    search() {
-      if (this.studentName !== "") {
-        axios.get("/students/search/" + this.studentName).then((res) => {
-          this.studentdata = res.data;
         });
-      } else {
-        this.getstudent();
-      }
-    },
+      },
+      DeleteStudent(id) {
+        axios.delete("/students/" + id).then((res) => {
+          console.log(res.data);
+          this.getstudent();
+        });
+        this.deleteDialog = false;
+      },
+      showDeleteStudent(student) {
+        this.deleteDialog = true;
+        this.id = student.id;
+      },
+      UpdateStudent(id, student, hidden) {
+        axios.put("/students/" + id, student).then((res) => {
+          this.showDialog = hidden;
+          this.getstudent();
+          return res.data;
+        });
+      },
+      addShow(student) {
+        this.studentInfo = student;
+        this.showDialog = true;
+      },
+      Cancel(hidden) {
+        this.showDialog = hidden;
+      },
+
+      search() {
+        if (this.studentName !== "") {
+          axios.get("/students/search/" + this.studentName).then((res) => {
+            this.studentdata = res.data;
+          });
+        } else {
+          this.getstudent();
+        }
+      },
+      Selectclass() {
+          this.studentdata = [];
+          if (this.classes !== "") {
+            for (let cls of this.classFilter) {
+              if (cls.class === this.classes) {
+                this.studentdata.push(cls);
+              }
+            }
+          }else{
+            this.getstudent();
+          }
+      },
   },
   mounted() {
     this.getstudent();
@@ -264,5 +297,16 @@ input[type="file"] {
 }
 tr td:hover {
   cursor: pointer;
+}
+.search{
+  margin-top: -4px;
+  margin-right: 55px;
+  width: 260px;
+  
+}
+.combobox{
+  width: 230px;
+  /* margin-left: 20px; */
+  margin-right: 130px;
 }
 </style>
