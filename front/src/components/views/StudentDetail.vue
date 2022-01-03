@@ -20,7 +20,7 @@
       <div class="mainContent">
         <div class="student" style="">
           <img class="batch" src="../../assets/batch.png" alt="" />
-          <p class="paragrab1">BATCH 2021</p>
+          <p class="paragrab1">{{ student.batch}}</p>
         </div>
 
         <div class="student">

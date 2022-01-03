@@ -18,6 +18,8 @@ class CreateStudentsTable extends Migration
             $table->string('firstName');
             $table->string('lastName');
             $table->string('class');
+            $table->string('batch');
+            $table->string('major');
             $table->integer('phone');
             $table->string('gender');
             $table->string('ngo');

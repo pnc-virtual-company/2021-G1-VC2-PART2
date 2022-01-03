@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="700">
       <template v-slot:activator="{ on, attrs }">
         <v-btn color="blue lighten" dark v-bind="attrs" v-on="on"
           >+ Add student</v-btn
@@ -9,79 +9,167 @@
 
       <v-card>
         <h2>Create new Student</h2>
-        <v-card-text>
-          <v-row>
-            <v-col cols="6" sm="6">
-              <v-text-field
-                prepend-inner-icon="mdi-account-details-outline"
-                v-model="username"
-                :rules="nameRules"
-                :counter="10"
-                label="First Name"
-              ></v-text-field>
-            </v-col>
 
-            <v-col cols="6" sm="6">
-              <v-text-field
-                prepend-inner-icon="mdi-account-details-outline"
-                v-model="email"
-                :rules="emailRules"
-                :counter="10"
-                label="Last Name"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="12">
-              <v-select
-                :items="items"
-                prepend-inner-icon="mdi-select-group"
-                label="Choose Class"
-                style="width: 100%"
-                dense
-              ></v-select>
-            </v-col>
-          </v-row>
-          <v-radio-group v-model="row" row>
-            <v-radio
-              label="Female"
-              name="fav_language"
-              value="Female"
-              v-model="gender"
-            ></v-radio>
-            <v-radio
-              label="Male"
-              type="radio"
-              name="fav_language"
-              value="Male"
-              v-model="gender"
-            ></v-radio>
-          </v-radio-group>
+        <v-form @submit.prevent="Addstudent" ref="form">
+          <v-card-text>
+            <v-row>
+              <v-col cols="6" sm="6">
+                <v-text-field
+                  prepend-inner-icon="mdi-account-plus"
+                  v-model="firstName"
+                  label="First Name"
+                  color="cyan"
+                ></v-text-field>
+              </v-col>
 
-          <v-text-field
-            type="number"
-            prepend-inner-icon="mdi-phone-forward-outline"
-            placeholder="Phone number"
-            v-model="phoneNumber"
-          />
-          <v-text-field
-            prepend-inner-icon="mdi-message-processing-outline"
-            v-model="ngo"
-            :counter="20"
-            label="NGO"
-          ></v-text-field>
-          <v-file-input
-            name="picture"
-            label="Upload image"
-            @change="Image"
-            style="width: 100%"
-          ></v-file-input>
-        </v-card-text>
+              <v-col cols="6" sm="6">
+                <v-text-field
+                  prepend-inner-icon="mdi-account-tie"
+                  v-model="lastName"
+                  label="Last Name"
+                  color="cyan"
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-        <v-divider></v-divider>
+            <v-row>
+              <v-col cols="6" sm="6">
+                <v-combobox
+                  prepend-inner-icon="mdi-folder-plus"
+                  :items="Classroom"
+                  v-model="Class"
+                  label="Class"
+                  color="cyan"
+                  dense
+                ></v-combobox>
+              </v-col>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="Addstudent">Create</v-btn>
-        </v-card-actions>
+              <v-col cols="6" sm="6">
+                <v-combobox
+                  v-model="batch"
+                  prepend-inner-icon="mdi-account-box-multiple"
+                  :items="batchs"
+                  label="Choose Batch"
+                  color="cyan"
+                  dense
+                ></v-combobox>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="6" sm="6">
+                <v-text-field
+                  prepend-inner-icon="mdi-chart-line-stacked"
+                  v-model="major"
+                  label="Major"
+                  dense
+                  color="cyan"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  prepend-inner-icon="mdi-phone-plus"
+                  label="Phone number"
+                  v-model="phoneNumber"
+                  dense
+                  color="cyan"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="6" sm="6">
+                <v-text-field
+                  prepend-inner-icon="mdi-microsoft-azure"
+                  v-model="ngo"
+                  label="NGO"
+                  dense
+                  color="cyan"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="6" sm="6">
+                <v-radio-group class="gender" v-model="gender" row>
+                  <v-list-item-icon>
+                    <v-icon>mdi-gender-transgender</v-icon>
+                  </v-list-item-icon>
+                  <v-radio color="cyan" label="Female" value="Female"></v-radio>
+                  <v-radio
+                    color="secondary"
+                    label="Male"
+                    value="Male"
+                  ></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+
+            <v-file-input
+              prepend-inner-icon="mdi-image-area"
+              counter
+              show-size
+              small-chips
+              v-model="picture"
+              truncate-length="50"
+              dense
+              color="cyan"
+            ></v-file-input>
+
+            <!-- ===================Create Successfull========================= -->
+            <v-alert
+              v-model="alert"
+              v-if="success"
+              dense
+              dismissible
+              text
+              type="success"
+              style="top: 15px"
+            >
+              The student is have been <strong>created</strong>
+            </v-alert>
+
+            <!-- =========================Message error============================= -->
+            <v-alert
+              v-model="alert"
+              v-else
+              dense
+              outlined
+              dismissible
+              type="error"
+              style="top: 15px"
+            >
+              Create student is <strong>failed</strong> , please try again !
+            </v-alert>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn type="submit" @click="dialog = false" color="gray" text
+              >Cancel</v-btn
+            >
+            <v-btn
+              type="submit"
+              v-if="
+                firstName === '' ||
+                lastName === '' ||
+                Class === '' ||
+                batch === '' ||
+                major === '' ||
+                phoneNumber === '' ||
+                gender === '' ||
+                ngo === '' ||
+                picture === null
+              "
+              color="green"
+              text
+              disabled
+              >Create</v-btn
+            >
+            <v-btn type="submit" v-else color="green" text>Create</v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
   </div>
@@ -93,7 +181,7 @@ export default {
   emits: ["add-user"],
   data() {
     return {
-      items: [
+      Classroom: [
         "WEB 2021A",
         "WEB 2021B",
         "SNA 2021",
@@ -101,88 +189,87 @@ export default {
         "WEB 2022B",
         "SNA 2022",
       ],
+      batchs: [
+        "BATCH 2020",
+        "BATCH 2021",
+        "BATCH 2022",
+        "BATCH 2023",
+        "BATCH 2024",
+        "BATCH 2025",
+      ],
+      success: false,
+      alert: false,
+      hidden: false,
       dialog: false,
       firstName: "",
       lastName: "",
       Class: "",
-      phoneNumber: "0",
+      batch: "",
+      major: "",
+      phoneNumber: "",
       gender: "",
       ngo: "",
-      picture: "",
+      picture: null,
     };
   },
   methods: {
-    Image(event) {
-      this.picture = event.target.files[0];
-    },
     Addstudent() {
       let addStudent = new FormData();
       addStudent.append("firstName", this.firstName);
       addStudent.append("lastName", this.lastName);
       addStudent.append("class", this.Class);
+      addStudent.append("batch", this.batch);
+      addStudent.append("major", this.major);
       addStudent.append("phone", this.phoneNumber);
       addStudent.append("gender", this.gender);
       addStudent.append("ngo", this.ngo);
       addStudent.append("picture", this.picture);
 
-      axios.post("/students", addStudent).then((res) => {
-        console.log(res.data);
-        this.$emit("add-user", res.data);
-        this.dialog = false;
-      });
+      axios
+        .post("/students", addStudent)
+        .then((res) => {
+          this.$emit("add-user", res.data);
+          this.alert = true;
+          this.success = true;
+          this.hidden = true;
+
+          setInterval(() => {
+            if (this.hidden) {
+              this.firstName = "";
+              this.lastName = "";
+              this.Class = "";
+              this.batch = "";
+              this.major = "";
+              this.phoneNumber = "";
+              this.ngo = "";
+              this.gender = "";
+              this.picture = null;
+              this.dialog = false;
+              this.hidden = false;
+            }
+          }, 3000);
+        })
+        .catch((error) => {
+          this.alert = true;
+          this.success = false;
+          setInterval(() => {
+            this.alert = false;
+          }, 3000);
+          return error;
+        });
     },
   },
 };
 </script>
 
 <style  scoped>
-.btn-student {
-  float: right;
-  margin-top: 20px;
-  margin-right: -149px;
+.gender {
+  margin-top: -3%;
 }
 h2 {
   text-align: center;
-  padding: 10px;
+  padding: 2px;
   color: #fff;
   background: rgb(108, 185, 226);
-}
-
-input[type="text"] {
-  width: 50%;
-  margin-top: 3%;
-  padding: 3px;
-  padding-left: 10px;
-  outline: none;
-  border: 1px solid rgb(194, 193, 193);
-  border-radius: 5px;
-}
-input[type="number"] {
-  width: 100%;
-  margin-top: 3%;
-  padding: 3px;
-  padding-left: 10px;
-  outline: none;
-  border: 1px solid rgb(194, 193, 193);
-  border-radius: 5px;
-}
-select {
-  width: 100%;
-  margin-top: 2%;
-  padding: 3px;
-  padding-left: 10px;
-  outline: none;
-  border: 1px solid rgb(194, 193, 193);
-  border-radius: 5px;
-}
-input[type="radio"] {
-  margin-left: 10px;
-  margin-top: 3%;
-}
-input[type="file"] {
-  width: 100%;
-  margin-top: 3%;
-  padding: 5px 0;
-  outline: none;
 }
 </style>
