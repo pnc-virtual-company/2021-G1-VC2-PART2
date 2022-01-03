@@ -295,6 +295,7 @@ export default {
   },
   methods: {
     Adduser() {
+      console.log(this.studentId);
       if (this.$refs.form.validate()) {
         let studentid = "";
         if (this.studentId.id == undefined) {

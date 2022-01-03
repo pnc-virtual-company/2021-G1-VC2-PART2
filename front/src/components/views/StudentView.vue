@@ -1,254 +1,268 @@
 <template>
   <div class="main">
-    <div class="header">
-      <v-text-field 
-      v-if="userRole !== 'Student' "
-      class="search"
-      v-on:keyup="search"
-      v-model="studentName"
-      label="Search student"
-      color="blue darken-1"
-      single-line
-      append-icon="mdi-magnify"
+    <div class="header" v-if="!isDetail">
+      <v-text-field
+        v-if="userRole !== 'Student'"
+        class="search"
+        v-on:keyup="search"
+        v-model="studentName"
+        label="Search student"
+        color="blue darken-1"
+        single-line
+        append-icon="mdi-magnify"
       ></v-text-field>
 
-      <formstudent
-          v-if="userRole != 'Student' "
-          @add-user="getstudent"
-      />
+      <formstudent v-if="userRole != 'Student' && !isDetail" @add-user="getstudent" />
     </div>
-    
+
     <!-- ===================Delete disciple dialog======================== -->
 
     <v-dialog v-model="deleteDialog" max-width="500px">
       <v-card class="cardForm">
-        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+        <v-card-title class="text-h5"
+          >Are you sure you want to delete this item?</v-card-title
+        >
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="gray darken-1" text @click="deleteDialog = false">Cancel</v-btn>
-          <v-btn color="green darken-1" text @click="DeleteStudent(id)">OK</v-btn>
-          
+          <v-btn color="gray darken-1" text @click="deleteDialog = false"
+            >Cancel</v-btn
+          >
+          <v-btn color="green darken-1" text @click="DeleteStudent(id)"
+            >OK</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- ==========================End Dialog===================================== -->
-  <student-detail v-if="userRole === 'Student' "></student-detail>
-  <div class="userLists" v-else>
-   
+    <!-- ==========================Student Detail===================================== -->
+
+    <student-detail :student="studentInfo" v-if="isDetail" @back='Back'></student-detail>
+
+    <StudentInfo v-else-if="userRole === 'Student' "/>
+
+    <div class="userLists" v-else>
       <v-simple-table>
-      
-          <template v-slot:default>
+        <template v-slot:default>
           <thead>
-              <tr>
-                  <th class="text-left">First name</th>
-                  <th class="text-left">Last name</th>
-                  <th class="text-left">Class</th>
-                  <th class="text-left">Phone</th>
-                  <th class="text-left">Gender</th>
-                  <th class="text-left">Ngo</th>
-                  <th v-if="userRole !== 'Student' " class="text-left">Action</th>
-              </tr>
+            <tr>
+              <th class="text-left">First name</th>
+              <th class="text-left">Last name</th>
+              <th class="text-left">Class</th>
+              <th class="text-left">Phone</th>
+              <th class="text-left">Gender</th>
+              <th class="text-left">Ngo</th>
+              <th v-if="userRole !== 'Student'" class="text-left">Action</th>
+            </tr>
           </thead>
           <tbody>
-              <tr v-for="student in studentdata" :key="student.username">
-                  <td>{{ student.firstName }}</td>
-                  <td>{{ student.lastName }}</td>
-                  <td>{{ student.class }}</td>
-                  <td>0{{ student.phone }}</td>
-                  <td>{{ student.gender }}</td>
-                  <td>{{ student.ngo }}</td>
-                  
-                  <td v-if="userRole !== 'Student' "><v-list-item-icon>
-                      <v-icon @click="addShow(student)" color='green'>mdi-pencil-box-multiple-outline</v-icon>
-                  </v-list-item-icon>
+            <tr v-for="student in studentdata" :key="student.username">
+              <td @click="Studentdetail(student)">{{ student.firstName }}</td>
+              <td @click="Studentdetail(student)">{{ student.lastName }}</td>
+              <td>{{ student.class }}</td>
+              <td>0{{ student.phone }}</td>
+              <td>{{ student.gender }}</td>
+              <td>{{ student.ngo }}</td>
 
-                  <v-list-item-icon>
-                      <v-icon @click="showDeleteStudent(student)" color="#EF5350">mdi-delete</v-icon>
-                  </v-list-item-icon></td>
+              <td v-if="userRole !== 'Student'">
+                <v-list-item-icon>
+                  <v-icon @click="addShow(student)" color="green"
+                    >mdi-pencil-box-multiple-outline</v-icon
+                  >
+                </v-list-item-icon>
 
-                  
-
-                </tr>
-            </tbody>
-            <EditStudent v-if="showDialog"
-                :studentData = "studentInfo"
-                @Cancel = "Cancel" 
-                @Update = "UpdateStudent" 
-              />
-
-            </template>
-        </v-simple-table>
+                <v-list-item-icon>
+                  <v-icon @click="showDeleteStudent(student)" color="#EF5350"
+                    >mdi-delete</v-icon
+                  >
+                </v-list-item-icon>
+              </td>
+            </tr>
+          </tbody>
+          <EditStudent
+            v-if="showDialog"
+            :studentData="studentInfo"
+            @Cancel="Cancel"
+            @Update="UpdateStudent"
+          />
+        </template>
+      </v-simple-table>
     </div>
-  
   </div>
 </template>
 
 <script>
-  import FormStudent from '../ui/FormStudent.vue';
-  import EditStudent from './EditStudent.vue';
-  import StudentDetail from './StudentDetail.vue';
-  import axios from '../../axios-http.js';
- 
-  export default {
-    components: {
-      'formstudent': FormStudent,
-      EditStudent,
-      StudentDetail,
+import FormStudent from "../ui/FormStudent.vue";
+import EditStudent from "./EditStudent.vue";
+import StudentDetail from "./StudentDetail.vue";
+import StudentInfo from "./StudentInfo.vue";
+import axios from "../../axios-http.js";
+
+export default {
+  components: {
+    formstudent: FormStudent,
+    EditStudent,
+    StudentDetail,
+    StudentInfo,
+  },
+  data() {
+    return {
+      isDetail: false,
+      dialog: false,
+      showDialog: false,
+      studentdata: [],
+      studentInfo: "",
+      studentName: "",
+      userRole: "",
+      deleteDialog: false,
+      id: "",
+    };
+  },
+
+  methods: {
+    Studentdetail(student) {
+      this.isDetail = true;
+      this.studentInfo = student;
     },
-    data () {
-      return {
-        dialog: false,
-        showDialog: false,
-        studentdata:[],
-        studentInfo: '',
-        studentName: '',
-        userRole: '',
-        deleteDialog: false,
-        id:''
-
-      }
+    Back(back) {
+      this.isDetail = back;
     },
-   
-    methods: {
-     
-      getstudent(){
-        let studentId = localStorage.getItem('studentId');
-        this. userRole = localStorage.getItem('role');
-        
-        axios.get('/students').then(res => {
-          if(this.userRole === "Student"){
-            for(let student of res.data){
-              if(student.id == studentId ){
-                this.studentdata.push(student);
-              }
-            }
+    getstudent() {
+      let studentId = localStorage.getItem("studentId");
+      this.userRole = localStorage.getItem("role");
 
-          }else{
-              this.studentdata = res.data;
+      axios.get("/students").then((res) => {
+        if (this.userRole === "Student") {
+          for (let student of res.data) {
+            if (student.id == studentId) {
+              this.studentdata.push(student);
             }
-         
-        })
-      },
-      DeleteStudent(id){
-        axios.delete('/students/' + id).then(res => {
-          console.log(res.data);
-          this.getstudent();
-        })
-        this.deleteDialog= false;
-      },
-      showDeleteStudent(student){
-        this.deleteDialog = true;
-        this.id = student.id;
-      },
-      UpdateStudent(id,student,hidden){
-          axios.put('/students/' + id , student).then(res => {
-            this.showDialog = hidden;
-            this.getstudent();
-            return res.data;
-          })
-      },
-      addShow(student){
-        this.studentInfo = student;
-        this.showDialog = true;
-      },
-      Cancel(hidden){
-        this.showDialog = hidden;
-      }, 
-
-      search(){
-        if(this.studentName !== ""){
-          axios.get('/students/search/' + this.studentName).then(res => {
-            this.studentdata = res.data;
-          })
-        }else{
-          this.getstudent();
+          }
+        } else {
+          this.studentdata = res.data;
         }
+      });
+    },
+    DeleteStudent(id) {
+      axios.delete("/students/" + id).then((res) => {
+        console.log(res.data);
+        this.getstudent();
+      });
+      this.deleteDialog = false;
+    },
+    showDeleteStudent(student) {
+      this.deleteDialog = true;
+      this.id = student.id;
+    },
+    UpdateStudent(id, student, hidden) {
+      axios.put("/students/" + id, student).then((res) => {
+        this.showDialog = hidden;
+        this.getstudent();
+        return res.data;
+      });
+    },
+    addShow(student) {
+      this.studentInfo = student;
+      this.showDialog = true;
+    },
+    Cancel(hidden) {
+      this.showDialog = hidden;
+    },
+
+    search() {
+      if (this.studentName !== "") {
+        axios.get("/students/search/" + this.studentName).then((res) => {
+          this.studentdata = res.data;
+        });
+      } else {
+        this.getstudent();
       }
     },
-    mounted() {
-      this.getstudent()
-    }
-  }
+  },
+  mounted() {
+    this.getstudent();
+  },
+};
 </script>
 
 <style scoped>
-  .header{
-    display: flex;
-    align-items: flex-start;
-   
-    width: 80%;
-    margin-left: 10%;
-  }
-  .main{
-    height: 84vh;
-    margin-top: 3%;
-    overflow-y: scroll;
-  }
-  .btn-student {
-      float: right;
-      margin-top: 20px;
-      margin-right: -149px;
-  }
-  h2{
-      text-align: center;
-      padding: 10px;
-      color: #fff;
-      background: rgb(108, 185, 226);
-  }
-  
-  input[type=text] {
-      width: 50%;
-      margin-top: 3%;
-      padding: 3px;
-      padding-left: 10px;
-      outline: none;
-      border: 1px solid rgb(194, 193, 193);
-      border-radius: 5px;
-  }
-  input[type=number]
-  {
-      width: 100%;
-      margin-top: 3%;
-      padding: 3px;
-      padding-left: 10px;
-      outline: none;
-        border: 1px solid rgb(194, 193, 193);
-      border-radius: 5px;
-  }
-  select{
-      width: 100%;
-      margin-top: 2%;
-      padding: 3px;
-      padding-left: 10px;
-      outline: none;
-      border: 1px solid rgb(194, 193, 193);
-      border-radius: 5px;
-  }
-  input[type=radio]{
-      margin-left: 10px;
-      margin-top: 3%;
-  }
-  input[type=file]{
-      width: 100%;
-      margin-top: 3%;
-      padding: 5px 0;
-      outline: none;
-  }
-  .userLists{
-    width: 80%;
-    margin-left: 10%;
-    margin-top: 2%;
-  }
-  .table{
-    overflow-y: scroll;
-    height: 90vh;
-  }
-  .search{
-    margin-right: 60.7%;
-    margin-top: -2px;
-  }
-  .cardForm{
-    border-top: 5px solid red;
-  }
+.header {
+  display: flex;
+  align-items: flex-start;
+
+  width: 80%;
+  margin-left: 10%;
+}
+.main {
+  height: 84vh;
+  margin-top: 3%;
+  overflow-y: scroll;
+}
+.btn-student {
+  float: right;
+  margin-top: 20px;
+  margin-right: -149px;
+}
+h2 {
+  text-align: center;
+  padding: 10px;
+  color: #fff;
+  background: rgb(108, 185, 226);
+}
+
+input[type="text"] {
+  width: 50%;
+  margin-top: 3%;
+  padding: 3px;
+  padding-left: 10px;
+  outline: none;
+  border: 1px solid rgb(194, 193, 193);
+  border-radius: 5px;
+}
+input[type="number"] {
+  width: 100%;
+  margin-top: 3%;
+  padding: 3px;
+  padding-left: 10px;
+  outline: none;
+  border: 1px solid rgb(194, 193, 193);
+  border-radius: 5px;
+}
+select {
+  width: 100%;
+  margin-top: 2%;
+  padding: 3px;
+  padding-left: 10px;
+  outline: none;
+  border: 1px solid rgb(194, 193, 193);
+  border-radius: 5px;
+}
+input[type="radio"] {
+  margin-left: 10px;
+  margin-top: 3%;
+}
+input[type="file"] {
+  width: 100%;
+  margin-top: 3%;
+  padding: 5px 0;
+  outline: none;
+}
+.userLists {
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 2%;
+}
+.table {
+  overflow-y: scroll;
+  height: 90vh;
+}
+.search {
+  margin-right: 60.7%;
+  margin-top: -2px;
+}
+.cardForm {
+  border-top: 5px solid red;
+}
+tr td:hover {
+  cursor: pointer;
+}
 </style>
