@@ -105,7 +105,9 @@
   import FormStudent from '../ui/FormStudent.vue';
   import EditStudent from './EditStudent.vue';
   import StudentDetail from './StudentDetail.vue';
+  import StudentInfo from './StudentInfo.vue';
   import axios from '../../axios-http.js';
+
  
   export default {
     components: {
