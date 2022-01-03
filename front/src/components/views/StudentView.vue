@@ -58,10 +58,10 @@
             <tr v-for="student in studentdata" :key="student.username">
               <td @click="Studentdetail(student)">{{ student.firstName }}</td>
               <td @click="Studentdetail(student)">{{ student.lastName }}</td>
-              <td>{{ student.class }}</td>
-              <td>0{{ student.phone }}</td>
-              <td>{{ student.gender }}</td>
-              <td>{{ student.ngo }}</td>
+              <td @click="Studentdetail(student)">{{ student.class }}</td>
+              <td @click="Studentdetail(student)">0{{ student.phone }}</td>
+              <td @click="Studentdetail(student)">{{ student.gender }}</td>
+              <td @click="Studentdetail(student)">{{ student.ngo }}</td>
 
               <td v-if="userRole !== 'Student'">
                 <v-list-item-icon>

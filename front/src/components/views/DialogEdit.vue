@@ -75,7 +75,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="cancel" color="primary " text>Cancel</v-btn>
+        <v-btn @click="cancel" color="gray " text>Cancel</v-btn>
         <v-btn
           type="submit"
           color="success"

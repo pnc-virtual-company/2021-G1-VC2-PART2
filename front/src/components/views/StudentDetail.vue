@@ -25,7 +25,7 @@
 
         <div class="student">
           <img class="classroom" src="../../assets/class.png" alt="" />
-          <p class="paragrab2">{{ students.class }}</p>
+          <p class="paragrab2">{{ student.class }}</p>
         </div>
 
         <!-- =======================Managage Termination============== -->
