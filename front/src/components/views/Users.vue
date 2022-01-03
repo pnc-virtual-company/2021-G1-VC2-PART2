@@ -42,7 +42,6 @@
                   <v-text-field
                     v-model="password"
                     :rules="passwordrules"
-                    :counter="20"
                     label="Password"
                     color="deep-purple accent-4"
                     :type="passwordShow ? 'text' : 'password'"
@@ -55,7 +54,6 @@
                 <v-col cols="12" sm="6">
                   <v-text-field
                     v-model="password_confirmation"
-                    :counter="20"
                     :rules="passwordrules"
                     label="confirm password"
                     color="deep-purple accent-4"
@@ -133,7 +131,29 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="gray" text @click="dialog = false">Cancel</v-btn>
-              <v-btn type="submit" color="green" text>Create</v-btn>
+              <v-btn
+                type="submit"
+                color="green"
+                text
+                v-if="
+                  this.username == '' ||
+                  this.email == '' ||
+                  this.password == '' ||
+                  this.image == null ||
+                  this.role == '' "
+                  
+                disabled
+                >Create</v-btn
+              >
+
+              <v-btn
+                v-else
+                type="submit"
+                color="green"
+                text
+                >Create</v-btn
+              >
+
             </v-card-actions>
           </v-form>
         </v-card>
@@ -145,7 +165,7 @@
     <v-dialog v-model="deleteDialog" max-width="500px">
       <v-card class="cardForm">
         <v-card-title class="text-h5"
-          >Are you sure you want to delete this item?</v-card-title
+          >Are you sure you want to delete this user?</v-card-title
         >
         <v-divider></v-divider>
         <v-card-actions>
@@ -153,7 +173,7 @@
           <v-btn color="gray darken-1" text @click="deleteDialog = false"
             >Cancel</v-btn
           >
-          <v-btn color="green darken-1" text @click="DeleteUser(id)">OK</v-btn>
+          <v-btn color="primary" text @click="DeleteUser(id)">OK</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -176,10 +196,10 @@
             <tr v-for="user of users" :key="user.id">
 
               <!-- =============Display image user or student======== -->
-              <td v-if="user.role === 'Admin'">
+              <td v-if="user.role == 'Admin'">
                 <img src="../../assets/icon.png" alt="" />
               </td>
-              <td v-else-if="user.role === 'Student' ">
+              <td v-else-if="user.role == 'Student'">
                 <img :src="student_url + user.student.picture" alt="" />
               </td>
               <td v-else>
@@ -276,6 +296,7 @@ export default {
   },
   methods: {
     Adduser() {
+      console.log(this.studentId);
       if (this.$refs.form.validate()) {
         let studentid = "";
         if (this.studentId.id == undefined) {
@@ -283,7 +304,7 @@ export default {
         } else {
           studentid = this.studentId.id;
         }
-        
+
         let newUser = new FormData();
         newUser.append("username", this.username);
         newUser.append("email", this.email);
@@ -301,9 +322,8 @@ export default {
             this.hidden = true;
             this.getUsers();
 
-          
             setInterval(() => {
-              if(this.hidden){
+              if (this.hidden) {
                 this.dialog = false;
                 this.username = "";
                 this.email = "";
@@ -315,7 +335,7 @@ export default {
                 this.alert = false;
                 this.hidden = false;
               }
-            }, 4000); 
+            }, 4000);
 
             this.error = "User is created successfully!";
             return res.data;

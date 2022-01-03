@@ -1,49 +1,32 @@
 <template>
   <div class="containner">
-    <v-btn
-      @click="Back"
-      prepend-inner-icon="mdi-account-plus"
-      color="grey darken-1"
-      dark
-      class="back"
-    >
-      <v-icon left> mdi-arrow-left-bold-box </v-icon>Back</v-btn
-    >
-
-    <div class="mainProfile">
-      <div class="profile">
-        <div class="proImg">
-          <img class="proImg" :src="url + student.picture" />
-        </div>
-        <p class="username">{{ student.firstName }} {{ student.lastName }}</p>
+    <div class="mainContent">
+      <div class="student" style="">
+        <img class="batch" src="../../assets/batch.png" alt="" />
+        <p class="paragrab1">BATCH 2021</p>
       </div>
-      <div class="mainContent">
-        <div class="student" style="">
-          <img class="batch" src="../../assets/batch.png" alt="" />
-          <p class="paragrab1">BATCH 2021</p>
-        </div>
 
-        <div class="student">
-          <img class="classroom" src="../../assets/class.png" alt="" />
-          <p class="paragrab2">{{ student.class }}</p>
-        </div>
-
-        <!-- ===================Managage Termination============== -->
-        <div class="student" v-if="num3 >= 3">
-          <img class="action" src="../../assets/emoji.png" alt="" />
-          <p class="paragrab3" style="color: #e53935">OUT SCHOOL</p>
-        </div>
-
-        <div class="student" v-else-if="num4">
-          <img class="action" src="../../assets/emoji.png" alt="" />
-          <p class="paragrab3" style="color: #e53935">OUT SCHOOL</p>
-        </div>
-
-        <div class="student" v-else>
-          <img class="action1" src="../../assets/school.png" alt="" />
-          <p class="paragrab3" style="color: #388e3c">AT SCHOOL</p>
-        </div>
+      <div class="student">
+        <img class="classroom" src="../../assets/class.png" alt="" />
+        <p class="paragrab2">{{ students.class }}</p>
       </div>
+
+      <!-- =======================Managage Termination============== -->
+      <div class="student" v-if="num3 >= 3">
+        <img class="action" src="../../assets/emoji.png" alt="" />
+        <p class="paragrab3" style="color: #E53935">OUT SCHOOL</p>
+      </div>
+
+      <div class="student" v-else-if="num4">
+        <img class="action" src="../../assets/emoji.png" alt="" />
+        <p class="paragrab3" style="color: #E53935">OUT SCHOOL</p>
+      </div>
+
+      <div class="student" v-else>
+        <img class="action1" src="../../assets/school.png" alt=""/>
+        <p class="paragrab3" style="color: #388E3C">AT SCHOOL</p>
+      </div>
+
     </div>
     <br />
     <v-expansion-panels class="main">
@@ -131,15 +114,9 @@
           disciple.description
         }}</v-expansion-panel-content>
       </v-expansion-panel>
-      <v-tabs v-if="permission != ''" dark background-color="orange" grow>
-        <v-tab>
-          <v-icon left> mdi-chat-processing </v-icon>
-     
-          Permission
-        </v-tab>
-      </v-tabs>
 
-      <v-expansion-panel v-for="per of permission" :key="per.id">
+      <span>Permission</span>
+      <v-expansion-panel v-for="per of students.permission" :key="per.id">
         <v-expansion-panel-header class="header-1">
           <div class="d-flex">
             <v-col cols="12" sm="2">
@@ -171,8 +148,7 @@
 <script>
 import axios from "../../axios-http.js";
 export default {
-  emits: ["back"],
-  props: ["student"],
+  props: ['student'],
   data() {
     return {
       num: 0,
@@ -181,16 +157,12 @@ export default {
       num3: 0,
       num4: false,
       disciples: [],
-      permission: "",
-      students: "",
+      students: [],
       studentId: "",
       url: "http://127.0.0.1:8000/storage/imagestudent/",
     };
   },
   methods: {
-    Back() {
-      this.$emit("back", false);
-    },
     getStudent() {
       let studentid = localStorage.getItem("studentId");
       axios.get("/students").then((res) => {
@@ -209,7 +181,7 @@ export default {
         this.num3 = 0;
 
         for (let disciple of res.data) {
-          if (disciple.student.id == this.student.id) {
+          if (disciple.student.id == this.studentId) {
             this.disciples.push(disciple);
             if (disciple.dnt == "Misconduct") {
               this.num1 += 1;
@@ -228,7 +200,7 @@ export default {
     },
     Misconduct() {
       this.disciples = [];
-      for (let dis of this.student.disciple) {
+      for (let dis of this.students.disciple) {
         if (dis.dnt == "Misconduct") {
           this.disciples.push(dis);
         }
@@ -236,7 +208,7 @@ export default {
     },
     Oral() {
       this.disciples = [];
-      for (let dis of this.student.disciple) {
+      for (let dis of this.students.disciple) {
         if (dis.dnt == "Oral warning") {
           this.disciples.push(dis);
         }
@@ -245,7 +217,7 @@ export default {
 
     Terminated() {
       this.disciples = [];
-      for (let dis of this.student.disciple) {
+      for (let dis of this.students.disciple) {
         if (dis.dnt == "Termination") {
           this.disciples.push(dis);
         }
@@ -254,7 +226,7 @@ export default {
 
     Weaning() {
       this.disciples = [];
-      for (let dis of this.student.disciple) {
+      for (let dis of this.students.disciple) {
         if (dis.dnt == "Warning letter") {
           this.disciples.push(dis);
         }
@@ -262,52 +234,24 @@ export default {
     },
   },
   mounted() {
-    this.disciples = this.student.disciple;
-    this.permission = this.student.permission;
     this.getStudent();
     this.getDisciple();
     this.studentId = localStorage.getItem("studentId");
+    console.log(this.student);
   },
 };
 </script>
 
 <style scoped>
-.back {
-  margin-left: 10%;
-  margin-bottom: 1%;
-}
-.profile {
-  width: 20%;
-}
-img {
-  width: 100%;
-  height: 100%;
-}
-.proImg {
-  width: 60px;
-  height: 60px;
-  margin-top: 12%;
-  margin-left: 29%;
-}
-.username {
-  margin-top: 5%;
-  text-align: center;
-  color: #fff;
-  font-weight: bold;
-}
-.mainProfile {
+.mainContent {
   display: flex;
+  align-items: center;
+  justify-content: center;
   width: 80%;
   height: 25vh;
   margin-left: 10%;
   border-radius: 10px;
   background-color: #0a89f1b0;
-}
-.mainContent {
-  width: 80%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .batch {
   width: 55px;
