@@ -115,7 +115,7 @@
         }}</v-expansion-panel-content>
       </v-expansion-panel>
 
-      <span>Permission</span>
+      <v-badge :content="num3" :value="num5"> Permission </v-badge>
       <v-expansion-panel v-for="per of students.permission" :key="per.id">
         <v-expansion-panel-header class="header-1">
           <div class="d-flex">
@@ -156,7 +156,9 @@ export default {
       num2: 0,
       num3: 0,
       num4: false,
+      num5: 0,
       disciples: [],
+      permissions:[],
       students: [],
       studentId: "",
       url: "http://127.0.0.1:8000/storage/imagestudent/",
@@ -198,6 +200,20 @@ export default {
         }
       });
     },
+    getPermission() {
+      axios.get("/permission").then((res) => {
+        this.permissions = [];
+        this.num5 = 0;
+        for(let per of res.data){
+          if(per.student.id == this.studentId){
+            this.permissions.push(per)
+            console.log(this.permissions)
+            this.num5 = length(this.permissions)
+          }
+        }
+
+      });
+    },
     Misconduct() {
       this.disciples = [];
       for (let dis of this.students.disciple) {
@@ -237,7 +253,7 @@ export default {
     this.getStudent();
     this.getDisciple();
     this.studentId = localStorage.getItem("studentId");
-    console.log(this.student);
+    // console.log(this.student);
   },
 };
 </script>

@@ -136,6 +136,7 @@
       ],
       classes:'',
       classFilter:[],
+      isDetail:false
       };
     },
     methods: {
