@@ -112,7 +112,7 @@
       'formstudent': FormStudent,
       EditStudent,
       StudentDetail,
-      // StudentInfo,
+      StudentInfo,
     },
     data () {
       return {
@@ -140,6 +140,7 @@
       Studentdetail(student) {
         this.isDetail = true;
         this.studentInfo = student;
+        console.log('hello');
       },
       Back(back) {
         this.isDetail = back;
