@@ -11,7 +11,7 @@
                     dark
                     v-bind="attrs"
                     v-on="on"
-                    style="margin-left: 76%"
+                    style="margin-left: 35%"
                 >
                 Create disciple
                 </v-btn>

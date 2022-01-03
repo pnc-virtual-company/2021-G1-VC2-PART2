@@ -131,8 +131,13 @@
           disciple.description
         }}</v-expansion-panel-content>
       </v-expansion-panel>
-
-      <span v-if="permission != '' ">Permission</span>
+      <v-tabs v-if="permission != ''" dark background-color="orange" grow>
+        <v-tab>
+          <v-icon left> mdi-chat-processing </v-icon>
+     
+          Permission
+        </v-tab>
+      </v-tabs>
 
       <v-expansion-panel v-for="per of permission" :key="per.id">
         <v-expansion-panel-header class="header-1">
@@ -176,7 +181,7 @@ export default {
       num3: 0,
       num4: false,
       disciples: [],
-      permission: '',
+      permission: "",
       students: "",
       studentId: "",
       url: "http://127.0.0.1:8000/storage/imagestudent/",
@@ -262,7 +267,6 @@ export default {
     this.getStudent();
     this.getDisciple();
     this.studentId = localStorage.getItem("studentId");
-   
   },
 };
 </script>
@@ -275,7 +279,7 @@ export default {
 .profile {
   width: 20%;
 }
-img{
+img {
   width: 100%;
   height: 100%;
 }
@@ -285,7 +289,7 @@ img{
   margin-top: 12%;
   margin-left: 29%;
 }
-.username{
+.username {
   margin-top: 5%;
   text-align: center;
   color: #fff;

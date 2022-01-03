@@ -86,14 +86,10 @@
     </v-card>
   </v-dialog>
 
-
-  <form-permission
-    v-if="userRole !== 'Student' "
-    @add-per="Addpermission"
-   ></form-permission>
-
   <!-- ==========search button=============== -->
-   <v-text-field
+  <div class="title">
+    <v-card-title>
+      <v-text-field
         v-if="userRole !== 'Student' "
         v-on:keyup="Search"
         v-model="search"
@@ -102,7 +98,26 @@
         class="search"
         color="blue darken-1"
         single-line
-      ></v-text-field>
+    ></v-text-field>
+    </v-card-title>
+   
+    <v-combobox
+        class="select-class"
+        v-if="userRole !== 'Student'"
+        v-on:keyup="selectClass"
+        v-model="classes"
+        :items="items"
+        label="Select Class"
+        outlined
+        single-line
+        dense
+        color="deep-purple accent-4"
+    ></v-combobox>
+    <form-permission
+      v-if="userRole !== 'Student' "
+      @add-per="Addpermission"
+    ></form-permission>
+   </div>
     <!-- ==========card======================== -->
     
   <v-expansion-panels class="main">
@@ -182,6 +197,16 @@ export default {
       startDate: '',
       endDate: '',
       description: '',
+      classes:'',
+      perFilter:[],
+      items: [
+        "WEB 2021A",
+        "WEB 2021B",
+        "SNA 2021",
+        "WEB 2022A",
+        "WEB 2022B",
+        "SNA 2022",
+      ],
     }
     
   },
@@ -240,6 +265,7 @@ export default {
     getPermission(){
       let studentId = localStorage.getItem('studentId');
       axios.get('/permissions').then(res => {
+        this.perFilter = res.data;
         if(this.userRole === "Student"){
             for(let permission of res.data){
               if(permission.student.id == studentId ){
@@ -262,6 +288,19 @@ export default {
       }else{
         this.getPermission();
       }
+    },
+    selectClass() {
+      this.permissions = [];
+      if (this.classes !== "") {
+        for (let per of this.perFilter) {
+          if (per.student.class === this.classes) {
+            this.permissions.push(per);
+          }
+        }
+      }else{
+        this.getPermission();
+      }
+
     },
 
   },
@@ -313,12 +352,25 @@ export default {
     margin-bottom: 3%;
   }
   .search{
-    width: 20%;
-    margin-left: 10%;
-    margin-top: 12px;
-    margin-bottom: 2%;
-    height: 10vh;
+    width: 380px;
+    margin-left: -4%;
+    margin-top: -5%;
+    
   }
+  /* ========================================== */
+  .select-class{
+    width: 250px;
+    margin-left: 20px;
+  }
+  .title{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 80%;
+    margin-left: 10%; 
+  }
+
+  /* ========================================= */
   input[type=date]{
     outline: none;
   }
