@@ -12,6 +12,8 @@ class Student extends Model
         'firstName',
         'lastName',
         'class',
+        'batch',
+        'major',
         'phone',
         'gender',
         'ngo',

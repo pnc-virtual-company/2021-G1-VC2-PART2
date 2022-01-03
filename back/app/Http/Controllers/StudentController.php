@@ -31,6 +31,8 @@ class StudentController extends Controller
             'firstName' => 'required',
             'lastName' => 'required',
             'class' => 'required',
+            'batch' => 'required',
+            'major' => 'required',
             'phone' => 'required',
             'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:1999',
             'gender' => 'required',
@@ -43,6 +45,8 @@ class StudentController extends Controller
         $student->firstName = $request->firstName;
         $student->lastName = $request->lastName;
         $student->class = $request->class;
+        $student->batch = $request->batch;
+        $student->major = $request->major;
         $student->phone = $request->phone;
         $student->gender = $request->gender;
         $student->ngo = $request->ngo;

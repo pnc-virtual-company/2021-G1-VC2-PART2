@@ -20,7 +20,7 @@
       <div class="mainContent">
         <div class="student" style="">
           <img class="batch" src="../../assets/batch.png" alt="" />
-          <p class="paragrab1">BATCH 2021</p>
+          <p class="paragrab1">{{ student.batch}}</p>
         </div>
 
         <div class="student">
@@ -28,7 +28,7 @@
           <p class="paragrab2">{{ student.class }}</p>
         </div>
 
-        <!-- ===================Managage Termination============== -->
+        <!-- =======================Managage Termination============== -->
         <div class="student" v-if="num3 >= 3">
           <img class="action" src="../../assets/emoji.png" alt="" />
           <p class="paragrab3" style="color: #e53935">OUT SCHOOL</p>
