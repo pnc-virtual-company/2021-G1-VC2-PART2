@@ -59,6 +59,30 @@
                 <input type="date" name="date" v-model="endDate">
               </v-col>
 
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="6"
+              >
+                <v-select
+                   v-model="time"
+                  :items="items"
+                  label="Choose"
+                ></v-select>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                
+              >
+                 <v-text-field
+                  v-model="manyDay"
+                  :counter="7"
+                  label="How many of day."
+                  required
+                ></v-text-field>
+              </v-col>
+
               <v-col cols="12" sm="12">
                 <v-text-field
                   label="Description"
@@ -99,10 +123,13 @@
     emits: ['add-per'],
     data: () => ({
       dialog: false,
+      items: ['Morning', 'Afternoon'],
       studentlist:[],
       teacherlist:['Sim', 'Vandy', 'Davy', 'Thaina', 'Phuty', 'Somkhan'],
       value: null,
       
+      time:'',
+      manyDay:'',
       studentId:'',
       teacher:'',
       leavetype:'',
@@ -113,6 +140,12 @@
     }),
     methods: {
       createPermission (){
+        console.log(this.teacher);
+        console.log(this.leavetype);
+        console.log(this.studentId);
+        console.log(this.manyDay);
+        console.log(this.time);
+        
         let addpermission = {
           student_id: this.studentId,
           teacher: this.teacher,
