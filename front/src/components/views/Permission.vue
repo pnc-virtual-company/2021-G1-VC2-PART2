@@ -4,59 +4,79 @@
   <!-- ================Edete permission dialog================== -->
   <v-dialog width="600" v-model="showEdit">
     <v-card>
-      <v-card-title class="text-h5 grey lighten-2">
-        Update permission form
+      <v-card-title class="para2">
+        <h2>Update permission</h2> 
       </v-card-title>
 
       <v-card-text>
         <v-container>
-          <v-row>
-        
-            <v-col cols="12" sm="6">
-                <label for="student">Choose student:</label>
-                <select name="studentid" id="" v-model="studentId">
-                  <option v-for="student of studentlist" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
-                </select>
+           <v-row>
+              <v-col cols="6" sm="6">
+                <v-combobox
+                  prepend-inner-icon="mdi-account-box-multiple"
+                  v-model="studentId"
+                  :items="studentlist"
+                  label="Choose student"
+                  item-text="firstName"
+                  item-value="id"
+                  dense
+                  color="cyan"
+                ></v-combobox>
               </v-col>
 
-            <v-col cols="12" sm="6">
-              <v-autocomplete
-                v-model="teacher"
-                :items="teacherlist"
-                dense
-                label="Choose Teacher"
-              ></v-autocomplete>
-            </v-col>
+              <v-col cols="6" sm="6">
+                <v-combobox
+                  prepend-inner-icon="mdi-account-tie"
+                  label="Choose Teacher"
+                  v-model="teacher"
+                  :items="teacherlist"
+                  color="cyan"
+                  dense
+                ></v-combobox>
+              </v-col>
+            </v-row>
 
-            <v-col cols="6" sm="12">
-              <v-select
-                v-model="leaveType"
-                :items="['sick', 'have a task to do', 'sick too', 'sick three']"
-                label="Choose leave type"
-                required
-              ></v-select>
-            </v-col>
-
-            <v-col cols="6" sm="12">
-              <label for="startDate">Start date: </label>
-              <input type="date" name="date" v-model="startDate">
-              <label for="endDate" style="margin-left:15%">End date: </label>
-              <input type="date" name="date" v-model="endDate">
-            </v-col>
-
-             <v-col
-              cols="12"
-              sm="12"
-            >
-              <v-text-field
-                label="Description"
-                hint="input your description"
-                v-model="description"
-                required
-              ></v-text-field>
-            </v-col>
-
-          </v-row>
+            <v-row>
+              <v-col cols="6" sm="12">
+                <v-combobox
+                  prepend-inner-icon="mdi-card-account-details-outline"
+                  v-model="leaveType"
+                  :items="[
+                    'sick',
+                    'have a task to do',
+                    'sick too',
+                    'sick three',
+                  ]"
+                  label="Choose leave type"
+                  required
+                  color="cyan"
+                  dense
+                ></v-combobox>
+              </v-col>
+            </v-row>
+            <v-row class="date">
+              <v-col cols="12" lg="6">
+                <label for="startDate">Start date: </label>
+                <input type="date" name="date" v-model="startDate" />
+              </v-col>
+              <v-col cols="12" lg="6">
+                <label for="endDate" style="margin-left: 15%">End date: </label>
+                <input type="date" name="date" v-model="endDate" />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="12">
+                <v-text-field
+                  prepend-inner-icon="mdi-message-reply-text"
+                  label="Description"
+                  hint="Input your description"
+                  v-model="description"
+                  required
+                  color="cyan"
+                  dense
+                ></v-text-field>
+              </v-col>
+            </v-row>
         </v-container>
       </v-card-text>
 
@@ -230,8 +250,15 @@ export default {
       })
     },
     Update(){
+      let studentid = "";
+      if (this.studentId.id == undefined) {
+        studentid = "";
+      } else {
+        studentid = this.studentId.id;
+      }
+
       let updatePer = {
-        student_id: this.studentId,
+        student_id: studentid,
         teacher: this.teacher,
         leaveType: this.leaveType,
         startDate: this.startDate,
@@ -248,7 +275,7 @@ export default {
 
     ShowEditDialog(per){
       this.id = per.id;
-      this.studentId = per.student.id;
+      this.studentId = per.student.firstName;
       this.teacher = per.teacher;
       this.leaveType = per.leaveType;
       this.startDate = per.startDate;
@@ -403,5 +430,12 @@ export default {
   #endDate{
     text-align: center;
   }
-
+.para2 {
+  padding: 2px;
+  color: #fff;
+  background: rgb(108, 185, 226);
+}
+h2 {
+  margin-left: 27%;
+}
 </style>
