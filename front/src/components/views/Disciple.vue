@@ -5,7 +5,7 @@
 
       <v-dialog v-model="editdialog" max-width="600px">
         <v-card class="card">
-          <v-card-title color="blue" class="text-h6">
+          <v-card-title color="blue" class="para2">
             <span>Are you sure you want to update this item?</span>
           </v-card-title>
           <v-container>
@@ -185,11 +185,18 @@
         </v-expansion-panel-content>
 
         <!-- ====================end show details=================== -->
-        <div v-if="userRole !== 'Student' && userRole !== 'Social Affair'" class="btn" align="center">
-          <v-icon @click="ShowDilogEdit(disciple)" color="green" left >mdi-pencil-box-multiple-outline</v-icon>
-          <v-icon @click="ShowDialog(disciple)" color="#EF5350" right>mdi-delete</v-icon>
+        <div
+          v-if="userRole !== 'Student' && userRole !== 'Social Affair'"
+          class="btn"
+          align="center"
+        >
+          <v-icon @click="ShowDilogEdit(disciple)" color="green" left
+            >mdi-pencil-box-multiple-outline</v-icon
+          >
+          <v-icon @click="ShowDialog(disciple)" color="#EF5350" right
+            >mdi-delete</v-icon
+          >
         </div>
-
       </v-expansion-panel>
     </div>
   </v-expansion-panels>
@@ -384,5 +391,13 @@ input[type="date"] {
   justify-content: flex-end;
   margin-right: 2%;
   padding-bottom: 5px;
+}
+.para2 {
+  padding: 2px;
+  color: #fff;
+  background: rgb(108, 185, 226);
+}
+span {
+  margin-left: 16%;
 }
 </style>

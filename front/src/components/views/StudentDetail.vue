@@ -54,7 +54,7 @@
 
         <v-tab @click="Misconduct">
           <v-badge color="green" :content="num1" :value="num1">
-            Misconduct
+            Notification
           </v-badge>
         </v-tab>
 
@@ -208,7 +208,7 @@ export default {
         for (let disciple of res.data) {
           if (disciple.student.id == this.student.id) {
             this.disciples.push(disciple);
-            if (disciple.dnt == "Misconduct") {
+            if (disciple.dnt == "Notification") {
               this.num1 += 1;
             } else if (disciple.dnt == "Oral warning") {
               this.num2 += 1;
@@ -223,10 +223,10 @@ export default {
         }
       });
     },
-    Misconduct() {
+    Notification() {
       this.disciples = [];
       for (let dis of this.student.disciple) {
-        if (dis.dnt == "Misconduct") {
+        if (dis.dnt == "Notification") {
           this.disciples.push(dis);
         }
       }
