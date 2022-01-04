@@ -7,11 +7,9 @@
       <v-card-title class="text-h5 grey lighten-2">
         Update permission form
       </v-card-title>
-
       <v-card-text>
         <v-container>
           <v-row>
-        
             <v-col cols="12" sm="6">
                 <label for="student">Choose student:</label>
                 <select name="studentid" id="" v-model="studentId">
@@ -168,7 +166,7 @@
   
       <div v-if="userRole !== 'Student' " class="btn" align="center">
         <v-icon @click="ShowEditDialog(per)" left color='green'>mdi-pencil-box-multiple-outline</v-icon>
-        <v-icon @click="ShowDialog(per)" tile color="#EF5350" right>mdi-delete </v-icon>
+        <v-icon @click="ShowDialog(per)" title color="#EF5350" right>mdi-delete </v-icon>
       </div>
     </v-expansion-panel>
   </v-expansion-panels>

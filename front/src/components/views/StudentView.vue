@@ -142,12 +142,14 @@
       ],
       classes:'',
       classFilter:[],
+      
       };
     },
     methods: {
       Studentdetail(student) {
         this.isDetail = true;
         this.studentInfo = student;
+        console.log('hello');
       },
       Back(back) {
         this.isDetail = back;
