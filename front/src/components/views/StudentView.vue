@@ -118,6 +118,7 @@
     },
     data () {
       return {
+        isDetail: false,
         dialog: false,
         showDialog: false,
         studentdata:[],
@@ -136,7 +137,7 @@
       ],
       classes:'',
       classFilter:[],
-      isDetail:false
+      
       };
     },
     methods: {

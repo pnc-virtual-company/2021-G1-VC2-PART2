@@ -14,19 +14,18 @@
       <!-- =======================Managage Termination============== -->
       <div class="student" v-if="num3 >= 3">
         <img class="action" src="../../assets/emoji.png" alt="" />
-        <p class="paragrab3" style="color: #E53935">OUT SCHOOL</p>
+        <p class="paragrab3" style="color: #e53935">OUT SCHOOL</p>
       </div>
 
       <div class="student" v-else-if="num4">
         <img class="action" src="../../assets/emoji.png" alt="" />
-        <p class="paragrab3" style="color: #E53935">OUT SCHOOL</p>
+        <p class="paragrab3" style="color: #e53935">OUT SCHOOL</p>
       </div>
 
       <div class="student" v-else>
-        <img class="action1" src="../../assets/school.png" alt=""/>
-        <p class="paragrab3" style="color: #388E3C">AT SCHOOL</p>
+        <img class="action1" src="../../assets/school.png" alt="" />
+        <p class="paragrab3" style="color: #388e3c">AT SCHOOL</p>
       </div>
-
     </div>
     <br />
     <v-expansion-panels class="main">
@@ -115,7 +114,11 @@
         }}</v-expansion-panel-content>
       </v-expansion-panel>
 
-      <v-badge :content="num3" :value="num5"> Permission </v-badge>
+      <v-tabs v-if="permission != ''" dark background-color="orange" grow>
+        <v-tab><v-icon left> mdi-chat-processing 
+          </v-icon>Permission</v-tab>
+      </v-tabs>
+      
       <v-expansion-panel v-for="per of students.permission" :key="per.id">
         <v-expansion-panel-header class="header-1">
           <div class="d-flex">
@@ -148,7 +151,7 @@
 <script>
 import axios from "../../axios-http.js";
 export default {
-  props: ['student'],
+  props: ["student"],
   data() {
     return {
       num: 0,
