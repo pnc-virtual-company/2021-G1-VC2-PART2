@@ -1,5 +1,5 @@
 <template>
-  <v-dialog persistent width="600" v-model="dialog" class="overlay">
+  <v-dialog persistent width="700" v-model="dialog" class="overlay">
     <v-card>
       <h2 id="edit">Do you want to update?</h2>
       <!-- ===================Form input user==================== -->
@@ -13,7 +13,7 @@
                 :rules="nameRules"
                 :counter="20"
                 label="Username"
-                color="deep-purple accent-4"
+                color="cyan"
               ></v-text-field>
             </v-col>
 
@@ -24,7 +24,7 @@
                 :rules="emailRules"
                 :counter="20"
                 label="E-mail"
-                color="deep-purple accent-4"
+                color="cyan"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -38,7 +38,7 @@
                 label="Select role"
                 outlined
                 dense
-                color="deep-purple accent-4"
+                color="cyan"
               ></v-combobox>
             </v-col>
 
@@ -53,7 +53,7 @@
                 item-value="id"
                 outlined
                 dense
-                color="deep-purple accent-4"
+                color="cyan"
               ></v-combobox>
             </v-col>
           </v-row>
@@ -69,23 +69,27 @@
               truncate-length="32"
             ></v-file-input>
           </v-col> -->
-        </v-card-text>
-      </v-form>
-      <v-divider></v-divider>
 
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn @click="cancel" color="gray " text>Cancel</v-btn>
-        <v-btn
-          type="submit"
-          color="success"
-          text
-          v-if="this.username == '' || this.email == '' || this.role == ''"
-          disabled
-          >Update</v-btn
-        >
-        <v-btn type="submit" color="success" text v-else>Update</v-btn>
-      </v-card-actions>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="cancel" color="gray " text>Cancel</v-btn>
+          <v-btn
+            v-if="
+            this.username == '' || 
+            this.email == '' || 
+            this.role == '' ||
+            this.studentId == ''
+            "
+            disabled
+            >Update</v-btn
+          >
+          <v-btn type="submit" color="success" text v-else>Update</v-btn>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
@@ -93,7 +97,7 @@
 <script>
 import axios from "../../axios-http.js";
 export default {
-  props: ["data"],
+  props: ["userinfo"],
   emits: ["update", "cancel"],
 
   data() {
@@ -103,8 +107,7 @@ export default {
       username: "",
       email: "",
       role: "",
-      image: null,
-      studentId: "",
+      studentId: '',
       studentList: [],
 
       nameRules: [
@@ -123,17 +126,24 @@ export default {
   },
 
   methods: {
-    
     Update() {
-      console.log("Test");
       if (this.$refs.form.validate()) {
+
+        let studentid = "";
+        if (this.studentId == undefined) {
+          studentid = "";
+        } else {
+          studentid = this.studentId.id;
+        }
+
         let user = {
           username: this.username,
           email: this.email,
           role: this.role,
+          student_id: studentid,
         };
-
-        this.$emit("update", this.data.id, user, false);
+        console.log(user);
+        this.$emit("update", this.userinfo.id, user, false);
       }
     },
 
@@ -149,9 +159,10 @@ export default {
   },
   mounted() {
     this.getStudent();
-    this.username = this.data.username;
-    this.email = this.data.email;
-    this.role = this.data.role;
+    this.username = this.userinfo.username;
+    this.email = this.userinfo.email;
+    this.role = this.userinfo.role;
+    this.studentId = this.userinfo.Student_id;
   },
 };
 </script>

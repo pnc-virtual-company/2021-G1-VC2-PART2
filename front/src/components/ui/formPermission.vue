@@ -44,7 +44,7 @@
               <v-col cols="12" sm="12">
                 <v-select
                   v-model="leavetype"
-                  :items="['sick', 'have a task to do', 'sick too', 'sick three']"
+                  :items="['sick too', 'sick three']"
                   label="Choose leave type"
                   required
                 ></v-select>

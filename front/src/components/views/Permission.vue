@@ -332,8 +332,7 @@ export default {
   .main{
     width: 80%;
     margin-left: 10%;
-    margin-bottom: 5%;
-  
+    margin-bottom: 3%;
   }
   .btn{
     display: flex;

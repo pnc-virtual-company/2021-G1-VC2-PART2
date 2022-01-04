@@ -60,6 +60,6 @@ export default {
 </script>
 <style scoped>
 * {
-  background-color: rgb(205, 227, 255);
+  background-color: #fff;
 }
 </style>
