@@ -55,11 +55,11 @@
             <v-row class="date">
               <v-col cols="12" lg="6">
                 <label for="startDate">Start date: </label>
-                <input type="date" name="date" v-model="startDate" />
+                <input type="dateTime-local" name="date" v-model="startDate" />
               </v-col>
               <v-col cols="12" lg="6">
                 <label for="endDate" style="margin-left: 15%">End date: </label>
-                <input type="date" name="date" v-model="endDate" />
+                <input type="dateTime-local" name="date" v-model="endDate" />
               </v-col>
             </v-row>
             <v-row>
@@ -153,9 +153,24 @@
             </v-col>
 
             <v-col cols="12" sm="4">
-              <span>{{ per.startDate }} / Morning</span>
-              <p id="endDate">{{ per.endDate }} day</p>
+              <p>Start :{{ per.startDate }}</p>
+              <p>End :{{ per.endDate }}</p>
+              <div class="date">
+                <span>How many day : </span>
+                <span
+                  style="margin-left: 5px"
+                  v-html="
+                    Math.round(
+                      (new Date(per.endDate).getTime() -
+                        new Date(per.startDate).getTime()) /
+                        (1000 * 3600 * 24)
+                    )
+                  "
+                ></span>
+                <span>days</span>
+              </div>
             </v-col>
+
             <v-col cols="12" sm="2">
               <v-img
                 class="image2"
@@ -195,34 +210,34 @@
 </template>
 
 <script>
-import formPermission from '../ui/formPermission.vue';
-import axios from '../../axios-http.js';
+import formPermission from "../ui/formPermission.vue";
+import axios from "../../axios-http.js";
 export default {
   components: { formPermission },
-  
-  data(){
-    return{
+
+  data() {
+    return {
       dialog: false,
       showEdit: false,
-      userRole: '',
-      id: '',
-      studentID: '',
-      search: '',
-      studentId: '',
+      userRole: "",
+      id: "",
+      studentID: "",
+      search: "",
+      studentId: "",
       permissions: [],
-      studentlist:[],
-      teacherlist:['Sim', 'Vandy', 'Davy', 'Thaina', 'Phuty', 'Somkhan'],
+      studentlist: [],
+      teacherlist: ["Sim", "Vandy", "Davy", "Thaina", "Phuty", "Somkhan"],
       url: "http://127.0.0.1:8000/storage/imagestudent/",
-      
-      firstName: '',
-      lastName: '',
-      teacher:'',
-      leaveType:'',
-      startDate: '',
-      endDate: '',
-      description: '',
-      classes:'',
-      perFilter:[],
+
+      firstName: "",
+      lastName: "",
+      teacher: "",
+      leaveType: "",
+      startDate: "",
+      endDate: "",
+      description: "",
+      classes: "",
+      perFilter: [],
       items: [
         "WEB 2021A",
         "WEB 2021B",
@@ -231,27 +246,26 @@ export default {
         "WEB 2022B",
         "SNA 2022",
       ],
-    }
-    
+    };
   },
   methods: {
-    Addpermission(per){
-      axios.post('/permissions', per).then(res => {
+    Addpermission(per) {
+      axios.post("/permissions", per).then((res) => {
         this.getPermission();
         return res.data;
-      })
+      });
     },
-    Remove(id){
+    Remove(id) {
       this.dialog = false;
-      axios.delete('/permissions/' + id).then(res => {
+      axios.delete("/permissions/" + id).then((res) => {
         this.getPermission();
-        return res.data
-      })
+        return res.data;
+      });
     },
-    Update(){
+    Update() {
       let studentid = "";
       if (this.studentId.id == undefined) {
-        studentid = this.studentID; 
+        studentid = this.studentID;
       } else {
         studentid = this.studentId.id;
       }
@@ -263,17 +277,16 @@ export default {
         startDate: this.startDate,
         endDate: this.endDate,
         description: this.description,
-      }
-      
-      axios.put('/permissions/' + this.id, updatePer).then(res => {
+      };
+
+      axios.put("/permissions/" + this.id, updatePer).then((res) => {
         this.showEdit = false;
         this.getPermission();
         return res.data;
-      })
-     
+      });
     },
 
-    ShowEditDialog(per){
+    ShowEditDialog(per) {
       this.id = per.id;
       this.studentID = per.student.id;
       this.studentId = per.student.firstName;
@@ -282,43 +295,47 @@ export default {
       this.startDate = per.startDate;
       this.endDate = per.endDate;
       this.description = per.description;
-  
+
       this.showEdit = true;
     },
-    ShowDialog(per){
+    ShowDialog(per) {
       this.dialog = true;
       this.id = per.id;
     },
-    getStudent(){
-      axios.get('/students').then(res => {
+    getStudent() {
+      axios.get("/students").then((res) => {
         this.studentlist = res.data;
-        
       });
     },
-    getPermission(){
-      let studentId = localStorage.getItem('studentId');
-      axios.get('/permissions').then(res => {
+    getPermission() {
+      let studentId = localStorage.getItem("studentId");
+      axios.get("/permissions").then((res) => {
         this.perFilter = res.data;
-        if(this.userRole === "Student"){
-            for(let permission of res.data){
-              if(permission.student.id == studentId ){
-                this.permissions.push(permission)
-              }
+        if (this.userRole === "Student") {
+          for (let permission of res.data) {
+            if (permission.student.id == studentId) {
+              this.permissions.push(permission);
             }
-
-          }else{
-              this.permissions = res.data;
-            }
-      })
+          }
+        } else {
+          this.permissions = res.data;
+        }
+      });
     },
 
-    Search(){
-      if(this.search !== "") {
+    Search() {
+      if (this.search !== "") {
         this.permissions = this.permissions.filter(
-          (per) => (per.student.firstName.toLowerCase().includes(this.search.toLowerCase()) ||
-          (per.student.lastName.toLowerCase().includes(this.search.toLowerCase()))))
-          console.log(this.permissions);
-      }else{
+          (per) =>
+            per.student.firstName
+              .toLowerCase()
+              .includes(this.search.toLowerCase()) ||
+            per.student.lastName
+              .toLowerCase()
+              .includes(this.search.toLowerCase())
+        );
+        console.log(this.permissions);
+      } else {
         this.getPermission();
       }
     },
@@ -330,21 +347,18 @@ export default {
             this.permissions.push(per);
           }
         }
-      }else{
+      } else {
         this.getPermission();
       }
-
     },
-
   },
 
   mounted() {
     this.getStudent();
     this.getPermission();
-    this.userRole = localStorage.getItem('role');
+    this.userRole = localStorage.getItem("role");
   },
-
-}
+};
 </script>
 
 <style scoped>
@@ -437,4 +451,10 @@ select {
 h2 {
   margin-left: 27%;
 }
+ .date{
+    display: flex;
+    align-items: flex-start;
+    margin-top: -6%;
+    margin-left: 23%;
+  }
 </style>

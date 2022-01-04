@@ -55,11 +55,11 @@
             <v-row class="date">
               <v-col cols="12" lg="6">
                 <label for="startDate">Start date: </label>
-                <input type="date" name="date" v-model="startDate" />
+                <input type="dateTime-local" name="date" v-model="startDate" />
               </v-col>
               <v-col cols="12" lg="6">
                 <label for="endDate" style="margin-left: 15%">End date: </label>
-                <input type="date" name="date" v-model="endDate" />
+                <input type="dateTime-local" name="date" v-model="endDate" />
               </v-col>
             </v-row>
             <v-row>
