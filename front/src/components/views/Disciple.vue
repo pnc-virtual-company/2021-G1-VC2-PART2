@@ -136,13 +136,16 @@
               </v-img>
             </v-col>
             <v-col cols="12" sm="2">
-              <p id="dnt">{{ disciple.dnt }}</p>
+              <p v-if="disciple.dnt == 'Termination' " id="dnt" style="color:red">{{ disciple.dnt }} ( This student is out school )</p>
+              <p v-else-if="disciple.dnt == 'Warning letter' " id="dnt" style="color:orange">{{ disciple.dnt }}</p>
+              <p v-else-if="disciple.dnt == 'Oral warning' " id="dnt" style="color:#FFD600">{{ disciple.dnt }}</p>
+              <p v-else id="dnt" style="color:green">{{ disciple.dnt }}</p>
             </v-col>
 
-            <v-col cols="12" sm="3">
+            <v-col cols="12" sm="4" class="image">
               <v-img
                 max-height="120"
-                max-width="90"
+                max-width="100"
                 :src="url + disciple.student.picture"
               >
               </v-img>
@@ -150,23 +153,10 @@
 
             <v-col cols="12" sm="4">
               <div class="username">
-                <div>
-                  <h3 style="margin-bottom: 10px">
-                    {{ disciple.student.firstName }}
-                    {{ disciple.student.lastName }}
-                  </h3>
-                </div>
-                <p>{{ disciple.class }}</p>
+                <h3>{{ disciple.student.firstName }} {{ disciple.student.lastName }}</h3>
               </div>
 
-              <div style="disply: flex">
-                <div
-                  class="date"
-                  style="margin-left: 58px; margin-bottom: -23px"
-                >
-                  <h4>{{ disciple.date }}</h4>
-                </div>
-
+              <div class="date">
                 <v-img
                   max-height="50"
                   max-width="50"
@@ -174,7 +164,10 @@
                   alt=""
                 >
                 </v-img>
+                <h4>{{ disciple.date }}</h4>
+                
               </div>
+              <p id="class">{{ disciple.student.class }}</p>
             </v-col>
           </v-row>
           <!-- ===================end button edit&delete============= -->
@@ -352,6 +345,7 @@ export default {
 }
 .headerManin {
   width: 80%;
+  margin-bottom: 5%;
 }
 .header {
   margin-right: 5%;
@@ -399,5 +393,28 @@ input[type="date"] {
 }
 span {
   margin-left: 16%;
+}
+#dnt{
+  margin-top: 35%;
+  font-size: 18px;
+}
+.username{
+  margin-top: 7%;
+  padding-left: 15px;
+
+}
+.date{
+  display: flex;
+  align-items: center;
+  margin-top: 2%;
+}
+#class{
+  margin-top: 3%;
+  margin-left: 5%;
+}
+.image{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
