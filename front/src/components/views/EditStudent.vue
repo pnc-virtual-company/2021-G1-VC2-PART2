@@ -1,198 +1,247 @@
-<template> 
-    <v-dialog persistent width="600" v-model="dialog" class="overlay">
-        <v-card>
-            <h2>Update Student</h2>
-            <v-card-text>
-              <v-row class='row'>
-                <v-col cols="6" sm="6">
-                    <v-text-field 
-                    class="firstName"
-                    v-model="firstName"
-                    label="first name"  
-                    outlined 
-                    dense>
-                    </v-text-field>
-                </v-col>
-
-                <v-col cols="6" sm="6">
-                    <v-text-field 
-                    class="lastName"
-                    v-model="lastName"
-                    label="last name"  
-                    outlined 
-                    dense>
-                    </v-text-field>
-                </v-col>
-            </v-row>
-            <v-col cols="12" sm="12">
-                <input type="radio" id="male" name="gender" v-model="gender" value="Male" placeholder="Male"> Male
-                <input type="radio" id="female" name="gender" v-model="gender" value="Female" placeholder="Female"> Female
-            </v-col>
-            <v-select
-                v-model="Class"
-                :items="items"
-                label="class"
+<template>
+  <v-dialog persistent width="700" v-model="dialog">
+    <v-card>
+      <h3>Update Student</h3>
+      <v-form @submit.prevent="Update" ref="form">
+        <v-card-text>
+          <v-row>
+            <v-col cols="6" sm="6">
+              <v-text-field
+                prepend-inner-icon="mdi-account-plus"
+                v-model="firstName"
+                label="First Name"
+                color="cyan"
                 dense
-                outlined
-            ></v-select>
-            <v-row>
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="6" sm="6">
+              <v-text-field
+                prepend-inner-icon="mdi-account-tie"
+                v-model="lastName"
+                label="Last Name"
+                color="cyan"
+                dense
+              ></v-text-field>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="6" sm="6">
+              <v-combobox
+                prepend-inner-icon="mdi-folder-plus"
+                :items="classes"
+                v-model="Class"
+                label="Class"
+                color="cyan"
+                dense
+              ></v-combobox>
+            </v-col>
+
+            <v-col cols="6" sm="6">
+              <v-combobox
+                v-model="batch"
+                prepend-inner-icon="mdi-account-box-multiple"
+                :items="batchs"
+                label="Choose Batch"
+                color="cyan"
+                dense
+              ></v-combobox>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="6" sm="6">
+              <v-text-field
+                prepend-inner-icon="mdi-chart-line-stacked"
+                v-model="major"
+                label="Major"
+                dense
+                color="cyan"
+              ></v-text-field>
+            </v-col>
+
             <v-col cols="12" sm="6">
-                <v-text-field 
-                    v-model="phoneNumber"
-                    label="Phone number"  
-                    outlined 
-                    dense>
-                </v-text-field>
+              <v-text-field
+                prepend-inner-icon="mdi-phone-plus"
+                label="Phone number"
+                v-model="phoneNumber"
+                dense
+                color="cyan"
+              ></v-text-field>
             </v-col>
-            <v-col cols="12" sm="6">
-                <v-text-field 
-                    v-model="ngo"
-                    label="Ngo"  
-                    outlined 
-                    dense>
-                </v-text-field>
+          </v-row>
+
+          <v-row>
+            <v-col cols="6" sm="6">
+              <v-text-field
+                prepend-inner-icon="mdi-microsoft-azure"
+                v-model="ngo"
+                label="NGO"
+                dense
+                color="cyan"
+              ></v-text-field>
             </v-col>
-            </v-row>
 
-            <v-col
-            class="d-flex"
-            cols="12"
-            sm="12"
-            >
-                <v-file-input
-                  chips
-                  counter
-                  show-size
-                  small-chips
-                  v-model="picture"
-                  color="deep-purple accent-4"
-                  truncate-length="32"
-                ></v-file-input>
+            <v-col cols="6" sm="6">
+              <v-radio-group class="gender" v-model="gender" row>
+                <v-list-item-icon>
+                  <v-icon>mdi-gender-transgender</v-icon>
+                </v-list-item-icon>
+                <v-radio color="cyan" label="Female" value="Female"></v-radio>
+                <v-radio color="secondary" label="Male" value="Male"></v-radio>
+              </v-radio-group>
             </v-col>
-            </v-card-text>
+          </v-row>
 
-            <v-divider></v-divider>
+          <v-file-input
+            prepend-inner-icon="mdi-image-area"
+            counter
+            show-size
+            small-chips
+            v-model="picture"
+            truncate-length="50"
+            dense
+            color="cyan"
+          ></v-file-input>
 
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="gray" text @click="Cancel">Cancel</v-btn>
-                <v-btn color="green" text @click="Update ">Update</v-btn>
-            </v-card-actions>
+          <!-- ===================Create Successfull========================= -->
+          <v-alert
+            v-model="alert"
+            v-if="success"
+            dense
+            dismissible
+            text
+            type="success"
+            style="top: 15px"
+          >
+            The student is have been <strong>created</strong>
+          </v-alert>
 
-        </v-card>
-    </v-dialog>
+          <!-- =========================Message error============================= -->
+          <v-alert
+            v-model="alert"
+            v-else
+            dense
+            outlined
+            dismissible
+            type="error"
+            style="top: 15px"
+          >
+            Create student is <strong>failed</strong> , please try again !
+          </v-alert>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn type="submit" @click="Cancel" color="gray" text>Cancel</v-btn>
+          <v-btn
+            type="submit"
+            v-if="
+              firstName === '' ||
+              lastName === '' ||
+              Class === '' ||
+              batch === '' ||
+              major === '' ||
+              phoneNumber === '' ||
+              gender === '' ||
+              ngo === '' ||
+              picture === null
+            "
+            color="green"
+            text
+            disabled
+            >Update</v-btn
+          >
+          <v-btn type="submit" v-else color="green" text>Update</v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
 export default {
-    props: ['studentData'],
-    emits:['Update', 'Cancel'],
+  props: ["studentData"],
+  emits: ["Update", "Cancel"],
 
-    data(){
-      return{
-        items: ['WEB 2021A', 'WEB 2021B', 'SNA 2021','WEB 2022A','WEB 2022B','SNA 2022'],
-        dialog: true,
-        row: null,
-        firstName: '',
-        lastName: '',
-        Class: '',
-        gender: '',
-        phoneNumber: '',
-        ngo: '',
-        picture: '',
-      }
-    },
+  data() {
+    return {
+      classes: [
+        "WEB 2021A",
+        "WEB 2021B",
+        "SNA 2021",
+        "WEB 2022A",
+        "WEB 2022B",
+        "SNA 2022",
+      ],
+      batchs: [
+        "BATCH 2020",
+        "BATCH 2021",
+        "BATCH 2022",
+        "BATCH 2023",
+        "BATCH 2024",
+        "BATCH 2025",
+      ],
+      success: false,
+      alert: false,
+      hidden: false,
+      dialog: true,
 
-    methods:{
-      Update(){
-        let updatedStudent = {
-            firstName: this.firstName,
-            lastName: this.lastName,
-            class: this.Class,
-            gender: this.gender,
-            phone: this.phoneNumber,
-            ngo: this.ngo,
-        }
+      firstName: "",
+      lastName: "",
+      Class: "",
+      batch: "",
+      major: "",
+      gender: "",
+      phoneNumber: "",
+      ngo: "",
+      picture: null,
+    };
+  },
 
-        this.$emit('Update',this.studentData.id, updatedStudent, false);
-      },
-      Cancel(){
-        this.$emit('Cancel', false);
-      }
+  methods: {
+    Update() {
+      let updatedStudent = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        class: this.Class,
+        batch: this.batch,
+        major: this.major,
+        gender: this.gender,
+        phone: this.phoneNumber,
+        ngo: this.ngo,
+      };
+
+      this.$emit("Update", this.studentData.id, updatedStudent, false);
     },
-    mounted() {
-      this.firstName = this.studentData.firstName;
-      this.lastName = this.studentData.lastName;
-      this.Class = this.studentData.class;
-      this.gender = this.studentData.gender;
-      this.phoneNumber = this.studentData.phone;
-      this.ngo = this.studentData.ngo;
+    Cancel() {
+      this.$emit("Cancel", false);
     },
-}
+  },
+  mounted() {
+    this.firstName = this.studentData.firstName;
+    this.lastName = this.studentData.lastName;
+    this.Class = this.studentData.class;
+    this.batch = this.studentData.batch;
+    this.major = this.studentData.major;
+    this.gender = this.studentData.gender;
+    this.phoneNumber = this.studentData.phone;
+    this.ngo = this.studentData.ngo;
+  },
+};
 </script>
 
 <style scoped>
-
-   .overlay {
-      position: fixed;
-      background: #fff;
-      top: 5px;
-      left: 35%;
-      width: 30%;
-      z-index: 10;
-      border-radius: 10px;
-      
-  }
-     h2{
-        text-align: center;
-        padding: 10px;
-        color: #fff;
-        background: rgb(108, 185, 226);
-    }
-    
-    input[type=text],
-    input[type=email],
-    input[type=password]
-    {
-        width: 100%;
-        margin-top: 3%;
-        padding: 5px;
-        outline: none;
-         border: 1px solid rgb(194, 193, 193);
-        border-radius: 5px;
-    }
-    select{
-        width: 100%;
-        margin-top: 2%;
-        padding: 5px;
-        outline: none;
-        border: 1px solid rgb(194, 193, 193);
-        border-radius: 5px;
-    }
-    input[type=password]{
-        margin-bottom: 2%;
-    }
-    input[type=file]{
-        width: 100%;
-        margin-top: 3%;
-        padding: 5px 0;
-        outline: none;
-    }
-    input[type=number]
-    {
-        width: 100%;
-        margin-top: 3%;
-        padding: 3px;
-        padding-left: 10px;
-        outline: none;
-         border: 1px solid rgb(194, 193, 193);
-        border-radius: 5px;
-    }
-    .row{
-        margin-top: 2%;
-    }
-    #female{
-        margin-left: 3%;
-    }
- 
+h3 {
+  text-align: center;
+  padding: 2px;
+  color: #fff;
+  background: rgb(108, 185, 226);
+}
+.gender {
+  margin-top: -3%;
+}
 </style>
