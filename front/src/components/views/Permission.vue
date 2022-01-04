@@ -1,107 +1,125 @@
 <template>
   <div class="card">
-
-  <!-- ================Edete permission dialog================== -->
-  <v-dialog width="600" v-model="showEdit">
-    <v-card>
-      <v-card-title class="text-h5 grey lighten-2">
-        Update permission form
-      </v-card-title>
-
-      <v-card-text>
-        <v-container>
-          <v-row>
-        
-            <v-col cols="12" sm="6">
-                <label for="student">Choose student:</label>
-                <select name="studentid" id="" v-model="studentId">
-                  <option v-for="student of studentlist" :key="student.id" :value= student.id>{{student.firstName}} {{student.lastName}}</option>
-                </select>
+    <!-- ================Edete permission dialog================== -->
+    <v-dialog width="600" v-model="showEdit">
+      <v-card>
+        <v-card-title class="para2">
+          <h2>Update permission</h2>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="6" sm="6">
+                <v-combobox
+                  prepend-inner-icon="mdi-account-box-multiple"
+                  v-model="studentId"
+                  :items="studentlist"
+                  label="Choose student"
+                  item-text="firstName"
+                  item-value="id"
+                  dense
+                  color="cyan"
+                ></v-combobox>
               </v-col>
 
-            <v-col cols="12" sm="6">
-              <v-autocomplete
-                v-model="teacher"
-                :items="teacherlist"
-                dense
-                label="Choose Teacher"
-              ></v-autocomplete>
-            </v-col>
+              <v-col cols="6" sm="6">
+                <v-combobox
+                  prepend-inner-icon="mdi-account-tie"
+                  label="Choose Teacher"
+                  v-model="teacher"
+                  :items="teacherlist"
+                  color="cyan"
+                  dense
+                ></v-combobox>
+              </v-col>
+            </v-row>
 
-            <v-col cols="6" sm="12">
-              <v-select
-                v-model="leaveType"
-                :items="['sick', 'have a task to do', 'sick too', 'sick three']"
-                label="Choose leave type"
-                required
-              ></v-select>
-            </v-col>
+            <v-row>
+              <v-col cols="6" sm="12">
+                <v-combobox
+                  prepend-inner-icon="mdi-card-account-details-outline"
+                  v-model="leaveType"
+                  :items="[
+                    'sick',
+                    'have a task to do',
+                    'sick too',
+                    'sick three',
+                  ]"
+                  label="Choose leave type"
+                  required
+                  color="cyan"
+                  dense
+                ></v-combobox>
+              </v-col>
+            </v-row>
+            <v-row class="date">
+              <v-col cols="12" lg="6">
+                <label for="startDate">Start date: </label>
+                <input type="date" name="date" v-model="startDate" />
+              </v-col>
+              <v-col cols="12" lg="6">
+                <label for="endDate" style="margin-left: 15%">End date: </label>
+                <input type="date" name="date" v-model="endDate" />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="12">
+                <v-text-field
+                  prepend-inner-icon="mdi-message-reply-text"
+                  label="Description"
+                  hint="Input your description"
+                  v-model="description"
+                  required
+                  color="cyan"
+                  dense
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
 
-            
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="showEdit = false">Discard</v-btn>
+          <v-btn color="success" text @click="Update">Save change</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-             <v-col
-              cols="12"
-              sm="12"
-            >
-              <v-text-field
-                label="Description"
-                hint="input your description"
-                v-model="description"
-                required
-              ></v-text-field>
-            </v-col>
+    <!-- ================Delete dialog================== -->
+    <v-dialog width="500" v-model="dialog">
+      <v-card id="dialog_remove">
+        <v-card-title class="text-h5 grey lighten-2">
+          Do you want to delete this Permission?
+        </v-card-title>
+        <v-card-text> Are you sur to remove this permission ? </v-card-text>
+        <v-divider></v-divider>
 
-          </v-row>
-        </v-container>
-      </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="dialog = false">Discard</v-btn>
+          <v-btn color="success" text @click="Remove(id)">I accept</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-      <v-divider></v-divider>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn text @click="showEdit = false">Discard</v-btn>
-        <v-btn color="success" text @click="Update">Save change</v-btn>
-
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
-  <!-- ================Delete dialog================== -->
-  <v-dialog width="500" v-model="dialog">
-    <v-card id="dialog_remove">
-      <v-card-title class="text-h5 grey lighten-2">
-        Do you want to delete this Permission?
+    <!-- ==========search button=============== -->
+    <div class="title">
+      <v-card-title>
+        <v-text-field
+          v-if="userRole !== 'Student'"
+          v-on:keyup="Search"
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search permission"
+          class="search"
+          color="blue darken-1"
+          single-line
+        ></v-text-field>
       </v-card-title>
-      <v-card-text>
-        Are you sur to remove this permission ?
-      </v-card-text>
-      <v-divider></v-divider>
 
-      <v-card-actions>
-
-        <v-spacer></v-spacer>
-        <v-btn text @click="dialog = false">Discard</v-btn>
-        <v-btn color="success" text @click="Remove(id)">I accept</v-btn>
-
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
-  <!-- ==========search button=============== -->
-  <div class="title">
-    <v-card-title>
-      <v-text-field
-        v-if="userRole !== 'Student' "
-        v-on:keyup="Search"
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search permission"
-        class="search"
-        color="blue darken-1"
-        single-line
-    ></v-text-field>
-    </v-card-title>
-   
-    <v-combobox
+      <v-combobox
         class="select-class"
         v-if="userRole !== 'Student'"
         v-on:keyup="selectClass"
@@ -112,63 +130,68 @@
         single-line
         dense
         color="deep-purple accent-4"
-    ></v-combobox>
-    <form-permission
-      v-if="userRole !== 'Student' "
-      @add-per="Addpermission"
-    ></form-permission>
-   </div>
+      ></v-combobox>
+      <form-permission
+        v-if="userRole !== 'Student'"
+        @add-per="Addpermission"
+      ></form-permission>
+    </div>
     <!-- ==========card======================== -->
-    
-  <v-expansion-panels class="main">
-    <v-expansion-panel
-      v-for="per of permissions"
-      :key="per.id">
-      <v-expansion-panel-header class="header">
-        <v-row>
-          <v-col cols="12" sm="1">
-            <v-img class="image1"
-              lazy-src="https://picsum.photos/id/11/10/6"
-              max-height="150"
-              max-width="50"
-              src="https://icons-for-free.com/iconfiles/png/512/doctors+health+hospital+medical+medicine+icon-1320184696812504400.png"></v-img>
-          </v-col>
 
-          <v-col cols='12' sm='4'>
-            <span>{{per.startDate}} / {{per.time}}</span>
-            <p id="endDate">{{per.endDate}} </p>
-          </v-col>
-          <v-col cols='12' sm='2'>
-            <v-img class="image2"
-              lazy-src="https://picsum.photos/id/11/10/6"
-              max-height="100"
-              max-width="100"
-              :src="url + per.student.picture"
-            ></v-img>
-          </v-col>
+    <v-expansion-panels class="main">
+      <v-expansion-panel v-for="per of permissions" :key="per.id">
+        <v-expansion-panel-header class="header">
+          <v-row>
+            <v-col cols="12" sm="1">
+              <v-img
+                class="image1"
+                lazy-src="https://picsum.photos/id/11/10/6"
+                max-height="150"
+                max-width="50"
+                src="https://icons-for-free.com/iconfiles/png/512/doctors+health+hospital+medical+medicine+icon-1320184696812504400.png"
+              ></v-img>
+            </v-col>
 
-          <v-col cols='12' sm='2'>
-            <h3 id="name">{{per.student.firstName}} {{per.student.lastName}}</h3>
-            <br>
-            <p>{{per.student.class}}</p>
-            <p>{{per.teacher}}</p>
-          </v-col>
+            <v-col cols="12" sm="4">
+              <span>{{ per.startDate }} / Morning</span>
+              <p id="endDate">{{ per.endDate }} day</p>
+            </v-col>
+            <v-col cols="12" sm="2">
+              <v-img
+                class="image2"
+                lazy-src="https://picsum.photos/id/11/10/6"
+                max-height="100"
+                max-width="100"
+                :src="url + per.student.picture"
+              ></v-img>
+            </v-col>
 
-        </v-row>
-      </v-expansion-panel-header>
-      <!-- ======space================== -->
-      <v-expansion-panel-content class="description">
-          {{per.description}}
-      </v-expansion-panel-content>
-  
-      <div v-if="userRole !== 'Student' " class="btn" align="center">
-        <v-icon @click="ShowEditDialog(per)" left color='green'>mdi-pencil-box-multiple-outline</v-icon>
-        <v-icon @click="ShowDialog(per)" tile color="#EF5350" right>mdi-delete </v-icon>
-      </div>
-    </v-expansion-panel>
-  </v-expansion-panels>
-</div>
- 
+            <v-col cols="12" sm="2">
+              <h3 id="name">
+                {{ per.student.firstName }} {{ per.student.lastName }}
+              </h3>
+              <br />
+              <p>{{ per.student.class }}</p>
+              <p>{{ per.teacher }}</p>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-header>
+        <!-- ======space================== -->
+        <v-expansion-panel-content class="description">
+          {{ per.description }}
+        </v-expansion-panel-content>
+
+        <div v-if="userRole !== 'Student'" class="btn" align="center">
+          <v-icon @click="ShowEditDialog(per)" left color="green"
+            >mdi-pencil-box-multiple-outline</v-icon
+          >
+          <v-icon @click="ShowDialog(per)" title color="#EF5350" right
+            >mdi-delete
+          </v-icon>
+        </div>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </div>
 </template>
 
 <script>
@@ -183,6 +206,7 @@ export default {
       showEdit: false,
       userRole: '',
       id: '',
+      studentID: '',
       search: '',
       studentId: '',
       permissions: [],
@@ -225,14 +249,22 @@ export default {
       })
     },
     Update(){
+      let studentid = "";
+      if (this.studentId.id == undefined) {
+        studentid = this.studentID; 
+      } else {
+        studentid = this.studentId.id;
+      }
+
       let updatePer = {
-        student_id: this.studentId,
+        student_id: studentid,
         teacher: this.teacher,
         leaveType: this.leaveType,
         startDate: this.startDate,
         endDate: this.endDate,
         description: this.description,
       }
+      
       axios.put('/permissions/' + this.id, updatePer).then(res => {
         this.showEdit = false;
         this.getPermission();
@@ -243,7 +275,8 @@ export default {
 
     ShowEditDialog(per){
       this.id = per.id;
-      this.studentId = per.student.id;
+      this.studentID = per.student.id;
+      this.studentId = per.student.firstName;
       this.teacher = per.teacher;
       this.leaveType = per.leaveType;
       this.startDate = per.startDate;
@@ -315,88 +348,93 @@ export default {
 </script>
 
 <style scoped>
-  .card-row{
-    padding: 20px;
-    margin: 50px;
-    width: 80%;
-    margin-left: 5%;
-  }
-  .header{
-    margin-right: 5%;
-  }
-  .main{
-    width: 80%;
-    margin-left: 10%;
-    margin-bottom: 5%;
-  
-  }
-  .btn{
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    margin-right: 2%;
-    margin-bottom: 10px;
-  }
-  .card{
-    margin-top: 3%;
-    height: 84vh;
-    overflow-y: scroll;
-  }
-  #name{
-    margin-top: 6%;
-  }
-  span{
-    display: flex;
-    justify-content: center;
-    margin-top: 6%;
-    margin-bottom: 3%;
-  }
-  .search{
-    width: 380px;
-    margin-left: -4%;
-    margin-top: -5%;
-    
-  }
-  /* ========================================== */
-  .select-class{
-    width: 250px;
-    margin-left: 20px;
-  }
-  .title{
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 80%;
-    margin-left: 10%; 
-  }
+.card-row {
+  padding: 20px;
+  margin: 50px;
+  width: 80%;
+  margin-left: 5%;
+}
+.header {
+  margin-right: 5%;
+}
+.main {
+  width: 80%;
+  margin-left: 10%;
+  margin-bottom: 3%;
+}
+.btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-right: 2%;
+  margin-bottom: 10px;
+}
+.card {
+  margin-top: 3%;
+  height: 84vh;
+  overflow-y: scroll;
+}
+#name {
+  margin-top: 6%;
+}
+span {
+  display: flex;
+  justify-content: center;
+  margin-top: 6%;
+  margin-bottom: 3%;
+}
+.search {
+  width: 380px;
+  margin-left: -4%;
+  margin-top: -5%;
+}
+/* ========================================== */
+.select-class {
+  width: 250px;
+  margin-left: 20px;
+}
+.title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 80%;
+  margin-left: 10%;
+}
 
-  /* ========================================= */
-  input[type=date]{
-    outline: none;
-  }
-  #dialog_remove{
-    border-top: 7px solid red;
-  }
-  .image2{
-    margin-bottom: -30px;
-    margin-top: 5%;
-  }
-  .image1{
-    margin-top: 50%;
-  }
-  .description{
-    margin-top: 3%;
-  }
-  select{
-    width: 50%;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid gray;
-    margin-top: 9px;
-    margin-left: 9%;
-  }
-  #endDate{
-    text-align: center;
-  }
-
+/* ========================================= */
+input[type="date"] {
+  outline: none;
+}
+#dialog_remove {
+  border-top: 7px solid red;
+}
+.image2 {
+  margin-bottom: -30px;
+  margin-top: 5%;
+}
+.image1 {
+  margin-top: 50%;
+}
+.description {
+  margin-top: 3%;
+}
+select {
+  width: 50%;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid gray;
+  margin-top: 9px;
+  margin-left: 9%;
+}
+#endDate {
+  text-align: center;
+}
+.para2 {
+  padding: 2px;
+  color: #fff;
+  background: rgb(108, 185, 226);
+}
+h2 {
+  margin-left: 27%;
+}
 </style>

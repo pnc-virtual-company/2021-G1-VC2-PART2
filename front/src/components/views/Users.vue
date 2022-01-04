@@ -21,7 +21,7 @@
                     :rules="nameRules"
                     :counter="20"
                     label="Username"
-                    color="deep-purple accent-4"
+                    color="cyan"
                   ></v-text-field>
                 </v-col>
 
@@ -32,7 +32,7 @@
                     :rules="emailRules"
                     :counter="20"
                     label="E-mail"
-                    color="deep-purple accent-4"
+                    color="cyan"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -43,24 +43,24 @@
                     v-model="password"
                     :rules="passwordrules"
                     label="Password"
-                    color="deep-purple accent-4"
+                    color="cyan"
                     :type="passwordShow ? 'text' : 'password'"
                     prepend-inner-icon="mdi-key"
                     :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="passwordShow = !passwordShow"
                   ></v-text-field>
                 </v-col>
-
                 <v-col cols="12" sm="6">
                   <v-text-field
                     v-model="password_confirmation"
                     :rules="passwordrules"
                     label="confirm password"
-                    color="deep-purple accent-4"
+                    color="cyan"
                     :type="passwordShowCon ? 'text' : 'password'"
                     prepend-inner-icon="mdi-key"
                     :append-icon="passwordShowCon ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="passwordShowCon = !passwordShowCon"
+                    
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -74,7 +74,7 @@
                     label="Select role"
                     outlined
                     dense
-                    color="deep-purple accent-4"
+                    color="cyan"
                   ></v-combobox>
                 </v-col>
 
@@ -84,29 +84,31 @@
                     prepend-inner-icon="mdi-account-box-multiple"
                     v-model="studentId"
                     :items="studentList"
-                    label="Select role"
+                    label="Choose student"
                     item-text="firstName"
                     item-value="id"
                     outlined
                     dense
-                    color="deep-purple accent-4"
+                    color="cyan"
                   ></v-combobox>
                 </v-col>
               </v-row>
 
               <v-file-input
                 prepend-inner-icon="mdi-image-area"
+                dense
                 counter
                 show-size
                 small-chips
                 v-model="image"
-                color="deep-purple accent-4"
+                color="cyan"
                 truncate-length="50"
               ></v-file-input>
             </v-card-text>
 
+            <!-- =========================Message error and login successfully============================ -->
             <v-col cols="12" sm="12">
-              <!-- =========================Message error and login successfully============================ -->
+           
               <v-alert
                 dismissible
                 type="success"
@@ -140,20 +142,13 @@
                   this.email == '' ||
                   this.password == '' ||
                   this.image == null ||
-                  this.role == '' "
-                  
+                  this.role == ''
+                "
                 disabled
                 >Create</v-btn
               >
 
-              <v-btn
-                v-else
-                type="submit"
-                color="green"
-                text
-                >Create</v-btn
-              >
-
+              <v-btn v-else type="submit" color="green" text>Create</v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -180,7 +175,7 @@
     <!-- ==========================End Dialog=================================== -->
 
     <div class="userLists">
-      <h2>List of users</h2>
+      <h3>List of users</h3>
       <v-simple-table>
         <template v-slot:default>
           <thead>
@@ -194,7 +189,6 @@
           </thead>
           <tbody>
             <tr v-for="user of users" :key="user.id">
-
               <!-- =============Display image user or student======== -->
               <td v-if="user.role == 'Admin'">
                 <img src="../../assets/icon.png" alt="" />
@@ -230,7 +224,7 @@
 
     <dialog-edit
       v-if="displayEdit"
-      :data="userInfo"
+      :userinfo="userInfo"
       @cancel="cancel"
       @update="EditUser"
     />
@@ -296,13 +290,12 @@ export default {
   },
   methods: {
     Adduser() {
-      console.log(this.studentId);
       if (this.$refs.form.validate()) {
         let studentid = "";
-        if (this.studentId.id == undefined) {
-          studentid = "";
-        } else {
+        if (this.studentId !== "") {
           studentid = this.studentId.id;
+        } else {
+          studentid = "";
         }
 
         let newUser = new FormData();
@@ -368,7 +361,6 @@ export default {
     Show(user) {
       this.userInfo = user;
       this.displayEdit = true;
-      this.showDialog = true;
     },
 
     cancel() {
@@ -412,6 +404,8 @@ export default {
 .userLists {
   width: 80%;
   margin-left: 10%;
+  margin-bottom: 3%;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 }
 .main {
   height: 84vh;
@@ -419,83 +413,23 @@ export default {
   overflow-y: scroll;
 }
 
-h2 {
-  margin-top: 2%;
-  text-align: center;
-  padding: 10px;
-  color: #fff;
-  background: rgb(108, 185, 226);
-}
 h3 {
+  margin-top: 2%;
   text-align: center;
-  padding: 10px;
+  padding: 5px;
   color: #fff;
   background: rgb(108, 185, 226);
 }
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  margin-top: 3%;
-  padding: 5px;
-  outline: none;
-  border: 1px solid rgb(194, 193, 193);
-  border-radius: 5px;
-}
-select {
-  width: 100%;
-  margin-top: 2%;
-  padding: 5px;
-  outline: none;
-  border: 1px solid rgb(194, 193, 193);
-  border-radius: 5px;
-}
-input[type="password"] {
-  margin-bottom: 2%;
-}
-input[type="file"] {
-  width: 100%;
-  margin-top: 3%;
-  padding: 5px 0;
-  outline: none;
-}
+
 .text-center {
   margin-left: 69%;
 }
-
 img {
   width: 70px;
   height: 70px;
   border-radius: 360px;
   margin-top: 5px;
   padding: 5px;
-}
-.message {
-  color: red;
-}
-
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
-
-:root {
-  --main-color: #750579;
-  --main-color-light: #e21ee9;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  font-family: "Roboto", sans-serif;
-}
-
-body {
-  margin: 0;
-}
-
-.right-main-button {
-  float: right;
-  margin-right: 2rem;
 }
 .cardForm {
   border-top: 5px solid red;

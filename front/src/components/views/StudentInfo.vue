@@ -34,9 +34,9 @@
           <v-badge :value="num"> All discipline </v-badge>
         </v-tab>
 
-        <v-tab @click="Misconduct">
+        <v-tab @click="Notification">
           <v-badge color="green" :content="num1" :value="num1">
-            Misconduct
+            Notification
           </v-badge>
         </v-tab>
 
@@ -115,7 +115,8 @@
       </v-expansion-panel>
 
       <v-tabs v-if="permission != ''" dark background-color="orange" grow>
-        <v-tab><v-icon left> mdi-chat-processing </v-icon>Permission</v-tab>
+        <v-tab><v-icon left> mdi-chat-processing 
+          </v-icon>Permission</v-tab>
       </v-tabs>
       
       <v-expansion-panel v-for="per of students.permission" :key="per.id">
@@ -158,7 +159,9 @@ export default {
       num2: 0,
       num3: 0,
       num4: false,
+      num5: 0,
       disciples: [],
+      permissions:[],
       students: [],
       studentId: "",
       url: "http://127.0.0.1:8000/storage/imagestudent/",
@@ -185,7 +188,7 @@ export default {
         for (let disciple of res.data) {
           if (disciple.student.id == this.studentId) {
             this.disciples.push(disciple);
-            if (disciple.dnt == "Misconduct") {
+            if (disciple.dnt == "Notification") {
               this.num1 += 1;
             } else if (disciple.dnt == "Oral warning") {
               this.num2 += 1;
@@ -200,10 +203,24 @@ export default {
         }
       });
     },
-    Misconduct() {
+    getPermission() {
+      axios.get("/permission").then((res) => {
+        this.permissions = [];
+        this.num5 = 0;
+        for(let per of res.data){
+          if(per.student.id == this.studentId){
+            this.permissions.push(per)
+            console.log(this.permissions)
+            this.num5 = length(this.permissions)
+          }
+        }
+
+      });
+    },
+    Notification() {
       this.disciples = [];
       for (let dis of this.students.disciple) {
-        if (dis.dnt == "Misconduct") {
+        if (dis.dnt == "Notification") {
           this.disciples.push(dis);
         }
       }
@@ -239,7 +256,7 @@ export default {
     this.getStudent();
     this.getDisciple();
     this.studentId = localStorage.getItem("studentId");
-    console.log(this.student);
+    // console.log(this.student);
   },
 };
 </script>
