@@ -1,7 +1,7 @@
 <template>
   <div class="card">
 
-  <!-- ================Edete permission dialog================== -->
+  <!-- ================Edit permission dialog================== -->
   <v-dialog width="600" v-model="showEdit">
     <v-card>
       <v-card-title class="text-h5 grey lighten-2">
@@ -37,12 +37,14 @@
               ></v-select>
             </v-col>
 
-            <v-col cols="6" sm="12">
-              <label for="startDate">Start date: </label>
-              <input type="date" name="date" v-model="startDate">
-              <label for="endDate" style="margin-left:15%">End date: </label>
-              <input type="date" name="date" v-model="endDate">
-            </v-col>
+            <v-col cols="6" sm="6">
+                <label for="startDate">Start date: </label>
+                <input type="datetime-local" name="date" v-model="startDate">
+          </v-col>
+          <v-col cols="6" sm="6">
+            <label for="endDate" >End date: </label>
+            <input type="datetime-local" name="date" v-model="endDate">
+          </v-col>
 
              <v-col
               cols="12"
@@ -139,10 +141,16 @@
               src="https://icons-for-free.com/iconfiles/png/512/doctors+health+hospital+medical+medicine+icon-1320184696812504400.png"></v-img>
           </v-col>
 
-          <v-col cols='12' sm='4'>
-            <span>{{per.startDate}} / Morning</span>
-            <p id="endDate">{{per.endDate}} day</p>
+          <v-col cols='12' sm='4' >
+            <p>Start :{{per.startDate}} </p>
+            <p>End :{{per.endDate}} </p>
+              <div class="date">
+                <!-- <span>How many day : </span> -->
+                <span style="margin-left: 5px" v-html="Math.round(((new Date(per.endDate)).getTime() - (new Date(per.startDate)).getTime()) / (1000 *  3600 * 24))" ></span> 
+                <span>days</span>
+            </div>
           </v-col>
+          
           <v-col cols='12' sm='2'>
             <v-img class="image2"
               lazy-src="https://picsum.photos/id/11/10/6"
@@ -403,5 +411,13 @@ export default {
   #endDate{
     text-align: center;
   }
-
+  #startDate{
+    text-align: center;
+  }
+  .date{
+    display: flex;
+    align-items: flex-start;
+    margin-top: -6%;
+    margin-left: 23%;
+  }
 </style>

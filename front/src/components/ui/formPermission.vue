@@ -134,6 +134,8 @@
     },
     mounted() {
       this.getStudent();
+      
+  
     },
        
   }
