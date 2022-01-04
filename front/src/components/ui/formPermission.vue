@@ -52,11 +52,14 @@
                 ></v-select>
               </v-col>
         
-              <v-col cols="6" sm="12">
+              <v-col cols="6" sm="6">
                 <label for="startDate">Start date: </label>
-                <input type="date" name="date" v-model="startDate">
-                <label for="endDate" style="margin-left:15%">End date: </label>
-                <input type="date" name="date" v-model="endDate">
+                <input type="datetime-local" name="date" v-model="startDate">
+                
+              </v-col>
+              <v-col cols="6" sm="6">
+                <label for="endDate" >End date: </label>
+                <input type="datetime-local" name="date" v-model="endDate">
               </v-col>
 
               <v-col

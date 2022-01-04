@@ -24,7 +24,8 @@
           color="deep-purple accent-4"
     ></v-combobox>
 
-      <formstudent v-if="userRole != 'Student' && !isDetail" @add-user="getstudent" />
+      <formstudent v-if="userRole != 'Student' && !isDetail" @add-user="getstudent" ></formstudent>
+
     </div>
     <!-- ===================Delete disciple dialog======================== -->
 
@@ -59,6 +60,8 @@
               <th class="text-left">First name</th>
               <th class="text-left">Last name</th>
               <th class="text-left">Class</th>
+              <th class="text-left">Batch</th>
+              <th class="text-left">Major</th>
               <th class="text-left">Phone</th>
               <th class="text-left">Gender</th>
               <th class="text-left">Ngo</th>
@@ -70,6 +73,8 @@
               <td @click="Studentdetail(student)">{{ student.firstName }}</td>
               <td @click="Studentdetail(student)">{{ student.lastName }}</td>
               <td @click="Studentdetail(student)">{{ student.class }}</td>
+              <td @click="Studentdetail(student)">{{ student.batch }}</td>
+              <td @click="Studentdetail(student)">{{ student.major }}</td>
               <td @click="Studentdetail(student)">0{{ student.phone }}</td>
               <td @click="Studentdetail(student)">{{ student.gender }}</td>
               <td @click="Studentdetail(student)">{{ student.ngo }}</td>
@@ -137,6 +142,7 @@
       ],
       classes:'',
       classFilter:[],
+      
       };
     },
     methods: {

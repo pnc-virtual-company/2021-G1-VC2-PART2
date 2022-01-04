@@ -115,7 +115,8 @@
       </v-expansion-panel>
 
       <v-tabs v-if="permission != ''" dark background-color="orange" grow>
-        <v-tab><v-icon left> mdi-chat-processing </v-icon>Permission</v-tab>
+        <v-tab><v-icon left> mdi-chat-processing 
+          </v-icon>Permission</v-tab>
       </v-tabs>
       
       <v-expansion-panel v-for="per of students.permission" :key="per.id">
@@ -158,7 +159,9 @@ export default {
       num2: 0,
       num3: 0,
       num4: false,
+      num5: 0,
       disciples: [],
+      permissions:[],
       students: [],
       studentId: "",
       url: "http://127.0.0.1:8000/storage/imagestudent/",
@@ -200,6 +203,20 @@ export default {
         }
       });
     },
+    getPermission() {
+      axios.get("/permission").then((res) => {
+        this.permissions = [];
+        this.num5 = 0;
+        for(let per of res.data){
+          if(per.student.id == this.studentId){
+            this.permissions.push(per)
+            console.log(this.permissions)
+            this.num5 = length(this.permissions)
+          }
+        }
+
+      });
+    },
     Misconduct() {
       this.disciples = [];
       for (let dis of this.students.disciple) {
@@ -239,7 +256,7 @@ export default {
     this.getStudent();
     this.getDisciple();
     this.studentId = localStorage.getItem("studentId");
-    console.log(this.student);
+    // console.log(this.student);
   },
 };
 </script>
