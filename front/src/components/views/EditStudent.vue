@@ -147,8 +147,8 @@
               major === '' ||
               phoneNumber === '' ||
               gender === '' ||
-              ngo === '' ||
-              picture === null
+              ngo === ''
+            
             "
             color="green"
             text

@@ -70,7 +70,6 @@
               <v-col
                 cols="12"
                 sm="6"
-                
               >
                  <v-text-field
                   v-model="manyDay"
@@ -79,6 +78,8 @@
                   required
                 ></v-text-field>
               </v-col>
+
+
 
               <v-col cols="12" sm="12">
                 <v-text-field
@@ -115,6 +116,10 @@
 </template>
 
 <script>
+
+  
+
+
   import axios from '../../axios-http.js';
   export default {
     emits: ['add-per'],
