@@ -142,12 +142,14 @@
       ],
       classes:'',
       classFilter:[],
+      
       };
     },
     methods: {
       Studentdetail(student) {
         this.isDetail = true;
         this.studentInfo = student;
+        console.log('hello');
       },
       Back(back) {
         this.isDetail = back;
@@ -248,47 +250,12 @@ h2 {
   background: rgb(108, 185, 226);
 }
 
-input[type="text"] {
-  width: 50%;
-  margin-top: 3%;
-  padding: 3px;
-  padding-left: 10px;
-  outline: none;
-  border: 1px solid rgb(194, 193, 193);
-  border-radius: 5px;
-}
-input[type="number"] {
-  width: 100%;
-  margin-top: 3%;
-  padding: 3px;
-  padding-left: 10px;
-  outline: none;
-  border: 1px solid rgb(194, 193, 193);
-  border-radius: 5px;
-}
-select {
-  width: 100%;
-  margin-top: 2%;
-  padding: 3px;
-  padding-left: 10px;
-  outline: none;
-  border: 1px solid rgb(194, 193, 193);
-  border-radius: 5px;
-}
-input[type="radio"] {
-  margin-left: 10px;
-  margin-top: 3%;
-}
-input[type="file"] {
-  width: 100%;
-  margin-top: 3%;
-  padding: 5px 0;
-  outline: none;
-}
 .userLists {
   width: 80%;
   margin-left: 10%;
   margin-top: 2%;
+  margin-bottom: 3%;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 }
 .table {
   overflow-y: scroll;
@@ -312,7 +279,6 @@ tr td:hover {
 }
 .combobox{
   width: 230px;
-  /* margin-left: 20px; */
-  margin-right: 130px;
+  margin-right: 110px;
 }
 </style>

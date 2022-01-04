@@ -27,10 +27,15 @@
           <span>{{ userInfo.role }}</span>
 
           <div class="circle">
-            <button @click="Signout"><img v-if="userInfo.role == 'Admin'" src="../../assets/icon.png" alt="" />
-            <img v-else :src="url + userInfo.profile" alt="" /></button>
+            <button @click="Signout">
+              <img
+                v-if="userInfo.role == 'Admin'"
+                src="../../assets/icon.png"
+                alt=""
+              />
+              <img v-else :src="url + userInfo.profile" alt="" />
+            </button>
           </div>
-
         </div>
       </div>
     </div>
@@ -53,7 +58,6 @@ export default {
     };
   },
   methods: {
-   
     Signout() {
       this.show = !this.show;
       this.$emit("sign-out", this.userInfo, this.show);
@@ -102,7 +106,8 @@ img {
 nav {
   position: sticky;
   top: 0;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 ul {
   display: flex;

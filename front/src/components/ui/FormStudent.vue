@@ -2,7 +2,7 @@
   <div class="text-center">
     <v-dialog v-model="dialog" width="700">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="blue lighten" dark v-bind="attrs" v-on="on"
+        <v-btn  color="blue lighten" dark v-bind="attrs" v-on="on"
           >+ Add student</v-btn
         >
       </template>
@@ -246,6 +246,7 @@ export default {
               this.picture = null;
               this.dialog = false;
               this.hidden = false;
+              this.alert = false;
             }
           }, 3000);
         })

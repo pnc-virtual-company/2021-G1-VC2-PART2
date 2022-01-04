@@ -176,31 +176,6 @@
                 </v-img>
               </div>
             </v-col>
-
-            <v-col
-              cols="12"
-              sm="2"
-              v-if="userRole !== 'Student' && userRole !== 'Social Affair'"
-            >
-              <!-- ==============start button edit&delete============= -->
-              <v-list-item-icon>
-                <v-icon
-                  class="edit"
-                  @click="ShowDilogEdit(disciple)"
-                  color="green"
-                  >mdi-pencil-box-multiple-outline</v-icon
-                >
-              </v-list-item-icon>
-
-              <v-list-item-icon>
-                <v-icon
-                  class="delete"
-                  @click="ShowDialog(disciple)"
-                  color="#EF5350"
-                  >mdi-delete</v-icon
-                >
-              </v-list-item-icon>
-            </v-col>
           </v-row>
           <!-- ===================end button edit&delete============= -->
         </v-expansion-panel-header>
@@ -210,6 +185,11 @@
         </v-expansion-panel-content>
 
         <!-- ====================end show details=================== -->
+        <div v-if="userRole !== 'Student' && userRole !== 'Social Affair'" class="btn" align="center">
+          <v-icon @click="ShowDilogEdit(disciple)" color="green" left >mdi-pencil-box-multiple-outline</v-icon>
+          <v-icon @click="ShowDialog(disciple)" color="#EF5350" right>mdi-delete</v-icon>
+        </div>
+
       </v-expansion-panel>
     </div>
   </v-expansion-panels>
@@ -307,7 +287,6 @@ export default {
         } else {
           this.disciples = res.data;
         }
-    
       });
     },
     ShowDialog(disciple) {
@@ -319,7 +298,7 @@ export default {
         this.studentlist = res.data;
       });
     },
-    
+
     // =================Search btn=======================
     searchBotton() {
       if (this.search !== "") {
@@ -344,10 +323,9 @@ export default {
             this.disciples.push(dis);
           }
         }
-      }else{
+      } else {
         this.getDisciples();
       }
-
     },
   },
   mounted() {
@@ -368,24 +346,6 @@ export default {
 .headerManin {
   width: 80%;
 }
-.username {
-  padding: 10px;
-  margin: 10px;
-}
-.v-icon {
-  margin-left: 170%;
-  padding: 5px;
-}
-.delete {
-  margin-left: 40%;
-  padding: 5px;
-  margin-top: 11px;
-}
-.edit {
-  margin-left: 100%;
-  padding: 5px;
-  margin-top: 11px;
-}
 .header {
   margin-right: 5%;
 }
@@ -397,9 +357,6 @@ export default {
 .cardForm {
   border-top: 5px solid red;
 }
-#dnt {
-  margin-top: 25%;
-}
 #wearning {
   margin-top: 25%;
 }
@@ -408,17 +365,11 @@ export default {
   margin-left: -4%;
   margin-top: -5%;
 }
-.select{
-  width: 250px;
-  margin-left: 20px;
-
-}
 
 img {
   width: 45px;
   height: 35px;
 }
-
 #date {
   padding-left: 7px;
   display: flex;
@@ -427,5 +378,11 @@ img {
 input[type="date"] {
   width: 80%;
   border-bottom: 1px solid gray;
+}
+.btn {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2%;
+  padding-bottom: 5px;
 }
 </style>

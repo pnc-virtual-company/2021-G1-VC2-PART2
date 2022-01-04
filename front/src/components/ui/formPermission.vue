@@ -44,12 +44,7 @@
                 <v-combobox
                   prepend-inner-icon="mdi-card-account-details-outline"
                   v-model="leavetype"
-                  :items="[
-                    'sick',
-                    'have a task to do',
-                    'sick too',
-                    'sick three',
-                  ]"
+                  :items="['sick too', 'sick three']"
                   label="Choose leave type"
                   required
                   color="cyan"
