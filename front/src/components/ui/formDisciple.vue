@@ -27,18 +27,18 @@
                            
                             <v-col
                                 cols="12"
-                                sm="12"
+                                sm="8"
                                 id="student"
                             >   
                                 <img id="img1" src="../../assets/icon.png" alt="">
-                                <label for="choose student">Choose student : </label>
+                                <label for="choose student" >Choose student:</label>
                                 <select name="" id="" v-model="student_id">
                                     <option v-for="student of studentLists" :key="student.id" :value = student.id>{{student.firstName}} {{student.lastName}}</option>
                                 </select>
                                
                             </v-col>
 
-                            <v-col cols="12" sm="12" id="date">
+                            <v-col cols="12" sm="4" id="date">
                                 <img src="../../assets/date.png" alt="">
                                 <input
                                     type="date"
@@ -76,7 +76,7 @@
                                     label="Description"
                                     rows="1"
                                     prepend-icon="mdi-comment-processing-outline"
-                            ></v-textarea>
+                                ></v-textarea>
                             </v-col>
 
                         </v-row>
@@ -175,8 +175,8 @@
         height: 35px;
     }
     #img1{
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
     }
     label{
         margin-left: 10px;

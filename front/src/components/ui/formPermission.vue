@@ -117,9 +117,6 @@
 
 <script>
 
-  
-
-
   import axios from '../../axios-http.js';
   export default {
     emits: ['add-per'],
