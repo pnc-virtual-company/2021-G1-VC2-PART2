@@ -94,4 +94,48 @@ class StudentController extends Controller
     {
         return Student::where('firstName','like','%'.$firstName. '%')->get();
     }
+
+    // ======================Update student picture========================
+    public function UpdateStudentPicture(Request $request, $id)
+    {
+        $request->validate([
+            'picture' => 'nullable|image|mimes:jpg,jpeg,png,gif,jfif|max:1999',
+        ]);
+
+        // create User
+        $student =  Student::findOrFail($id);
+
+        if($request->file('picture')!=''){
+            $path = public_path()."/storage/imagestudent/";
+            $file = $request->picture;
+            $fileName = $file->getClientOriginalName();
+            if($student->picture!='' && $student->picture!= null && $student->picture!=[]){
+                $oldImg = $path.$student->picture;
+                unlink($oldImg);
+                $student->picture = $fileName;
+            }
+            else{
+                $student->picture = $fileName;
+            }
+            
+            $file->move($path,$fileName);
+            $student->update(['picture'=>$fileName]);
+            $student->save();
+            return response()->json([
+                'student' => $student,
+                'message' => 'Update Image successfully',
+            ]);
+
+        }
+        else{
+            $student->picture = $request->file();
+            $student->save();
+        }
+        
+        
+        return response()->json([
+            'student' => $student,
+            'message' => 'Image not found',
+        ]);
+    }
 }

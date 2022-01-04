@@ -29,11 +29,12 @@
           <div class="circle">
             <button @click="Signout">
               <img
-                v-if="userInfo.role == 'Admin'"
-                src="../../assets/icon.png"
+                v-if="userInfo.role !== 'Student'"
+                :src="url + userInfo.profile"
                 alt=""
               />
-              <img v-else :src="url + userInfo.profile" alt="" />
+              <img v-else :src="student_url + userInfo.student.picture" alt="" />
+
             </button>
           </div>
         </div>
@@ -55,6 +56,7 @@ export default {
       userInfo: "",
       token: null,
       url: "http://127.0.0.1:8000/storage/imageUser/",
+      student_url: "http://127.0.0.1:8000/storage/imagestudent/",
     };
   },
   methods: {
@@ -72,6 +74,7 @@ export default {
         for (let user of res.data) {
           if (user.id == this.userid) {
             this.userInfo = user;
+            console.log(this.userInfo);
 
             if (user.role == "Admin") {
               this.isRole = true;
@@ -80,6 +83,8 @@ export default {
         }
       }
     });
+
+    
   },
 };
 </script>

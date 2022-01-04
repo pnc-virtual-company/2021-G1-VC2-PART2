@@ -85,7 +85,51 @@ class UserController extends Controller
     {
         return User::where('username','like','%'.$username.'%')->get();
     }
+
+    // =============Update image===============================
+
+    public function UpdateImage(Request $request, $id)
+    {
+        $request->validate([
+            'profile' => 'nullable|image|mimes:jpg,jpeg,png,gif,jfif|max:1999',
+        ]);
+
+        // create User
+        $user =  User::findOrFail($id);
+
+        if($request->file('profile')!=''){
+            $path = public_path()."/storage/imageUser/";
+            $file = $request->profile;
+            $fileName = $file->getClientOriginalName();
+            if($user->profile!='' && $user->profile!= null && $user->profile!=[]){
+                $oldImg = $path.$user->profile;
+                unlink($oldImg);
+                $user->profile = $fileName;
+            }
+            else{
+                $user->profile = $fileName;
+            }
+            
+            $file->move($path,$fileName);
+            $user->update(['profile'=>$fileName]);
+            $user->save();
+            return response()->json([
+                'user' => $user,
+                'message' => 'Update Image successfully',
+            ]);
+
+        }
+        else{
+            $user->profile = $request->file();
+            $user->save();
+        }
+        
+        
+        return response()->json([
+            'user' => $user,
+            'message' => 'Image not found',
+        ]);
+    }
 }
 
-// 1|6tRwaxZlncw2Dim5uLL3SId7o3pDKfZskLNKH6Hf
-// 2|EpivXWpVr7aSvsMdwCs6nOlYu5GnEG9sK7O2wynO
+

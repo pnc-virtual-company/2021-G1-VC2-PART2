@@ -114,7 +114,7 @@
         }}</v-expansion-panel-content>
       </v-expansion-panel>
 
-      <v-tabs v-if="permission != ''" dark background-color="orange" grow>
+      <v-tabs v-if="permissions != ''" dark background-color="orange" grow>
         <v-tab><v-icon left> mdi-chat-processing 
           </v-icon>Permission</v-tab>
       </v-tabs>
@@ -204,13 +204,13 @@ export default {
       });
     },
     getPermission() {
-      axios.get("/permission").then((res) => {
+      axios.get("/permissions").then((res) => {
         this.permissions = [];
         this.num5 = 0;
         for(let per of res.data){
           if(per.student.id == this.studentId){
             this.permissions.push(per)
-            console.log(this.permissions)
+         
             this.num5 = length(this.permissions)
           }
         }
@@ -255,8 +255,9 @@ export default {
   mounted() {
     this.getStudent();
     this.getDisciple();
+    this.getPermission();
     this.studentId = localStorage.getItem("studentId");
-    // console.log(this.student);
+  
   },
 };
 </script>

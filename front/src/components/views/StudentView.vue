@@ -31,16 +31,16 @@
 
     <v-dialog v-model="deleteDialog" max-width="500px">
       <v-card class="cardForm">
-        <v-card-title class="text-h5"
-          >Are you sure you want to delete this item?</v-card-title
-        >
+        <v-card-title>
+          Are you sure you want to delete this student?
+        </v-card-title>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray darken-1" text @click="deleteDialog = false"
             >Cancel</v-btn
           >
-          <v-btn color="green darken-1" text @click="DeleteStudent(id)"
+          <v-btn color="error" text @click="DeleteStudent(id)"
             >OK</v-btn
           >
         </v-card-actions>
@@ -57,15 +57,15 @@
         <template v-slot:default>
           <thead>
             <tr>
-              <th class="text-left">First name</th>
-              <th class="text-left">Last name</th>
-              <th class="text-left">Class</th>
-              <th class="text-left">Batch</th>
-              <th class="text-left">Major</th>
-              <th class="text-left">Phone</th>
-              <th class="text-left">Gender</th>
-              <th class="text-left">Ngo</th>
-              <th v-if="userRole !== 'Student'" class="text-left">Action</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Class</th>
+              <th>Batch</th>
+              <th>Major</th>
+              <th>Phone</th>
+              <th>Gender</th>
+              <th>Ngo</th>
+              <th v-if="userRole !== 'Student'" >Action</th>
             </tr>
           </thead>
           <tbody>
@@ -149,7 +149,6 @@
       Studentdetail(student) {
         this.isDetail = true;
         this.studentInfo = student;
-        console.log('hello');
       },
       Back(back) {
         this.isDetail = back;
@@ -173,8 +172,8 @@
       },
       DeleteStudent(id) {
         axios.delete("/students/" + id).then((res) => {
-          console.log(res.data);
           this.getstudent();
+          return res.data;
         });
         this.deleteDialog = false;
       },
@@ -226,6 +225,9 @@
 </script>
 
 <style scoped>
+th{
+  background: rgb(108, 185, 226);
+}
 .header {
   display: flex;
   align-items: flex-start;
@@ -249,7 +251,6 @@ h2 {
   color: #fff;
   background: rgb(108, 185, 226);
 }
-
 .userLists {
   width: 80%;
   margin-left: 10%;
@@ -275,7 +276,6 @@ tr td:hover {
   margin-top: -4px;
   margin-right: 55px;
   width: 260px;
-  
 }
 .combobox{
   width: 230px;

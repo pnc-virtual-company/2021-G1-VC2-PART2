@@ -159,8 +159,9 @@
 
     <v-dialog v-model="deleteDialog" max-width="500px">
       <v-card class="cardForm">
-        <v-card-title class="text-h5"
-          >Are you sure you want to delete this user?</v-card-title
+        <v-card-title>
+          Are you sure you want to delete this user?
+        </v-card-title
         >
         <v-divider></v-divider>
         <v-card-actions>
