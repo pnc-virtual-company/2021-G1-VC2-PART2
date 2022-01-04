@@ -15,12 +15,12 @@
       </template>
       <v-card>
         <v-card-title class="para2">
-          <h2>DISCIPLINE FORM</h2>
+          <h3>DISCIPLINE FORM</h3>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12">
+              <v-col cols="6" sm="6">
                 <v-combobox
                   prepend-icon="mdi-account-box-multiple"
                   v-model="studentId"
@@ -32,7 +32,7 @@
                   color="cyan"
                 ></v-combobox>
               </v-col>
-              <v-col cols="12" sm="12" id="date">
+              <v-col cols="6" sm="6" id="date">
                 <img src="../../assets/date.png" alt="" />
                 <input
                   type="date"
@@ -45,8 +45,9 @@
                   prepend-icon="mdi-alert-outline"
                 />
               </v-col>
-
-              <v-col cols="12" sm="12">
+              </v-row>
+<v-row>
+              <v-col cols="6" sm="6">
                 <v-autocomplete
                   v-model="dnt"
                   :items="leavelist"
@@ -57,7 +58,7 @@
                 ></v-autocomplete>
               </v-col>
 
-              <v-col cols="12" sm="12" id="description">
+              <v-col cols="6" sm="6" id="description">
                 <v-textarea
                   v-model="description"
                   class="mx-1"
@@ -186,7 +187,7 @@ select {
   color: #fff;
   background: rgb(108, 185, 226);
 }
-h2 {
+h3 {
   margin-left: 30%;
 }
 </style>
