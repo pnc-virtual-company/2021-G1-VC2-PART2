@@ -28,14 +28,23 @@ Route::put('users/{id}', [UserController::class, 'UpdateUser']);
 Route::delete('users/{id}', [UserController::class, 'DeleteUser']);
 Route::post('/signup', [UserController::class, 'Signup']);
 Route::post('/signin', [UserController::class, 'Signin']);
-// ==================== Route Search User======================================
+// =================== Route Search User=====================================
 Route::get('/username/search/{username}', [UserController::class, 'search']);
+
+// =======================Update profile========================================
+Route::put('users/images/{id}', [UserController::class, 'UpdateImage']);
+
+
 
 //===================== Route Student ========================================
 Route::get('/students',[StudentController::class,'getStudent']);
 Route::post('/students',[StudentController::class,'store']);
 Route::put('/students/{id}',[StudentController::class,'updateStudent']);
 Route::delete('/students/{id}',[StudentController::class,'delete']);
+
+// ===============Update picture=================
+Route::put('/students/image/{id}',[StudentController::class,'UpdateStudentPicture']);
+
 
 //========================Route search student =============================== 
 Route::get('/students/search/{firstName}', [StudentController::class, 'search']);
@@ -45,13 +54,15 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/logout', [UserController::class, 'Logout']);
 });
 
+
+
 // ===========================Route Permission ==============================
 Route::get('/permissions',[PermissionController::class,'getPermission']);
 Route::post('/permissions',[PermissionController::class,'store']);
 Route::put('/permissions/{id}',[PermissionController::class,'updatePermission']);
 Route::delete('/permissions/{id}',[PermissionController::class,'delete']);
 
-//Route search Permission =============================== 
+//===========================Route search Permission =============================== 
 Route::get('/permissions/search/{teacher}', [PermissionController::class, 'search']);
 
 Route::get('/disciples',[DiscipleController::class,'index']);

@@ -94,7 +94,7 @@
       <div class="cardheader">
         <v-card-title>
           <v-text-field
-            v-if="userRole !== 'Student' && userRole !== 'Social Affair'"
+            v-if="userRole !== 'Studen' "
             class="searchbtn"
             v-model="search"
             append-icon="mdi-magnify"
@@ -118,7 +118,7 @@
         ></v-combobox>
 
         <form-disciple
-          v-if="userRole == 'Admin'"
+          v-if="userRole !== 'Student'"
           @add-discipline="getDisciples"
         ></form-disciple>
       </div>
