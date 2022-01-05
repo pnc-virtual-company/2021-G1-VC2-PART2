@@ -30,7 +30,7 @@
                     prepend-inner-icon="mdi-email-plus"
                     v-model="email"
                     :rules="emailRules"
-                    :counter="20"
+                    :counter="30"
                     label="E-mail"
                     color="cyan"
                   ></v-text-field>
@@ -191,14 +191,12 @@
           <tbody>
             <tr v-for="user of users" :key="user.id">
               <!-- =============Display image user or student======== -->
-              <td v-if="user.role == 'Admin'">
-                <img src="../../assets/icon.png" alt="" />
+              <td v-if="user.role !== 'Student'">
+                <img :src=" url + user.profile" alt="" />
               </td>
-              <td v-else-if="user.role == 'Student'">
-                <img :src="student_url + user.student.picture" alt="" />
-              </td>
+
               <td v-else>
-                <img :src="url + user.profile" alt="" />
+                <img :src="student_url + user.student.picture" alt="" />
               </td>
 
               <td>{{ user.username }}</td>
@@ -286,7 +284,7 @@ export default {
         (v) => !!v || "E-mail is required",
         (v) => /.+@.+/.test(v) || "E-mail must be valid",
         (v) =>
-          v.length <= 20 || "Email must be less than or equal 20 characters",
+          v.length <= 30 || "Email must be less than or equal 30 characters",
       ],
 
       passwordrules: [

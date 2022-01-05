@@ -235,6 +235,7 @@ export default {
 
           setInterval(() => {
             if (this.hidden) {
+              this.dialog = false;
               this.firstName = "";
               this.lastName = "";
               this.Class = "";
@@ -244,11 +245,10 @@ export default {
               this.ngo = "";
               this.gender = "";
               this.picture = null;
-              this.dialog = false;
               this.hidden = false;
               this.alert = false;
             }
-          }, 3000);
+          }, 2000);
         })
         .catch((error) => {
           this.alert = true;
@@ -264,6 +264,9 @@ export default {
 </script>
 
 <style  scoped>
+.text-center{
+  margin-left: 24%;
+}
 .gender {
   margin-top: -3%;
 }

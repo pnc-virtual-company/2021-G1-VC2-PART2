@@ -130,6 +130,10 @@ export default {
       axios.post("/disciples", newDiscipline).then((res) => {
         this.$emit("add-discipline", res.data);
         this.dialog = false;
+        this.studentId = "";
+        this.dnt = "";
+        this.date = "";
+        this.description = "";
       });
     },
     getStudent() {

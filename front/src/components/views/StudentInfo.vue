@@ -28,6 +28,7 @@
       </div>
     </div>
     <br />
+
     <v-expansion-panels class="main">
       <v-tabs dark background-color="blue" grow>
         <v-tab @click="getDisciple">
@@ -81,6 +82,8 @@
           </v-badge>
         </v-tab>
       </v-tabs>
+      
+      <h4 id="noResult" v-if="disciples == '' ">NO RESULTS HERE!</h4>
 
       <v-expansion-panel v-for="disciple of disciples" :key="disciple.id">
         <v-expansion-panel-header>
@@ -94,7 +97,7 @@
               </v-img>
             </v-col>
             <v-col cols="12" sm="3">
-              <p>{{ disciple.dnt }}</p>
+              <p>{{ disciple.leavetype }}</p>
             </v-col>
 
             <div class="image">
@@ -109,18 +112,22 @@
           </div>
         </v-expansion-panel-header>
 
-        <v-expansion-panel-content>{{
-          disciple.description
-        }}</v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <span style="font-weight:bold;margin-left:0%;font-size:17px;">The resean is : </span>  {{disciple.description}}
+        </v-expansion-panel-content>
       </v-expansion-panel>
 
-      <v-tabs v-if="permissions != ''" dark background-color="orange" grow>
-        <v-tab><v-icon left> mdi-chat-processing 
-          </v-icon>Permission</v-tab>
+      <!-- ========================Permission=================================== -->
+      <v-tabs dark background-color="orange" grow>
+        <v-tab  v-if="permissions !== '' ">
+          <v-badge color="green" :content="num5" :value="num5">Permission</v-badge>
+        </v-tab>
       </v-tabs>
       
-      <v-expansion-panel v-for="per of students.permission" :key="per.id">
-        <v-expansion-panel-header class="header-1">
+      <h4 id="noResult" v-if="permissions == '' ">NO RESULTS HERE!</h4>
+
+      <v-expansion-panel v-for="per of permissions" :key="per.id">
+        <v-expansion-panel-header>
           <div class="d-flex">
             <v-col cols="12" sm="2">
               <v-img
@@ -131,18 +138,27 @@
               >
               </v-img>
             </v-col>
-            <v-col cols="12" sm="4">
+            <v-col cols="12" sm="6">
               <div class="para">
-                <h3>{{ per.startDate }} / Morning</h3>
-                <h5 style="margin-left: 30px; margin-top: -20px">0.5 day</h5>
+                <h3>From : {{ per.startDate }} to {{ per.endDate}}</h3>
+
+                <div class="amount">
+                  <h3>Amount day : </h3>
+                  <h4 v-html=" Math.round(
+                  (new Date(per.endDate).getTime() -
+                  new Date(per.startDate).getTime()) /
+                  (1000 * 3600 * 24))"></h4>
+                  <h4> day</h4>
+                </div>
+              
               </div>
             </v-col>
           </div>
         </v-expansion-panel-header>
 
-        <v-expansion-panel-content>{{
-          per.description
-        }}</v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <span style="font-weight:bold;margin-left:0%;font-size:17px;">The resean is : </span>  {{per.description}}
+          </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
@@ -151,7 +167,6 @@
 <script>
 import axios from "../../axios-http.js";
 export default {
-  props: ["student"],
   data() {
     return {
       num: 0,
@@ -210,8 +225,7 @@ export default {
         for(let per of res.data){
           if(per.student.id == this.studentId){
             this.permissions.push(per)
-         
-            this.num5 = length(this.permissions)
+            this.num5 += 1
           }
         }
 
@@ -263,6 +277,14 @@ export default {
 </script>
 
 <style scoped>
+.amount{
+  display: flex;
+  align-items: center;
+  margin-top: 3%;
+}
+h4{
+  margin-left: 2%;
+}
 .mainContent {
   display: flex;
   align-items: center;
@@ -311,17 +333,6 @@ p {
   margin: 30px 10px;
 }
 
-h4 {
-  padding: 25px;
-}
-h3 {
-  padding: 30px;
-  margin-top: -20px;
-}
-h5 {
-  height: 1px;
-  margin-right: 120px;
-}
 .updateMain {
   margin-top: -10%;
 }
@@ -339,5 +350,14 @@ h5 {
   display: flex;
   align-items: center;
   margin-left: 5%;
+}
+.header-1{
+  border-top: 1px solid rgba(128, 128, 128, 0.63);
+}
+#noResult {
+  margin-top: 7%;
+  text-align: center;
+  color: gray;
+  margin-bottom: 5%;
 }
 </style>

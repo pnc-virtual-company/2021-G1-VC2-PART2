@@ -94,7 +94,7 @@
             </v-col>
           </v-row>
 
-          <v-file-input
+          <!-- <v-file-input
             prepend-inner-icon="mdi-image-area"
             counter
             show-size
@@ -103,7 +103,7 @@
             truncate-length="50"
             dense
             color="cyan"
-          ></v-file-input>
+          ></v-file-input> -->
 
           <!-- ===================Create Successfull========================= -->
           <v-alert
@@ -147,7 +147,7 @@
               major === '' ||
               phoneNumber === '' ||
               gender === '' ||
-              ngo === ''
+              ngo === '' 
             
             "
             color="green"
