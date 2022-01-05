@@ -81,6 +81,33 @@
           </v-container>
         </v-card-text>
 
+         <!-- ===================Create Successfull========================= -->
+          <v-col cols="12" sm="12">
+            <v-alert
+              v-model="alert"
+              v-if="success"
+              dense
+              dismissible
+              text
+              type="success"
+            >
+              This permission is have been <strong>created</strong>
+            </v-alert>
+
+            <!-- =========================Message error============================= -->
+            <v-alert
+              v-model="alert"
+              v-else
+              dense
+              outlined
+              dismissible
+              type="error"
+            >
+              <strong>The end date must me grater than start date</strong> , please try again !
+            </v-alert>
+          </v-col>
+
+
         <v-divider></v-divider>
 
         <v-card-actions>
@@ -117,6 +144,9 @@ export default {
   emits: ["add-per"],
   data: () => ({
     dialog: false,
+    success: false,
+    alert: false,
+    hidden: false,
     studentlist: [],
     teacherlist: ["Sim", "Vandy", "Davy", "Thaina", "Phuty", "Somkhan"],
     value: null,
@@ -153,7 +183,31 @@ export default {
         this.endDate !== "" && this.endDate >= this.startDate
       ) {
         this.$emit("add-per", addpermission);
-        this.dialog = false;
+        this.alert = true;
+        this.success = true;
+        this.hidden = true;
+
+        setInterval(() => {
+          if (this.hidden) {
+            this.dialog = false;
+            this.hidden = false;
+            this.alert = false;
+
+            this.studentId = "";
+            this.teacher = "";
+            this.leavetype = "";
+            this.startDate = "";
+            this.endDate = "";
+            this.description = "";
+          }
+        },3000)
+
+      }else{
+          this.alert = true;
+          this.success = false;
+          setInterval(() => {
+            this.alert = false;
+          }, 3000);
       }
     },
     getStudent() {
