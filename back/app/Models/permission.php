@@ -13,6 +13,8 @@ class permission extends Model
         'teacher',
         'startDate',
         'endDate',
+        'time',
+        'manyDay',
         'leaveType',
         'description',
     ];

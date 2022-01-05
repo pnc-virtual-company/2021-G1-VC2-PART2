@@ -7,10 +7,13 @@ import Disciple from '../components/views/Disciple.vue';
 import signinform from '../components/signin/signinform.vue';
 import NotAuthorized from '../components/nav/NotAuthorized.vue';
 
+
+
 Vue.use(VueRouter)
 
 const routes = [
-    {
+     
+    { 
         path: '/',
         component: signinform,
 
@@ -66,9 +69,7 @@ let authenticationGuard = (to, from, next) => {
     } else {
         next();
     }
-
 };
-
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
