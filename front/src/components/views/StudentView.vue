@@ -180,7 +180,7 @@ export default {
       this.userRole = localStorage.getItem("role");
 
       axios.get("/students").then((res) => {
-        this.classFilter = res.data.data;
+        this.classFilter = res.data;
         if (this.userRole === "Student") {
           for (let student of res.data) {
             if (student.id == studentId) {
