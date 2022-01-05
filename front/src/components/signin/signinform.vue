@@ -60,8 +60,8 @@
         </v-col>
     </div>
     <!-- =============Message when we signin success======== -->
-    <v-snackbar text top class="message" color="success" v-if="logined" v-model="snackbar">{{messageerror}}</v-snackbar>
-    <v-snackbar text top class="message" color="error" v-else v-model="snackbar">{{messageerror}}</v-snackbar>
+    <v-snackbar top class="message" color="success" v-if="logined" v-model="snackbar">{{messageerror}}</v-snackbar>
+    <v-snackbar top class="message" color="error" v-else v-model="snackbar">{{messageerror}}</v-snackbar>
    
         
   </v-app>
@@ -87,6 +87,7 @@ export default {
     passwordRules: [
       v => !!v || 'Password is required',
       v => (v && v.length >= 8) || 'Password must be 8  characters or more!',
+      v => (v && v.length < 20) || 'Password must be left than 20  characters!',
     ],
     messageerror: '',
     Issignin: true,

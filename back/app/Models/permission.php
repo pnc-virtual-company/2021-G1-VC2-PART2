@@ -21,4 +21,12 @@ class permission extends Model
         return $this->belongsTo(Student::class);
     }
 
+    public function getFromDateAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d-m-Y');
+    }
+
+    protected $casts = [
+        'email_verified_at' => 'datetime'
+    ];
+
 }

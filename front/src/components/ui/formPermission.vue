@@ -9,10 +9,11 @@
 
       <v-card>
         <v-card-title class="para2">
-          <h2>Add Permission</h2>
+          <h2>Permission form</h2>
         </v-card-title>
         <v-card-text>
           <v-container>
+
             <v-row>
               <v-col cols="6" sm="6">
                 <v-combobox
@@ -39,8 +40,20 @@
               </v-col>
             </v-row>
 
+            <v-row class="date">
+              <v-col cols="12" lg="6">
+                <label for="startDate">Start date: </label>
+                <input type="date" name="date" v-model="startDate" />
+              </v-col>
+              <v-col cols="12" lg="6">
+                <label for="endDate" style="margin-left: 10%">End date: </label>
+                <input type="date" name="date" v-model="endDate" />
+              </v-col>
+            </v-row>
+
             <v-row>
-              <v-col cols="6" sm="12">
+
+              <v-col cols="6" sm="6">
                 <v-combobox
                   prepend-inner-icon="mdi-card-account-details-outline"
                   v-model="leavetype"
@@ -51,19 +64,8 @@
                   dense
                 ></v-combobox>
               </v-col>
-            </v-row>
-            <v-row class="date">
-              <v-col cols="12" lg="6">
-                <label for="startDate">Start date: </label>
-                <input type="dateTime-local" name="date" v-model="startDate" />
-              </v-col>
-              <v-col cols="12" lg="6">
-                <label for="endDate" style="margin-left: 15%">End date: </label>
-                <input type="dateTime-local" name="date" v-model="endDate" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="12">
+
+              <v-col cols="6" sm="6">
                 <v-text-field
                   prepend-inner-icon="mdi-message-reply-text"
                   label="Description"
@@ -75,8 +77,12 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+
           </v-container>
         </v-card-text>
+
+        <v-divider></v-divider>
+
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn type="submit" @click="dialog = false" color="gray" text
@@ -139,7 +145,13 @@ export default {
         endDate: this.endDate,
         description: this.description,
       };
-      if (this.studentId !== "" || this.teacher !== "") {
+      if (
+        this.studentId !== "" &&
+        this.teacher !== "" &&
+        this.leavetype !== "" &&
+        this.startDate !== "" &&
+        this.endDate !== "" && this.endDate >= this.startDate
+      ) {
         this.$emit("add-per", addpermission);
         this.dialog = false;
       }
@@ -156,9 +168,8 @@ export default {
 };
 </script>
 <style scoped>
-.text-center {
-  margin-left: 9.5%;
-  margin-bottom: -50px;
+.text-center{
+  margin-left: 40.5%;
 }
 .dates {
   background: #e1f5fe;
@@ -167,21 +178,16 @@ export default {
 input[type="date"] {
   outline: none;
 }
-select {
-  width: 50%;
-  outline: none;
-  border: none;
-  border-bottom: 1px solid gray;
-  margin-top: 9px;
-  margin-left: 9%;
-}
+
 .para2 {
-  padding: 2px;
   color: #fff;
+  height: 6vh;
   background: rgb(108, 185, 226);
 }
 h2 {
-  margin-left: 30%;
+  margin-left: 35%;
+  font-size: 22px;
+  margin-top: -2%;
 }
 .date {
   font-size: 14.1px;

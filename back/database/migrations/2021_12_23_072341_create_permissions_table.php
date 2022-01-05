@@ -17,8 +17,8 @@ class CreatePermissionsTable extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained()->onDelete('CASCADE');
             $table->string('teacher');
-            $table->dateTime('startDate');
-            $table->dateTime('endDate');
+            $table->string('startDate');
+            $table->string('endDate');
             $table->string('leaveType');
             $table->string('description');
             $table->timestamps();

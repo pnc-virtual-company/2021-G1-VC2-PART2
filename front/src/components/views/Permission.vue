@@ -17,7 +17,6 @@
                   label="Choose student"
                   item-text="firstName"
                   item-value="id"
-                  dense
                   color="cyan"
                 ></v-combobox>
               </v-col>
@@ -29,13 +28,23 @@
                   v-model="teacher"
                   :items="teacherlist"
                   color="cyan"
-                  dense
                 ></v-combobox>
               </v-col>
             </v-row>
 
+            <v-row class="date">
+              <v-col cols="12" lg="6">
+                <label for="startDate">Start date: </label>
+                <input type="date" name="date" v-model="startDate" />
+              </v-col>
+              <v-col cols="12" lg="6">
+                <label for="endDate">End date: </label>
+                <input type="date" name="date" v-model="endDate" />
+              </v-col>
+            </v-row>
+
             <v-row>
-              <v-col cols="6" sm="12">
+              <v-col cols="6" sm="6">
                 <v-combobox
                   prepend-inner-icon="mdi-card-account-details-outline"
                   v-model="leaveType"
@@ -46,19 +55,8 @@
                   dense
                 ></v-combobox>
               </v-col>
-            </v-row>
-            <v-row class="date">
-              <v-col cols="12" lg="6">
-                <label for="startDate">Start date: </label>
-                <input type="dateTime-local" name="date" v-model="startDate" />
-              </v-col>
-              <v-col cols="12" lg="6">
-                <label for="endDate" style="margin-left: 15%">End date: </label>
-                <input type="dateTime-local" name="date" v-model="endDate" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="12">
+
+              <v-col cols="12" sm="6">
                 <v-text-field
                   prepend-inner-icon="mdi-message-reply-text"
                   label="Description"
@@ -77,7 +75,22 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="showEdit = false">Discard</v-btn>
-          <v-btn color="success" text @click="Update">Save change</v-btn>
+          <v-btn
+            v-if="
+              studentId === '' ||
+              teacher === '' ||
+              description === '' ||
+              leavetype === '' ||
+              startDate === '' ||
+              endDate === ''
+            "
+            color="success"
+            text
+            @click="Update"
+            disabled
+            >Save change</v-btn
+          >
+          <v-btn v-else color="success" text @click="Update">Save change</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -100,42 +113,46 @@
     </v-dialog>
 
     <!-- ==========search button=============== -->
-    <div class="title">
-      <v-card-title>
+    <div class="title" v-if="userRole !== 'Student'">
+      <v-col cols="12" sm="4" style="margin-left:-14px">
         <v-text-field
-          v-if="userRole !== 'Student'"
           v-on:keyup="Search"
           v-model="search"
           append-icon="mdi-magnify"
           label="Search permission"
-          class="search"
           color="blue darken-1"
           single-line
+          outlined
+          dense
         ></v-text-field>
-      </v-card-title>
+      </v-col>
 
-      <v-combobox
-        class="select-class"
-        v-if="userRole !== 'Student'"
-        v-on:keyup="selectClass"
-        v-model="classes"
-        :items="items"
-        label="Select Class"
-        outlined
-        single-line
-        dense
-        color="deep-purple accent-4"
-      ></v-combobox>
-      <form-permission
-        v-if="userRole !== 'Student'"
-        @add-per="Addpermission"
-      ></form-permission>
+      <v-col cols="12" sm="3">
+        <v-combobox
+          class="select-class"
+          v-on:keyup="selectClass"
+          v-model="classes"
+          :items="items"
+          label="Select Class"
+          outlined
+          single-line
+          dense
+          color="deep-purple accent-4"
+        ></v-combobox>
+      </v-col>
+
+      <v-col cols="12" sm='6' style="margin-left: 5px">
+        <form-permission
+          @add-per="Addpermission"
+        ></form-permission>
+      </v-col>
+
     </div>
+
     <!-- ==========card======================== -->
 
     <v-expansion-panels class="main">
-      <h4 v-if="permissions === '' "> NO RESULTS HERE!</h4>
-      <v-expansion-panel v-for="per of permissions" :key="per.id">
+      <v-expansion-panel v-for="per of permissionInfo" :key="per.id">
         <v-expansion-panel-header class="header">
           <v-row>
             <v-col cols="12" sm="1">
@@ -148,12 +165,19 @@
               ></v-img>
             </v-col>
 
-            <v-col cols="12" sm="4">
-              <p v-if="per.leaveType == 'Authorize' " id="date" style="color:green">{{ per.leaveType }}</p>
-              <p v-else id="date" style="color:red">{{ per.leaveType }}</p>
+            <v-col cols="12" sm="2">
+              <p
+                v-if="per.leaveType == 'Authorize'"
+                id="date"
+                style="color: green"
+              >
+                {{ per.leaveType }}
+              </p>
+              <p v-else id="date" style="color: red">{{ per.leaveType }}</p>
             </v-col>
 
-            <v-col cols="12" sm="2">
+
+            <v-col cols="12" sm="4" class="images">
               <v-img
                 class="image2"
                 lazy-src="https://picsum.photos/id/11/10/6"
@@ -163,7 +187,7 @@
               ></v-img>
             </v-col>
 
-            <v-col cols="12" sm="2">
+            <v-col cols="12" sm="3">
               <h2 id="name">
                 {{ per.student.firstName }} {{ per.student.lastName }}
               </h2>
@@ -177,14 +201,14 @@
         <!-- ==============space=============== -->
         <v-expansion-panel-content class="description">
           <div class="dateTime">
-            <p> Start from : {{ per.startDate }}</p>
-            <p style="margin-left:10px"> to {{ per.endDate }}</p>
+            <span style="margin-right:5px">Start from : </span> {{ per.startDate }}
+            <p style="margin-left: 10px">to {{ per.endDate }}</p>
           </div>
 
-          <div class="date">
-            <span>How many day : </span>
-            <span
-              style="margin-left: 5px"
+          <div class="dateDetail">
+            <span>Amount of day : </span>
+            <p
+              style="margin-left: 5px;color:red;"
               v-html="
                 Math.round(
                   (new Date(per.endDate).getTime() -
@@ -192,11 +216,11 @@
                     (1000 * 3600 * 24)
                 )
               "
-            ></span>
-            <span> days</span>
+            ></p>
+            <p style="margin-left:5px"> days </p>
           </div>
 
-          The reason : {{ per.description }}
+          <span>The reason : </span> {{ per.description }}
         </v-expansion-panel-content>
 
         <div v-if="userRole !== 'Student'" class="btn" align="center">
@@ -204,11 +228,13 @@
             >mdi-pencil-box-multiple-outline</v-icon
           >
           <v-icon @click="ShowDialog(per)" title color="#EF5350" right
-            >mdi-delete
-          </v-icon>
+            >mdi-delete</v-icon
+          >
         </div>
       </v-expansion-panel>
     </v-expansion-panels>
+
+    <h4 id="noResult" v-if="permissionInfo == '' ">NO RESULTS HERE!</h4>
   </div>
 </template>
 
@@ -227,7 +253,7 @@ export default {
       studentID: "",
       search: "",
       studentId: "",
-      permissions: '',
+      permissionInfo: [],
       studentlist: [],
       teacherlist: ["Sim", "Vandy", "Davy", "Thaina", "Phuty", "Somkhan"],
       url: "http://127.0.0.1:8000/storage/imagestudent/",
@@ -316,21 +342,20 @@ export default {
       axios.get("/permissions").then((res) => {
         this.perFilter = res.data;
         if (this.userRole === "Student") {
-          for (let permission of res.data) {
-            if (permission.student.id == studentId) {
-              this.permissions.push(permission);
+          for (let per of res.data) {
+            if (per.student.id == studentId) {
+              this.permissionInfo.push(per);
             }
           }
-        
         } else {
-          this.permissions = res.data;
+          this.permissionInfo = res.data;
         }
       });
     },
 
     Search() {
       if (this.search !== "") {
-        this.permissions = this.permissions.filter(
+        this.permissionInfo = this.permissionInfo.filter(
           (per) =>
             per.student.firstName
               .toLowerCase()
@@ -339,17 +364,17 @@ export default {
               .toLowerCase()
               .includes(this.search.toLowerCase())
         );
-        console.log(this.permissions);
+        console.log(this.permissionInfo);
       } else {
         this.getPermission();
       }
     },
     selectClass() {
-      this.permissions = [];
+      this.permissionInfo = [];
       if (this.classes !== "") {
         for (let per of this.perFilter) {
           if (per.student.class === this.classes) {
-            this.permissions.push(per);
+            this.permissionInfo.push(per);
           }
         }
       } else {
@@ -367,6 +392,11 @@ export default {
 </script>
 
 <style scoped>
+.images {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .card-row {
   padding: 20px;
   margin: 50px;
@@ -380,6 +410,7 @@ export default {
   width: 80%;
   margin-left: 10%;
   margin-bottom: 3%;
+  margin-top: 2%;
 }
 .btn {
   display: flex;
@@ -389,31 +420,20 @@ export default {
   margin-bottom: 10px;
 }
 .card {
-  margin-top: 3%;
-  height: 84vh;
+  height: 88vh;
   overflow-y: scroll;
+  margin-top: 1%;
 }
 #name {
   margin-top: 7%;
 }
-span {
-  display: flex;
-  justify-content: center;
-  margin-top: 6%;
-  margin-bottom: 3%;
-}
-.search {
-  width: 380px;
-  margin-left: -4%;
-  margin-top: -5%;
-}
 
 .title {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
   width: 80%;
   margin-left: 10%;
+  margin-top: 1%;
 }
 
 input[type="date"] {
@@ -422,10 +442,7 @@ input[type="date"] {
 #dialog_remove {
   border-top: 7px solid red;
 }
-.image2 {
-  margin-bottom: -30px;
-  margin-top: 5%;
-}
+
 .image1 {
   margin-top: 50%;
 }
@@ -438,28 +455,36 @@ input[type="date"] {
 }
 .para2 {
   color: #fff;
+  height: 6vh;
   background: rgb(108, 185, 226);
 }
 h3 {
   margin-left: 30%;
+  margin-top: -2%;
 }
-h4{
-  text-align: center;
+#noResult {
   margin-top: 15%;
+  text-align: center;
   color: gray;
 }
 #date {
   margin-left: 10%;
-  margin-top: 15%;
+  margin-top: 30%;
   font-size: 20px;
 }
-.date {
+.dateDetail {
   display: flex;
-  align-items: flex-start;
-  margin-top: -6%;
+  height: 5vh;
+
 }
 .dateTime {
   display: flex;
   margin-top: 2%;
+  height: 5vh;
+ 
+}
+span{
+  font-weight: bold;
+  font-size: 16px;
 }
 </style>

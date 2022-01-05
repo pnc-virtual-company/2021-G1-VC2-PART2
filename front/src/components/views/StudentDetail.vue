@@ -52,7 +52,7 @@
           <v-badge :value="num"> All discipline </v-badge>
         </v-tab>
 
-        <v-tab @click="Misconduct">
+        <v-tab @click="Notification">
           <v-badge color="green" :content="num1" :value="num1">
             Notification
           </v-badge>
@@ -100,6 +100,8 @@
         </v-tab>
       </v-tabs>
 
+      <h4 id="noResult" v-if="disciples == '' " >NO RESULTS HERE!</h4>
+
       <v-expansion-panel v-for="disciple of disciples" :key="disciple.id">
         <v-expansion-panel-header>
           <div class="d-flex">
@@ -132,11 +134,17 @@
         }}</v-expansion-panel-content>
       </v-expansion-panel>
       
-      <v-tabs v-if="permission != ''" dark background-color="orange" grow>
-        <v-tab><v-icon left> mdi-chat-processing </v-icon>Permission</v-tab>
-      </v-tabs>
+      <!-- ==========================Permission================================= -->
 
-      <v-expansion-panel v-for="per of permission" :key="per.id">
+       <v-tabs dark background-color="orange" grow>
+        <v-tab  v-if="permissions !== '' ">
+          <v-badge color="green" :content="num5" :value="num5">Permission</v-badge>
+        </v-tab>
+      </v-tabs>
+      
+      <h4 id="noResult" v-if="permissions == '' ">NO RESULTS HERE!</h4>
+
+      <v-expansion-panel v-for="per of permissions" :key="per.id">
         <v-expansion-panel-header class="header-1">
           <div class="d-flex">
             <v-col cols="12" sm="2">
@@ -177,22 +185,23 @@ export default {
       num2: 0,
       num3: 0,
       num4: false,
+      num5: 0,
       disciples: [],
-      permission: "",
+      permissions: [],
       students: "",
-      studentId: "",
       url: "http://127.0.0.1:8000/storage/imagestudent/",
     };
   },
   methods: {
+
     Back() {
       this.$emit("back", false);
     },
     getStudent() {
-      let studentid = localStorage.getItem("studentId");
+
       axios.get("/students").then((res) => {
         for (let student of res.data) {
-          if (studentid == student.id) {
+          if (this.studentid == student.id) {
             this.students = student;
           }
         }
@@ -257,18 +266,38 @@ export default {
         }
       }
     },
+
+    getPermission() {
+      axios.get("/permissions").then((res) => {
+        this.permissions = [];
+        this.num5 = 0;
+        for(let per of res.data){
+          console.log(this.students.id);
+          if(per.student.id == this.student.id){
+            this.permissions.push(per)
+            this.num5 += 1
+          }
+        }
+
+      });
+    },
+
   },
   mounted() {
     this.disciples = this.student.disciple;
-    this.permission = this.student.permission;
     this.getStudent();
     this.getDisciple();
+    this.getPermission();
     this.studentId = localStorage.getItem("studentId");
+
   },
 };
 </script>
 
 <style scoped>
+.containner{
+  margin-top: 3%;
+}
 .back {
   margin-left: 10%;
   margin-bottom: 1%;
@@ -285,6 +314,8 @@ img {
   height: 60px;
   margin-top: 12%;
   margin-left: 29%;
+  border-radius: 360px;
+  position: center;
 }
 .username {
   margin-top: 5%;
@@ -372,5 +403,11 @@ h5 {
   display: flex;
   align-items: center;
   margin-left: 5%;
+}
+#noResult {
+  margin-top: 2%;
+  text-align: center;
+  color: gray;
+  margin-bottom: 2%;
 }
 </style>

@@ -38,7 +38,7 @@
 
       <p class="username">{{ userinfo.username }}</p>
       <p class="email">{{ userinfo.email }}</p>
-      <p class="account">mdi-image-size-select-actual</p>
+      <p class="account">Manage your user account</p>
       <hr />
       <button id="Signout" @click="Signout">Sign out</button>
       <hr />

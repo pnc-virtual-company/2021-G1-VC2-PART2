@@ -88,41 +88,45 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <!-- ==========================End Dialog===================================== -->
 
       <!-- ===================search============= -->
-      <div class="cardheader">
-        <v-card-title>
+      <div class="cardheader" v-if="userRole !== 'Student'">
+        <v-col cols="12" sm="4" style="margin-left: -15px">
           <v-text-field
-            v-if="userRole !== 'Student' "
-            class="searchbtn"
             v-model="search"
             append-icon="mdi-magnify"
             label="Search discipline"
             color="blue darken-1"
             v-on:keyup="searchBotton"
             single-line
+            outlined
+            dense
           ></v-text-field>
-        </v-card-title>
-        <v-combobox
-          v-if="userRole !== 'Student'"
-          v-on:keyup="selectClass"
-          v-model="classes"
-          :items="items"
-          class="select"
-          label="Select Class"
-          outlined
-          single-line
-          dense
-          color="deep-purple accent-4"
-        ></v-combobox>
+        </v-col>
 
-        <form-disciple
-          v-if="userRole !== 'Student'"
-          @add-discipline="getDisciples"
-        ></form-disciple>
+        <v-col cols="12" sm="3">
+          <v-combobox
+            v-on:keyup="selectClass"
+            v-model="classes"
+            :items="items"
+            class="select"
+            label="Select Class"
+            outlined
+            single-line
+            dense
+            color="deep-purple accent-4"
+          ></v-combobox>
+        </v-col>
+
+        <v-col cols="12" sm="6" style="margin-left: 19px">
+          <form-disciple
+            @add-discipline="getDisciples"
+          ></form-disciple>
+        </v-col>
+
       </div>
-      <h4 v-if="disciples === '' ">NO RESULTS HERE!</h4>
+
+
       <v-expansion-panel v-for="disciple of disciples" :key="disciple.id">
         <v-expansion-panel-header class="header">
           <v-row>
@@ -136,10 +140,28 @@
               </v-img>
             </v-col>
             <v-col cols="12" sm="2">
-              <p v-if="disciple.dnt == 'Termination' " id="dnt" style="color:red">{{ disciple.dnt }} ( This student is out school )</p>
-              <p v-else-if="disciple.dnt == 'Warning letter' " id="dnt" style="color:orange">{{ disciple.dnt }}</p>
-              <p v-else-if="disciple.dnt == 'Oral warning' " id="dnt" style="color:#FFD600">{{ disciple.dnt }}</p>
-              <p v-else id="dnt" style="color:green">{{ disciple.dnt }}</p>
+              <p
+                v-if="disciple.dnt == 'Termination'"
+                id="dnt"
+                style="color: red"
+              >
+                {{ disciple.dnt }} ( This student is out school )
+              </p>
+              <p
+                v-else-if="disciple.dnt == 'Warning letter'"
+                id="dnt"
+                style="color: orange"
+              >
+                {{ disciple.dnt }}
+              </p>
+              <p
+                v-else-if="disciple.dnt == 'Oral warning'"
+                id="dnt"
+                style="color: #ffd600"
+              >
+                {{ disciple.dnt }}
+              </p>
+              <p v-else id="dnt" style="color: green">{{ disciple.dnt }}</p>
             </v-col>
 
             <v-col cols="12" sm="4" class="image">
@@ -153,7 +175,10 @@
 
             <v-col cols="12" sm="4">
               <div class="username">
-                <h3>{{ disciple.student.firstName }} {{ disciple.student.lastName }}</h3>
+                <h3>
+                  {{ disciple.student.firstName }}
+                  {{ disciple.student.lastName }}
+                </h3>
               </div>
 
               <div class="date">
@@ -165,7 +190,6 @@
                 >
                 </v-img>
                 <h4>{{ disciple.date }}</h4>
-                
               </div>
               <p id="class">{{ disciple.student.class }}</p>
             </v-col>
@@ -173,13 +197,13 @@
           <!-- ===================end button edit&delete============= -->
         </v-expansion-panel-header>
         <!-- ====================start show details========== -->
-        <v-expansion-panel-content>
-          {{ disciple.description }}
+        <v-expansion-panel-content class="description">
+          <span style="font-weight:bold;margin-left:0%;font-size:17px;">The explanation :</span>  {{ disciple.description }}
         </v-expansion-panel-content>
 
         <!-- ====================end show details=================== -->
         <div
-          v-if="userRole !== 'Student' && userRole !== 'Social Affair'"
+          v-if="userRole !== 'Student' "
           class="btn"
           align="center"
         >
@@ -191,6 +215,8 @@
           >
         </div>
       </v-expansion-panel>
+
+      <h4 id="noResult" v-if="disciples == '' ">NO RESULTS HERE!</h4>
     </div>
   </v-expansion-panels>
 </template>
@@ -208,7 +234,7 @@ export default {
       search: "",
       description: "",
       class: "",
-      disciples: '',
+      disciples: [],
       disFilter: [],
       id: "",
       student_id: "",
@@ -217,7 +243,7 @@ export default {
       userRole: "",
       url: "http://127.0.0.1:8000/storage/imagestudent/",
       leavelist: [
-        "Misconduct",
+        "Notification",
         "Oral warning",
         "Warning letter",
         "Termination",
@@ -342,39 +368,31 @@ export default {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
 }
 .headerManin {
   width: 80%;
+  margin-top: 1%;
   margin-bottom: 5%;
 }
 .header {
   margin-right: 5%;
 }
 .main {
-  height: 84vh;
+  height: 88vh;
   overflow-y: scroll;
-  margin-top: 3%;
+  margin-top: 1%;
 }
 .cardForm {
   border-top: 5px solid red;
 }
 #wearning {
-  margin-top: 25%;
-}
-.searchbtn {
-  width: 380px;
-  margin-left: -4%;
-  margin-top: -5%;
+  margin-top: 60%;
 }
 
 img {
   width: 45px;
   height: 35px;
-}
-#date {
-  padding-left: 7px;
-  display: flex;
-  align-items: center;
 }
 input[type="date"] {
   width: 80%;
@@ -394,32 +412,35 @@ input[type="date"] {
 span {
   margin-left: 16%;
 }
-#dnt{
-  margin-top: 35%;
+#dnt {
+  margin-top: 45%;
   font-size: 18px;
 }
-.username{
+.username {
   margin-top: 7%;
   padding-left: 15px;
-
 }
-.date{
+.date {
   display: flex;
   align-items: center;
   margin-top: 2%;
 }
-#class{
+#class {
   margin-top: 3%;
   margin-left: 5%;
 }
-.image{
+.image {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-h4{
+#noResult {
   text-align: center;
-  margin-top: 18%;
+  margin-top: 20%;
   color: gray;
+}
+.description{
+  border-top: 1px solid rgba(128, 128, 128, 0.514);
+  padding-top: 15px ;
 }
 </style>
