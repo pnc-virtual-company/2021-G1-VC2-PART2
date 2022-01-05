@@ -134,6 +134,7 @@
     <!-- ==========card======================== -->
 
     <v-expansion-panels class="main">
+      <h4 v-if="permissions === '' "> NO RESULTS HERE!</h4>
       <v-expansion-panel v-for="per of permissions" :key="per.id">
         <v-expansion-panel-header class="header">
           <v-row>
@@ -226,7 +227,7 @@ export default {
       studentID: "",
       search: "",
       studentId: "",
-      permissions: [],
+      permissions: '',
       studentlist: [],
       teacherlist: ["Sim", "Vandy", "Davy", "Thaina", "Phuty", "Somkhan"],
       url: "http://127.0.0.1:8000/storage/imagestudent/",
@@ -309,6 +310,7 @@ export default {
         this.studentlist = res.data;
       });
     },
+
     getPermission() {
       let studentId = localStorage.getItem("studentId");
       axios.get("/permissions").then((res) => {
@@ -319,6 +321,7 @@ export default {
               this.permissions.push(permission);
             }
           }
+        
         } else {
           this.permissions = res.data;
         }
@@ -440,7 +443,11 @@ input[type="date"] {
 h3 {
   margin-left: 30%;
 }
-
+h4{
+  text-align: center;
+  margin-top: 15%;
+  color: gray;
+}
 #date {
   margin-left: 10%;
   margin-top: 15%;

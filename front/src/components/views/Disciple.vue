@@ -94,7 +94,7 @@
       <div class="cardheader">
         <v-card-title>
           <v-text-field
-            v-if="userRole !== 'Studen' "
+            v-if="userRole !== 'Student' "
             class="searchbtn"
             v-model="search"
             append-icon="mdi-magnify"
@@ -122,7 +122,7 @@
           @add-discipline="getDisciples"
         ></form-disciple>
       </div>
-
+      <h4 v-if="disciples === '' ">NO RESULTS HERE!</h4>
       <v-expansion-panel v-for="disciple of disciples" :key="disciple.id">
         <v-expansion-panel-header class="header">
           <v-row>
@@ -208,7 +208,7 @@ export default {
       search: "",
       description: "",
       class: "",
-      disciples: [],
+      disciples: '',
       disFilter: [],
       id: "",
       student_id: "",
@@ -416,5 +416,10 @@ span {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+h4{
+  text-align: center;
+  margin-top: 18%;
+  color: gray;
 }
 </style>

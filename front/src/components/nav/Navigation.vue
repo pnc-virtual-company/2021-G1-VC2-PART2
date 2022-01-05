@@ -1,6 +1,15 @@
 <template>
   <nav>
     <div class="navbar">
+      <div class="mainImg">
+        <img class="image" src="../../assets/pn-logo.png" alt="">
+
+        <div class="title">
+          <p id="student">Students life</p>
+          <p id="management">Management</p>
+        </div>
+      </div>
+      
       <ul>
         <v-list-item color="green" v-if="isRole" :to="{ path: '/user' }">
           <v-icon>mdi-account-circle-outline</v-icon>
@@ -19,9 +28,10 @@
 
         <v-list-item color="green" :to="{ path: '/disciple' }">
           <v-icon>mdi-account-multiple-outline</v-icon>
-          <v-list-item-title class="white-text">Disciple</v-list-item-title>
+          <v-list-item-title class="white-text">discipline</v-list-item-title>
         </v-list-item>
       </ul>
+      
       <div class="navbar-right">
         <div class="blog">
           <span>{{ userInfo.role }}</span>
@@ -29,11 +39,12 @@
           <div class="circle">
             <button @click="Signout">
               <img
+                class="profileImg"
                 v-if="userInfo.role !== 'Student'"
                 :src="url + userInfo.profile"
                 alt=""
               />
-              <img v-else :src="student_url + userInfo.student.picture" alt="" />
+              <img  class="profileImg" v-else :src="student_url + userInfo.student.picture" alt="" />
 
             </button>
           </div>
@@ -95,7 +106,29 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
-img {
+.title{
+  height: 7vh;
+  margin-left: 5%;
+}
+#management{
+  margin-top: -30%;
+  font-style: italic;
+}
+#student{
+  margin-top: -1%;
+  font-style: italic;
+}
+.mainImg{
+  display: flex;
+  margin-left: 2%; 
+  margin-top: 6px;
+}
+.image{
+  width: 45px;
+  height: 45px;
+ 
+}
+.profileImg {
   width: 40px;
   height: 40px;
   margin-top: 8px;
@@ -105,7 +138,7 @@ img {
 
 .navbar {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   background-color: white;
 }
 nav {
@@ -120,8 +153,10 @@ ul {
   margin: 0px 15px;
 }
 .navbar-right {
+  display: flex;
+  justify-content: flex-end;
   padding: 0px;
-  width: 400px;
+  width: 800px;
 }
 .navbar-right:before {
   content: "";
@@ -162,15 +197,13 @@ ul {
   margin: 0px 3px;
   margin-right: 10px;
 }
-p {
-  width: 90%;
-  margin-top: 16px;
-  margin-right: 10px;
-  font-weight: bole;
-}
 span {
   margin-right: 200px;
   margin-top: 6%;
   color: #fff;
 }
+p{
+  font-size: 16px;
+}
+
 </style>

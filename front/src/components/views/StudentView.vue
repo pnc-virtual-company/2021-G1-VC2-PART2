@@ -93,6 +93,18 @@
                 </v-list-item-icon>
               </td>
             </tr>
+
+            <tr v-if="studentdata == ''">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td> NO RESULTS HERE!</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
           </tbody>
           <EditStudent
             v-if="showDialog"
@@ -149,6 +161,7 @@
       Studentdetail(student) {
         this.isDetail = true;
         this.studentInfo = student;
+        console.log('hello');
       },
       Back(back) {
         this.isDetail = back;
@@ -158,15 +171,15 @@
         this.userRole = localStorage.getItem("role");
 
         axios.get("/students").then((res) => {
-          this.classFilter = res.data
+          this.classFilter = res.data.data
           if (this.userRole === "Student") {
-            for (let student of res.data) {
+            for (let student of res.data.data) {
               if (student.id == studentId) {
                 this.studentdata.push(student);
               }
             }
           } else {
-            this.studentdata = res.data;
+            this.studentdata = res.data.data;
           }
         });
       },
