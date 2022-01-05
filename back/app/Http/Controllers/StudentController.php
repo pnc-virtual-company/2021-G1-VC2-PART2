@@ -14,8 +14,8 @@ class StudentController extends Controller
      */
     public function getStudent()
     {
-        //
-        return Student::with('permission','disciple')->latest()->get();
+    
+        return Student::with('permission','disciple')->latest()->paginate();
     }
 
     /**

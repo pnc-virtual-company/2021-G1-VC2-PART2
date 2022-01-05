@@ -4,7 +4,7 @@
     <v-dialog width="600" v-model="showEdit">
       <v-card>
         <v-card-title class="para2">
-          <h2>Update permission</h2>
+          <h3>Update permission</h3>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -39,12 +39,7 @@
                 <v-combobox
                   prepend-inner-icon="mdi-card-account-details-outline"
                   v-model="leaveType"
-                  :items="[
-                    'sick',
-                    'have a task to do',
-                    'sick too',
-                    'sick three',
-                  ]"
+                  :items="['Authorize', 'Unauthorize']"
                   label="Choose leave type"
                   required
                   color="cyan"
@@ -139,6 +134,7 @@
     <!-- ==========card======================== -->
 
     <v-expansion-panels class="main">
+      <h4 v-if="permissions === '' "> NO RESULTS HERE!</h4>
       <v-expansion-panel v-for="per of permissions" :key="per.id">
         <v-expansion-panel-header class="header">
           <v-row>
@@ -153,22 +149,8 @@
             </v-col>
 
             <v-col cols="12" sm="4">
-              <p>Start :{{ per.startDate }}</p>
-              <p>End :{{ per.endDate }}</p>
-              <div class="date">
-                <span>How many day : </span>
-                <span
-                  style="margin-left: 5px"
-                  v-html="
-                    Math.round(
-                      (new Date(per.endDate).getTime() -
-                        new Date(per.startDate).getTime()) /
-                        (1000 * 3600 * 24)
-                    )
-                  "
-                ></span>
-                <span>days</span>
-              </div>
+              <p v-if="per.leaveType == 'Authorize' " id="date" style="color:green">{{ per.leaveType }}</p>
+              <p v-else id="date" style="color:red">{{ per.leaveType }}</p>
             </v-col>
 
             <v-col cols="12" sm="2">
@@ -182,18 +164,39 @@
             </v-col>
 
             <v-col cols="12" sm="2">
-              <h3 id="name">
+              <h2 id="name">
                 {{ per.student.firstName }} {{ per.student.lastName }}
-              </h3>
+              </h2>
               <br />
               <p>{{ per.student.class }}</p>
               <p>{{ per.teacher }}</p>
             </v-col>
           </v-row>
         </v-expansion-panel-header>
-        <!-- ======space================== -->
+
+        <!-- ==============space=============== -->
         <v-expansion-panel-content class="description">
-          {{ per.description }}
+          <div class="dateTime">
+            <p> Start from : {{ per.startDate }}</p>
+            <p style="margin-left:10px"> to {{ per.endDate }}</p>
+          </div>
+
+          <div class="date">
+            <span>How many day : </span>
+            <span
+              style="margin-left: 5px"
+              v-html="
+                Math.round(
+                  (new Date(per.endDate).getTime() -
+                    new Date(per.startDate).getTime()) /
+                    (1000 * 3600 * 24)
+                )
+              "
+            ></span>
+            <span> days</span>
+          </div>
+
+          The reason : {{ per.description }}
         </v-expansion-panel-content>
 
         <div v-if="userRole !== 'Student'" class="btn" align="center">
@@ -224,7 +227,7 @@ export default {
       studentID: "",
       search: "",
       studentId: "",
-      permissions: [],
+      permissions: '',
       studentlist: [],
       teacherlist: ["Sim", "Vandy", "Davy", "Thaina", "Phuty", "Somkhan"],
       url: "http://127.0.0.1:8000/storage/imagestudent/",
@@ -307,6 +310,7 @@ export default {
         this.studentlist = res.data;
       });
     },
+
     getPermission() {
       let studentId = localStorage.getItem("studentId");
       axios.get("/permissions").then((res) => {
@@ -317,6 +321,7 @@ export default {
               this.permissions.push(permission);
             }
           }
+        
         } else {
           this.permissions = res.data;
         }
@@ -389,7 +394,7 @@ export default {
   overflow-y: scroll;
 }
 #name {
-  margin-top: 6%;
+  margin-top: 7%;
 }
 span {
   display: flex;
@@ -402,11 +407,7 @@ span {
   margin-left: -4%;
   margin-top: -5%;
 }
-/* ========================================== */
-.select-class {
-  width: 250px;
-  margin-left: 20px;
-}
+
 .title {
   display: flex;
   align-items: flex-start;
@@ -415,7 +416,6 @@ span {
   margin-left: 10%;
 }
 
-/* ========================================= */
 input[type="date"] {
   outline: none;
 }
@@ -430,31 +430,36 @@ input[type="date"] {
   margin-top: 50%;
 }
 .description {
-  margin-top: 3%;
+  border-top: 1px solid rgba(182, 174, 174, 0.705);
 }
-select {
-  width: 50%;
-  outline: none;
-  border: none;
-  border-bottom: 1px solid gray;
-  margin-top: 9px;
-  margin-left: 9%;
-}
+
 #endDate {
   text-align: center;
 }
 .para2 {
-  padding: 2px;
   color: #fff;
   background: rgb(108, 185, 226);
 }
-h2 {
-  margin-left: 27%;
+h3 {
+  margin-left: 30%;
 }
- .date{
-    display: flex;
-    align-items: flex-start;
-    margin-top: -6%;
-    margin-left: 23%;
-  }
+h4{
+  text-align: center;
+  margin-top: 15%;
+  color: gray;
+}
+#date {
+  margin-left: 10%;
+  margin-top: 15%;
+  font-size: 20px;
+}
+.date {
+  display: flex;
+  align-items: flex-start;
+  margin-top: -6%;
+}
+.dateTime {
+  display: flex;
+  margin-top: 2%;
+}
 </style>

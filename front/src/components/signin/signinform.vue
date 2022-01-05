@@ -60,8 +60,8 @@
         </v-col>
     </div>
     <!-- =============Message when we signin success======== -->
-    <v-snackbar top class="message" color="green" v-if="logined" v-model="snackbar">{{messageerror}}</v-snackbar>
-    <v-snackbar top class="message" color="error" v-else v-model="snackbar">{{messageerror}}</v-snackbar>
+    <v-snackbar text top class="message" color="success" v-if="logined" v-model="snackbar">{{messageerror}}</v-snackbar>
+    <v-snackbar text top class="message" color="error" v-else v-model="snackbar">{{messageerror}}</v-snackbar>
    
         
   </v-app>
