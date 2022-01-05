@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <!-- ================Edete permission dialog================== -->
+    <!-- ================Edit permission dialog================== -->
     <v-dialog width="600" v-model="showEdit">
       <v-card>
         <v-card-title class="para2">
