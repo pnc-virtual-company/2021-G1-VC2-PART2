@@ -217,7 +217,7 @@ export default {
       userRole: "",
       url: "http://127.0.0.1:8000/storage/imagestudent/",
       leavelist: [
-        "Misconduct",
+        "Notification",
         "Oral warning",
         "Warning letter",
         "Termination",
